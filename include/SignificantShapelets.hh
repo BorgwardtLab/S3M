@@ -9,8 +9,14 @@
 #include <vector>
 
 /**
-  Main class for performing the extraction of significant shapelets from
-  a given set of time series.
+  @class SignificantShapelets
+  @brief Main extraction class for significant shapelets
+
+  This is the main class for performing the extraction of significant
+  shapelets from a given set of time series. Its entry point is given
+  by `operator()`, in which the extraction process is performed. Note
+  that the implementation of `operator()` follows the pseudocode from
+  the paper.
 */
 
 class SignificantShapelets

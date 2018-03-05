@@ -249,9 +249,6 @@ std::vector<long double> SignificantShapelets::min_attainable_p_values( unsigned
   std::vector<long double> p_values;
   p_values.reserve( n );
 
-  // FIXME: we do not have to go over the complete range actually, but
-  // it is easier because we adjust the number of objects so that this
-  // value is *always* defined.
   for( unsigned rs = 0; rs <= n; rs++ )
     p_values.push_back( C.min_attainable_p(rs) );
 
