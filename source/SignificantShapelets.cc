@@ -149,7 +149,9 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     for( std::size_t j = 0; j < timeSeries.size(); j++ )
     {
       tables.insert( candidates[i].distance( timeSeries[j] ), labels[j] );
-      tables.prune( p_tarone );
+
+      if( !_disablePruning )
+        tables.prune( p_tarone );
 
       if( tables.size() == 0 )
       {

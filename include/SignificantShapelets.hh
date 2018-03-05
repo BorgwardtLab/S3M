@@ -62,14 +62,14 @@ public:
     _distances.assign( il.begin(), il.end() );
   }
 
-  void setRemoveDuplicates( bool value = true )
+  void disablePruning( bool value = true ) noexcept
   {
-    _removeDuplicates = value;
+    _disablePruning = value;
   }
 
-  bool removeDuplicates() const noexcept
+  void removeDuplicates( bool value = true ) noexcept
   {
-    return _removeDuplicates;
+    _removeDuplicates = value;
   }
 
   // Extraction --------------------------------------------------------
@@ -102,6 +102,7 @@ private:
   unsigned _windowStride;
 
   bool _removeDuplicates = false;
+  bool _disablePruning   = false;
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.

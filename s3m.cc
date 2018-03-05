@@ -21,6 +21,7 @@ int main( int argc, char** argv )
   using namespace boost::program_options;
 
   bool standardize      = false;
+  bool disablePruning   = false;
   bool removeDuplicates = false;
 
   unsigned m = 0; // minimum pattern length
@@ -38,6 +39,7 @@ int main( int argc, char** argv )
   description.add_options()
     ("help,h"             , "Show help")
     ("standardize"        , "Standardize data" )
+    ("disable-pruning,p"  , "Disable pruning criterion" )
     ("remove-duplicates,r", "Remove duplicates" )
     ("min-length,m"       , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
     ("max-length,M"       , value<unsigned>( &M )->default_value(  0 ), "Maximum candidate pattern length" )
@@ -67,11 +69,14 @@ int main( int argc, char** argv )
     return 0;
   }
 
-  if( variables.count("standardize") )
-    standardize = true;
+  if( variables.count("disable-pruning") )
+    disablePruning = true;
 
   if( variables.count("remove-duplicates") )
     removeDuplicates = true;
+
+  if( variables.count("standardize") )
+    standardize = true;
 
   // 1. Read training data ---------------------------------------------
 
@@ -102,7 +107,8 @@ int main( int argc, char** argv )
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
-  significantShapelets.setRemoveDuplicates( removeDuplicates );
+  significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
+  significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
 
   long double p_tarone = 0.0;
   auto shapelets       = significantShapelets( timeSeries,
