@@ -42,7 +42,7 @@ ENABLE_IF_SUPPORTED( CMAKE_CXX_FLAGS "-pedantic" )
 # Dependencies
 ########################################################################
 
-FIND_PACKAGE( Boost REQUIRED COMPONENTS program_options system timer )
+FIND_PACKAGE( Boost REQUIRED COMPONENTS log program_options system timer )
 
 ########################################################################
 # Include directories
@@ -73,6 +73,7 @@ ADD_EXECUTABLE( s3m
 
 TARGET_COMPILE_OPTIONS( s3m
   PRIVATE
+    "-DBOOST_LOG_DYN_LINK"
     "-O3"
 )
 

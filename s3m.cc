@@ -2,6 +2,14 @@
 #include "TimeSeries.hh"
 #include "Utilities.hh"
 
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/trivial.hpp>
+
+#include <boost/log/sinks/text_ostream_backend.hpp>
+
+#include <boost/log/utility/formatting_ostream.hpp>
+
 #include <boost/program_options.hpp>
 
 #include <boost/timer/timer.hpp>
@@ -15,6 +23,41 @@
 #include <vector>
 
 #include <cmath>
+
+// Adds colours to the output of log. This is based on an example from
+// StackOverflow [1].
+//
+// [1]: https://stackoverflow.com/a/38316911/1396991
+void setupLogFormat( boost::log::record_view const& r, boost::log::formatting_ostream& o )
+{
+  namespace logging = boost::log;
+  auto severity     = r[ logging::trivial::severity ];
+
+  if( severity )
+  {
+    switch( severity.get() )
+    {
+    case logging::trivial::info:
+      o << "\033[32m";
+      break;
+    case logging::trivial::warning:
+      o << "\033[33m";
+      break;
+    case logging::trivial::error:
+    case logging::trivial::fatal:
+      o << "\033[31m";
+      break;
+    default:
+      break;
+    }
+  }
+
+  o << r[ logging::expressions::smessage ];
+
+  // Restore the default colour
+  if( severity )
+    o << "\033[0m";
+}
 
 int main( int argc, char** argv )
 {
