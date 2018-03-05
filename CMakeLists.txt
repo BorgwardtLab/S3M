@@ -71,4 +71,9 @@ ADD_EXECUTABLE( s3m
   source/Utilities.cc
 )
 
+TARGET_COMPILE_OPTIONS( s3m
+  PRIVATE
+    "-O3"
+)
+
 TARGET_LINK_LIBRARIES( s3m ${Boost_LIBRARIES} )
