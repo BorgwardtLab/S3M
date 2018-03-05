@@ -5,7 +5,7 @@
 
 #include <boost/math/distributions/chi_squared.hpp>
 
-/*
+/**
   Maintains a (partially) filled contingency table. Each table stores
   its corresponding distance threshold, making it possible to perform
   updates efficiently.
@@ -89,26 +89,6 @@ public:
   */
 
   long double min_optimistic_p( unsigned delta ) const;
-
-  // Methods for Fisher's exact test -----------------------------------
-  //
-  // Ideally, the methods below should be made configurable using
-  // templates or some other mechanism. For now, they merely make
-  // this class a little bit more unwieldy.
-
-  /**
-    Calculates the $p$-value following Fisher's exact test test.
-    A two-sided $p$-value is calculated here.
-  */
-
-  double p_fisher() const;
-
-  /**
-    Calculates the minimum attainable $p$-value following Fisher's exact
-    test.
-  */
-
-  double min_attainable_p_fisher( unsigned rs) const;
 
   // Attributes --------------------------------------------------------
   //

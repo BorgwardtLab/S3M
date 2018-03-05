@@ -31,7 +31,7 @@ public:
   long double min_optimistic_p() const noexcept;
 
   /*
-    Retrieves the table with the lowest $p$value and returns it for
+    Retrieves the table with the lowest $p$-value and returns it for
     further processing. This function should only be called *once*,
     because it has to iterate over all tables.
   */

@@ -215,57 +215,6 @@ long double ContingencyTable::min_optimistic_p( unsigned delta ) const
   return p;
 }
 
-double ContingencyTable::p_fisher() const
-{
-  // TODO: this distribution should not be created *every* time the
-  // function is called, but its shape depends on `rs`...
-  boost::math::hypergeometric_distribution<double> distribution( this->rs(), _n1, _n );
-
-  // This is only the probability of the contingency table itself. The
-  // count variable needs to be adjusted to obtain a two-tailed value.
-  auto prob_initial = boost::math::pdf( distribution, _as );
-
-  std::vector<double> probabilities;
-  probabilities.push_back( prob_initial );
-
-  auto as_min = _n1 + this->rs() > _n ? _n1 + this->rs() - _n : 0;
-  auto as_max = this->rs() > _n1      ? _n1                   : this->rs();
-
-  for( unsigned as = as_min; as <= as_max; as++ )
-  {
-    if( as == _as )
-      continue;
-
-    auto prob = boost::math::pdf( distribution, as );
-    if( prob <= prob_initial )
-      probabilities.push_back( prob );
-  }
-
-  return std::accumulate( probabilities.begin(), probabilities.end(), 0.0 );
-}
-
-double ContingencyTable::min_attainable_p_fisher( unsigned rs ) const
-{
-  auto na = std::min(_n1, _n - _n1);
-  auto nb = std::max(_n1, _n - _n1);
-
-  assert( rs <= _n );
-
-  double x           = 0.0;
-  double denominator = boost::math::binomial_coefficient<double>( _n, rs );
-
-  if( rs < na )
-    x = boost::math::binomial_coefficient<double>( na, rs );
-  else if( na <= rs and rs < _n/2 )
-    x = boost::math::binomial_coefficient<double>( nb, _n - rs );
-  else if( _n/2 <= rs and rs < nb )
-    x = boost::math::binomial_coefficient<double>( nb, rs );
-  else if( nb <= rs and rs <= _n )
-    x = boost::math::binomial_coefficient<double>( na, _n - rs );
-
-  return x / denominator;
-}
-
 bool ContingencyTable::complete() const noexcept
 {
   // TODO: use memoization to speed up spurious lookups?
