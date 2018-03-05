@@ -6,6 +6,9 @@
 #include <vector>
 
 /*
+  @class TimeSeries
+  @brief Time series data storage class
+
   Represents a time series, i.e. a sequence of values of some length,
   for which this class provides lookup and loading functions.
 */
