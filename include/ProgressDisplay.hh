@@ -10,6 +10,15 @@
 
 #include <boost/any.hpp>
 
+/**
+  @class ProgressDisplay
+  @brief A progress display for the command line
+
+  This is a simple "visualization" of the progress of an operation, such
+  as the extraction of significant shapelets, for command-line tools. It
+  is based on an example of the Boost library.
+*/
+
 class ProgressDisplay
 {
 public:
