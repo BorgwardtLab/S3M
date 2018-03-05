@@ -2,10 +2,14 @@
 #define CONTINGENCY_TABLE_HH__
 
 #include <iosfwd>
+#include <ostream>
 
 #include <boost/math/distributions/chi_squared.hpp>
 
 /**
+  @class ContingencyTable
+  @brief Models a (partially) filled contingency table
+
   Maintains a (partially) filled contingency table. Each table stores
   its corresponding distance threshold, making it possible to perform
   updates efficiently.

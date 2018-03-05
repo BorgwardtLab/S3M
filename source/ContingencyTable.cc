@@ -1,8 +1,5 @@
 #include "ContingencyTable.hh"
 
-#include <boost/math/distributions/hypergeometric.hpp>
-#include <boost/math/special_functions/binomial.hpp>
-
 #include <algorithm>
 #include <limits>
 #include <numeric>
@@ -70,37 +67,31 @@ void ContingencyTable::insert( double distance, bool label )
 
 unsigned ContingencyTable::n1() const noexcept
 {
-  // TODO: use memoization to speed up spurious lookups?
   return _as + _bs;
 }
 
 unsigned ContingencyTable::n0() const noexcept
 {
-  // TODO: use memoization to speed up spurious lookups?
   return _cs + _ds;
 }
 
 unsigned ContingencyTable::rs() const noexcept
 {
-  // TODO: use memoization to speed up spurious lookups?
   return _as + _ds;
 }
 
 unsigned ContingencyTable::qs() const noexcept
 {
-  // TODO: use memoization to speed up spurious lookups?
   return _bs + _cs;
 }
 
 long double ContingencyTable::p() const
 {
-  // TODO: use memoization to speed up spurious lookups?
   return static_cast<long double>( 1.0 ) - boost::math::cdf( _chi2, this->t() );
 }
 
 long double ContingencyTable::p_raw() const
 {
-  // TODO: use memoization to speed up spurious lookups?
   return static_cast<long double>( 1.0 ) - boost::math::cdf( _chi2, this->t_raw() );
 }
 
@@ -217,14 +208,11 @@ long double ContingencyTable::min_optimistic_p( unsigned delta ) const
 
 bool ContingencyTable::complete() const noexcept
 {
-  // TODO: use memoization to speed up spurious lookups?
   return _as + _bs + _cs + _ds == _n;
 }
 
 double ContingencyTable::t() const
 {
-  // TODO: use memoization to speed up spurious lookups?
-
   auto numerator   = _n * std::pow( double(_as*_cs) - double(_bs*_ds), 2.0 );
   auto denominator = (_as+_bs) * (_cs+_ds) * (_as+_ds) * (_bs+_cs);
 
@@ -233,8 +221,6 @@ double ContingencyTable::t() const
 
 double ContingencyTable::t_raw() const
 {
-  // TODO: use memoization to speed up spurious lookups?
-
   // Use the *uncorrected* values. This may be an extremely stupid idea
   // by the client, but who are we to discourage them?
   auto as = this->as();
