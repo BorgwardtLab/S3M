@@ -19,8 +19,6 @@ public:
 
   // The data type that is used to represent individual values of the
   // time series. Leaving this fixed for now to save some time.
-  //
-  // TODO: make this a template parameter?
   using ValueType = double;
 
   using ContainerType  = std::vector<ValueType>;
@@ -101,8 +99,12 @@ public:
 
   // Distance calculations ---------------------------------------------
 
+  /**
+    Calculates the distance from one time series to another time series,
+    which requires evaluating the distance between subsequences.
+  */
+
   ValueType distance( const TimeSeries& other ) const noexcept;
-  ValueType distanceCentred( const TimeSeries& other ) const noexcept;
 
 private:
   std::vector<ValueType> _values;

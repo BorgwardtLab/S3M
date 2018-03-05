@@ -73,44 +73,6 @@ double TimeSeries::distance( const TimeSeries& other ) const noexcept
   return distance;
 }
 
-double TimeSeries::distanceCentred( const TimeSeries& other ) const noexcept
-{
-  const TimeSeries* T1 = this;
-  const TimeSeries* T2 = &other;
-
-  if( T1->length() > T2->length() )
-    std::swap( T1, T2 );
-
-  ValueType distance = std::numeric_limits<ValueType>::max();
-
-  for( std::size_t i = 0; i <= T2->length() - T1->length(); i++ )
-  {
-    ValueType temp = ValueType();
-    auto offset    = (*T2)[i] - (*T1)[0];
-    for( std::size_t j = 0; j < T1->length(); j++ )
-    {
-      auto x = (*T2)[i+j];
-      auto y = (*T1)[  j];
-
-      temp += (x-y-offset) * (x-y-offset);
-
-      // Abandon early if we are already worse than the current best
-      // estimate.
-      if( temp > distance )
-        break;
-    }
-
-    distance = std::min( distance, temp );
-
-    // This is the closest possible distance, so we might as well stop
-    // calculating here.
-    if( distance == ValueType() )
-      return distance;
-  }
-
-  return distance;
-}
-
 std::istream& operator>>( std::istream& in, TimeSeries& T )
 {
   using ValueType = typename TimeSeries::ValueType;
