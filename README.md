@@ -28,6 +28,7 @@ a terminal, please follow these steps to build the software:
     # This assumes that you have cloned the repository to some folder and
     # navigated to the folder via your terminal application.
     $ mkdir build
+    $ cd build
     $ cmake ../
     -- The CXX compiler identification is AppleClang 9.0.0.9000039
     -- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
