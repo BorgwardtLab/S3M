@@ -7,6 +7,9 @@
 #include <vector>
 
 /*
+ @class ContingencyTables
+ @brief Manager class for multiple contingency tables
+
  This class manages a set of contingency tables that belong to a given
  candidate pattern. It permits operating on all tables using a unified
  interface.
