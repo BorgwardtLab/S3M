@@ -34,11 +34,11 @@
 
 #include <cmath>
 
-// Adds colours to the output of log. This is based on an example from
-// StackOverflow [1].
+// Adds colours to the output of the log. This is based on an example
+// from StackOverflow [1].
 //
 // [1]: https://stackoverflow.com/a/38316911/1396991
-void setupLogFormat( boost::log::record_view const& r, boost::log::formatting_ostream& o )
+void formatLogRecord( boost::log::record_view const& r, boost::log::formatting_ostream& o )
 {
   namespace logging = boost::log;
   auto severity     = r[ logging::trivial::severity ];
@@ -91,7 +91,7 @@ void setupLogging()
   using Sink = logging::sinks::synchronous_sink<logging::sinks::text_ostream_backend>;
   boost::shared_ptr<Sink> sink( new Sink( backend ) );
 
-  sink->set_formatter( &setupLogFormat );
+  sink->set_formatter( &formatLogRecord );
   core->add_sink( sink );
 }
 
@@ -111,10 +111,8 @@ int main( int argc, char** argv )
   unsigned l = 0; // label index in time series
   unsigned k = 0; // number of significant shapelets to keep
 
+  std::string input;
   std::string output = "-";
-
-  std::string trainFile;
-  std::string testFile;
 
   options_description description( "Available options" );
   description.add_options()
@@ -127,13 +125,11 @@ int main( int argc, char** argv )
     ("stride,s"           , value<unsigned>( &s )->default_value(  1 ), "Stride" )
     ("label-index,l"      , value<unsigned>( &l )->default_value(  0 ), "Index of label in time series" )
     ("keep,k"             , value<unsigned>( &k )->default_value(  0 ), "Maximum number of shapelets to keep (0 = unlimited" )
-    ("train-file"         , value<std::string>( &trainFile )          , "Training file" )
-    ("test-file"          , value<std::string>( &testFile )           , "Test file" )
+    ("input,i"            , value<std::string>( &input )              , "Training file" )
     ("output,o"           , value<std::string>( &output )             , "Output file (specify '-' for stdout)" );
 
   positional_options_description positionalOptions;
-  positionalOptions.add( "train-file", 1 );
-  positionalOptions.add( "test-file" , 1 );
+  positionalOptions.add( "input", 1 );
 
   variables_map variables;
 
@@ -161,20 +157,23 @@ int main( int argc, char** argv )
 
   // 1. Read training data ---------------------------------------------
 
-  auto data         = readData( trainFile, l );
+  BOOST_LOG_TRIVIAL(info) << "Loading input from " << input;
+
+  auto data         = readData( input, l );
   auto&& timeSeries = data.first;
   auto&& labels     = data.second;
 
-  std::cerr << "* Training input file = " << trainFile << "\n"
-            << "* Read " << timeSeries.size() << " time series from training input file\n";
+  BOOST_LOG_TRIVIAL(info) << "Read "
+                          << timeSeries.size()
+                          << " time series from training input file";
 
   if( standardize )
   {
-    std::cerr << "* Standardizing data...";
+    BOOST_LOG_TRIVIAL(info) << "Starting data standardization";
 
     standardizeData( timeSeries );
 
-    std::cerr << "finished\n";
+    BOOST_LOG_TRIVIAL(info) << "Finished data standardization";
   }
 
   // 2. Perform the extraction -----------------------------------------
@@ -185,6 +184,9 @@ int main( int argc, char** argv )
   // specified
   if( m > M )
     M = m;
+
+  BOOST_LOG_TRIVIAL(info) << "Extracting shapelets with length "
+                          << "[" << m << ":" << M << "]";
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
@@ -241,5 +243,5 @@ int main( int argc, char** argv )
          << "}\n";
   }
 
-  std::cerr << "Shapelet extraction:" << timer.format() << "\n";
+  BOOST_LOG_TRIVIAL(info) << "Finished shapelet extraction. Total time:" << timer.format() << "\n";
 }
