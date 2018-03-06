@@ -2,15 +2,25 @@
 #include "TimeSeries.hh"
 #include "Utilities.hh"
 
+#include <boost/core/null_deleter.hpp>
+
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/trivial.hpp>
 
+#include <boost/log/sinks/sync_frontend.hpp>
 #include <boost/log/sinks/text_ostream_backend.hpp>
 
 #include <boost/log/utility/formatting_ostream.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+
+#include <boost/make_shared.hpp>
 
 #include <boost/program_options.hpp>
+
+#include <boost/shared_ptr.hpp>
 
 #include <boost/timer/timer.hpp>
 
@@ -52,15 +62,43 @@ void setupLogFormat( boost::log::record_view const& r, boost::log::formatting_os
     }
   }
 
-  o << r[ logging::expressions::smessage ];
+  auto timeStamp = logging::extract<boost::posix_time::ptime>("TimeStamp", r);
+
+  o << boost::posix_time::to_simple_string( *timeStamp ) << ": "
+    << r[ logging::expressions::smessage ];
 
   // Restore the default colour
   if( severity )
     o << "\033[0m";
 }
 
+void setupLogging()
+{
+  namespace logging = boost::log;
+  auto core         = logging::core::get();
+
+  logging::add_common_attributes();
+
+  boost::shared_ptr<logging::sinks::text_ostream_backend> backend
+    = boost::make_shared<logging::sinks::text_ostream_backend>();
+
+  backend->add_stream(
+    boost::shared_ptr<std::ostream>( &std::clog, boost::null_deleter() )
+  );
+
+  backend->auto_flush( true );
+
+  using Sink = logging::sinks::synchronous_sink<logging::sinks::text_ostream_backend>;
+  boost::shared_ptr<Sink> sink( new Sink( backend ) );
+
+  sink->set_formatter( &setupLogFormat );
+  core->add_sink( sink );
+}
+
 int main( int argc, char** argv )
 {
+  setupLogging();
+
   using namespace boost::program_options;
 
   bool standardize      = false;
