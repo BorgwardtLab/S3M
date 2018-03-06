@@ -5,16 +5,14 @@
 #include "SlidingWindow.hh"
 #include "Utilities.hh"
 
-// FIXME: remove after debugging or replace with a proper logging
-// framework, e.g. Boost.Log.
-#include <iostream>
-#include <iomanip>
-
 #include <algorithm>
+#include <iostream>
 #include <vector>
 
 #include <cassert>
 #include <cmath>
+
+#include <boost/log/trivial.hpp>
 
 #include <boost/math/special_functions/factorials.hpp>
 
@@ -43,22 +41,13 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   unsigned n  = unsigned( timeSeries.size() );
   unsigned n1 = unsigned( std::count( labels.begin(), labels.end(), true ) );
 
-  std::cerr << "n  = " << n << "\n"
-            << "n1 = " << n1 << "\n";
+  BOOST_LOG_TRIVIAL(info) << "n  = " << n << ", n1 = " << n1;
 
   auto min_attainable_p_values = SignificantShapelets::min_attainable_p_values( n, n1 );
   auto windowSizeCorrection    =   boost::math::factorial<long double>( _maxWindowSize )
                                  / boost::math::factorial<long double>( _minWindowSize );
 
-  std::cerr << "* Obtained the following set of minimum attainable $p$-values: ";
-  {
-    for( auto&& p_val : min_attainable_p_values )
-      std::cerr << std::setprecision(32) << p_val << " ";
-
-    std::cerr << "\n";
-  }
-
-  std::cerr << "* Window size correction factor: " << windowSizeCorrection << "\n";
+  BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
   // Remove thresholds that are larger than the desired significance
   // threshold. This does not change testability of patterns because
@@ -72,6 +61,9 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
                     _windowStride );
 
   sw.setRemoveDuplicates( _removeDuplicates );
+
+  if( _removeDuplicates )
+    BOOST_LOG_TRIVIAL(info) << "Performing duplicate removal during sliding window extraction";
 
   std::vector<TimeSeries> candidates;
 
@@ -102,13 +94,14 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     }
   }
 
-  std::cerr << "* In total: " << candidates.size() << " candidates\n";
+
+  BOOST_LOG_TRIVIAL(info) << "Obtained " << candidates.size() << " candidate shapelets";
 
   unsigned maxLength = 0;
   for( auto&& ts : timeSeries )
     maxLength = std::max( maxLength, unsigned( ts.length() ) );
 
-  std::cerr << "* Maximum length: " << maxLength << "\n";
+  BOOST_LOG_TRIVIAL(info) << "Maximum length of input time series is " << maxLength;
 
   // -------------------------------------------------------------------
   // Main loop for significant shapelet mining
