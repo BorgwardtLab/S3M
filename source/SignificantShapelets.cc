@@ -111,10 +111,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   // the best split (with respect to the distance measure), and add them
   // to the list of significant shapelets (at least for the time being).
 
-  // FIXME:
-  //   - ignoring predefined distances for now
-  //   - make duplicate candidate removal possible
-
   std::vector<SignificantShapelet> significantShapelets;
 
   // Initial threshold for Tarone's method. This will be adjusted inside
@@ -227,10 +223,10 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     }
   );
 
-  std::cerr << "* Detected "
-            << significantShapelets.size()
-            << " significant shapelet"
-            << ( significantShapelets.size() != 1 ? "s\n" : "\n" );
+  BOOST_LOG_TRIVIAL(info)
+    << "Detected " << significantShapelets.size()
+    << " significant shapelet"
+    << ( significantShapelets.size() != 1 ? "s" : "" );
 
   return significantShapelets;
 }

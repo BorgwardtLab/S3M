@@ -52,16 +52,6 @@ public:
 
   // Parameters --------------------------------------------------------
 
-  template <class InputIterator> void setDistances( InputIterator begin, InputIterator end )
-  {
-    _distances.assign( begin, end );
-  }
-
-  void setDistances( std::initializer_list<ValueType>&& il )
-  {
-    _distances.assign( il.begin(), il.end() );
-  }
-
   void disablePruning( bool value = true ) noexcept
   {
     _disablePruning = value;
@@ -107,10 +97,6 @@ private:
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.
   double _alpha = 0.05;
-
-  // If set, uses these distances as the distance thresholds for which
-  // to perform all calculations.
-  std::vector<ValueType> _distances;
 };
 
 /**
