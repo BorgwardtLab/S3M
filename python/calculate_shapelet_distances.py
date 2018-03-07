@@ -14,12 +14,12 @@ import sys
 
 import numpy as np
 
-from scipy.spatial.distance import euclidean
+from scipy.spatial.distance import sqeuclidean
 
 def distance(S,T):
   """
   Calculates the Euclidean distance between two sequences of varying
-  lengths without taking into account any computational shortcuts.
+  lengths, using early abandon if possible.
   """
   n, m = len(S), len(T)
 
@@ -30,8 +30,21 @@ def distance(S,T):
   min_distance = np.inf
 
   for i in range(0, m - n + 1):
-    sequence     = T[i:i+n]
-    min_distance = min(min_distance, euclidean(S, sequence))
+    stop         = False
+    sum_distance = 0.0
+
+    for j,x in enumerate(S):
+      y             = T[i+j]
+      sum_distance += sqeuclidean(x, y)
+
+      # Abandon calculations as soon as the best distance (so far) has
+      # been surpassed---adding more values will only increase it.
+      if sum_distance >= min_distance:
+        stop = True
+        break
+
+    if not stop:
+      min_distance = sum_distance
 
   return min_distance
 
