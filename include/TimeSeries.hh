@@ -90,6 +90,12 @@ public:
 
   // Attributes --------------------------------------------------------
 
+  void  setIndex( unsigned index ) { _index = index; }
+  void  setStart( unsigned start ) { _start = start; }
+
+  unsigned index() const noexcept  { return _index;  }
+  unsigned start() const noexcept  { return _start;  }
+
   /** Returns current size or length of time series */
   std::size_t size()   const noexcept { return _values.size(); }
   std::size_t length() const noexcept { return _values.size(); }
@@ -107,6 +113,15 @@ public:
   ValueType distance( const TimeSeries& other ) const noexcept;
 
 private:
+
+  unsigned _index = 0; //< Index of time series or index of parent time series for a shapelet (optional)
+  unsigned _start = 0; //< Start index (optional)
+
+  /**
+    The values making up the time series (or the individual shapelet),
+    sorted in order of appearance.
+  */
+
   std::vector<ValueType> _values;
 };
 
