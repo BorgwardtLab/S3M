@@ -57,7 +57,7 @@ std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::str
   return std::make_pair( result, labels );
 }
 
-void standardizeData( std::vector<TimeSeries>& timeSeries )
+std::pair<double, double> standardizeData( std::vector<TimeSeries>& timeSeries )
 {
   using namespace boost::accumulators;
   using ValueType = typename TimeSeries::ValueType;
@@ -82,4 +82,6 @@ void standardizeData( std::vector<TimeSeries>& timeSeries )
                     }
     );
   }
+
+  return std::make_pair( mu, sigma );
 }

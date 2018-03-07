@@ -30,6 +30,7 @@
 #include <sstream>
 #include <string>
 #include <regex>
+#include <utility>
 #include <vector>
 
 #include <cctype>
@@ -145,8 +146,11 @@ std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::str
   Performs $z$-score normalization, i.e. standardization, of a set of
   time series. They will be adjusted such that their mean is zero and
   they have unit variance.
+
+  The function will return the sample mean and the sample variance in
+  order to make it possible to *reverse* the transformation.
 */
 
-void standardizeData( std::vector<TimeSeries>& timeSeries );
+std::pair<double, double> standardizeData( std::vector<TimeSeries>& timeSeries );
 
 #endif

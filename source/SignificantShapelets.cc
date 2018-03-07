@@ -94,7 +94,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     }
   }
 
-
   BOOST_LOG_TRIVIAL(info) << "Obtained " << candidates.size() << " candidate shapelets";
 
   unsigned maxLength = 0;
