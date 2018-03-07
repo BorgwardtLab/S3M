@@ -271,6 +271,8 @@ std::ostream& operator<<( std::ostream& o, const SignificantShapelets::Significa
   o << "  {\n"
     << "    \"p_val\": " << std::setprecision( 32 ) << ss.p << ",\n"
     << "    \"table\": [" << ss.table << "],\n"
+    << "    \"index\": " << ss.shapelet.index() << ",\n"
+    << "    \"start\": " << ss.shapelet.start() << ",\n"
     << "    \"shapelet\": [\n"
     << "      ";
 
