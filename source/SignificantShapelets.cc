@@ -44,8 +44,10 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   BOOST_LOG_TRIVIAL(info) << "n  = " << n << ", n1 = " << n1;
 
   auto min_attainable_p_values = SignificantShapelets::min_attainable_p_values( n, n1 );
-  auto windowSizeCorrection    =   boost::math::factorial<long double>( _maxWindowSize )
-                                 / boost::math::factorial<long double>( _minWindowSize );
+  auto windowSizeCorrection    = _minWindowSize
+                                 + 0.5 * (  std::pow( _maxWindowSize - _minWindowSize, 2 )
+                                           +        ( _maxWindowSize - _minWindowSize )
+                                 );
 
   BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
