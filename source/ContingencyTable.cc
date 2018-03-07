@@ -211,15 +211,15 @@ bool ContingencyTable::complete() const noexcept
   return _as + _bs + _cs + _ds == _n;
 }
 
-double ContingencyTable::t() const
+long double ContingencyTable::t() const
 {
-  auto numerator   = _n * std::pow( double(_as*_cs) - double(_bs*_ds), 2.0 );
+  auto numerator   = _n * std::pow( static_cast<long double>(_as*_cs) - static_cast<long double>(_bs*_ds), static_cast<long double>( 2.0 ) );
   auto denominator = (_as+_bs) * (_cs+_ds) * (_as+_ds) * (_bs+_cs);
 
-  return static_cast<double>( numerator / denominator );
+  return static_cast<long double>( numerator / denominator );
 }
 
-double ContingencyTable::t_raw() const
+long double ContingencyTable::t_raw() const
 {
   // Use the *uncorrected* values. This may be an extremely stupid idea
   // by the client, but who are we to discourage them?
@@ -229,7 +229,7 @@ double ContingencyTable::t_raw() const
   auto ds = this->ds();
   auto n  = _n - 4;
 
-  auto numerator   = n * std::pow( double(as*cs) - double(bs*ds), 2.0 );
+  auto numerator   = n * std::pow( static_cast<long double>(as*cs) - static_cast<long double>(bs*ds), static_cast<long double>( 2.0 ) );
   auto denominator = (as+bs) * (cs+ds) * (as+ds) * (bs+cs);
 
   return static_cast<double>( numerator / denominator );

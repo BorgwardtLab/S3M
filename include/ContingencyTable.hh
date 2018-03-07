@@ -120,8 +120,8 @@ private:
     and returns it. This is required for $p$-value calculation.
   */
 
-  double t() const;
-  double t_raw() const;
+  long double t() const;
+  long double t_raw() const;
 
   static boost::math::chi_squared_distribution<long double> _chi2;
 
