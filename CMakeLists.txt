@@ -42,7 +42,14 @@ ENABLE_IF_SUPPORTED( CMAKE_CXX_FLAGS "-pedantic" )
 # Dependencies
 ########################################################################
 
-FIND_PACKAGE( Boost REQUIRED COMPONENTS log program_options system timer )
+FIND_PACKAGE( Threads )
+FIND_PACKAGE( Boost REQUIRED
+  COMPONENTS
+    log
+    program_options
+    system
+    timer
+)
 
 ########################################################################
 # Include directories
@@ -77,4 +84,4 @@ TARGET_COMPILE_OPTIONS( s3m
     "-O3"
 )
 
-TARGET_LINK_LIBRARIES( s3m ${Boost_LIBRARIES} )
+TARGET_LINK_LIBRARIES( s3m ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
