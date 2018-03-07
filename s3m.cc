@@ -221,7 +221,7 @@ int main( int argc, char** argv )
           std::transform( shapelet.begin(), shapelet.end(), shapelet.begin(),
             [&mu, &sigma] ( ValueType x )
             {
-              return (x * sigma) - mu;
+              return (x * sigma) + mu;
             }
           );
 
