@@ -167,11 +167,17 @@ int main( int argc, char** argv )
                           << timeSeries.size()
                           << " time series from training input file";
 
+  double mu    = 0.0;
+  double sigma = 1.0;
+
   if( standardize )
   {
     BOOST_LOG_TRIVIAL(info) << "Starting data standardization";
 
-    standardizeData( timeSeries );
+    // Store the parameters in order to undo the standardization
+    // procedure afterwards.
+    std::tie( mu, sigma )
+      = standardizeData( timeSeries );
 
     BOOST_LOG_TRIVIAL(info) << "Finished data standardization";
   }
@@ -200,6 +206,29 @@ int main( int argc, char** argv )
                                                thresholds );
 
   timer.stop();
+
+  if( standardize )
+  {
+    using SignificantShapelet = SignificantShapelets::SignificantShapelet;
+
+    std::transform(
+      shapelets.begin(), shapelets.end(), shapelets.begin(),
+        [&mu, &sigma] ( SignificantShapelet ss )
+        {
+          using ValueType  = typename TimeSeries::ValueType;
+          auto && shapelet = ss.shapelet;
+
+          std::transform( shapelet.begin(), shapelet.end(), shapelet.begin(),
+            [&mu, &sigma] ( ValueType x )
+            {
+              return (x * sigma) - mu;
+            }
+          );
+
+          return ss;
+        }
+    );
+  }
 
   // 3. Output ---------------------------------------------------------
   //
