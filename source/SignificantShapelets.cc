@@ -73,6 +73,11 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   {
     auto localCandidates = sw( timeSeries[i] );
 
+    // Set the time series the local candidate originates from in order
+    // to simplify post-procssing.
+    for( auto&& localCandidate : localCandidates )
+      localCandidate.setIndex( unsigned(i) );
+
     if( not _removeDuplicates )
       candidates.insert( candidates.end(), localCandidates.begin(), localCandidates.end() );
     else

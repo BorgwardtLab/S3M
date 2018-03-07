@@ -56,6 +56,8 @@ std::vector<TimeSeries> SlidingWindow::operator()( const TimeSeries& T ) const n
         = TimeSeries( T.begin() + DifferenceType(i),
                       T.begin() + DifferenceType(i + size ) );
 
+      candidate.setStart( unsigned(i) );
+
       // Create a new predicate for closeness detection. If any other
       // time series satisfies this predicate, the new candidate will
       // not be added.
