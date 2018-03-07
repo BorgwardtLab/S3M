@@ -23,13 +23,13 @@ if __name__ == "__main__":
   for shapelet in shapelets:
     p_values.append( shapelet["p_val"] )
 
-  p_min = math.log( min(p_values) )
-  p_max = math.log( max(p_values) )
+  p_min = math.log(min(p_values) + 1e-10)
+  p_max = math.log(max(p_values) + 1e-10)
 
-  for shapelet in shapelets:
+  for shapelet in shapelets[:5]:
     s     = shapelet["shapelet"]
     p     = shapelet["p_val"]
-    p     = math.log(p)
+    p     = math.log(p+1e-10)
 
     if p_max != p_min:
       alpha = max( (p_max - p) / (p_max - p_min), 0.05 )
