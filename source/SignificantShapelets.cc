@@ -218,7 +218,13 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   std::sort( significantShapelets.begin(), significantShapelets.end(),
     [] ( const SignificantShapelet& S, const SignificantShapelet& T )
     {
-      return S.p < T.p;
+      // Sort by $p$-value first...
+      if( S.p != T.p )
+        return S.p < T.p;
+
+      // ...and by length second, in case the $p$-values are equal
+      else
+        return S.shapelet.length() < T.shapelet.length();
     }
   );
 
