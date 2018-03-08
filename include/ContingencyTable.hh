@@ -19,7 +19,7 @@ class ContingencyTable
 {
 public:
 
-  /** Creates an empt (invalid) contingency table */
+  /** Creates an empty (invalid) contingency table */
   ContingencyTable();
 
   /**
@@ -39,6 +39,13 @@ public:
   */
 
   void insert( double distance, bool label );
+
+  /**
+    Checks whether two contingency tables are equal. Notice that this
+    only involves checking that the values they hold are equal. There
+    is no checking of the thresholds involved.
+  */
+  bool operator==( const ContingencyTable& other ) const noexcept;
 
   // Marginals ---------------------------------------------------------
 

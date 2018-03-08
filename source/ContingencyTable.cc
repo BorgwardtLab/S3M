@@ -65,6 +65,18 @@ void ContingencyTable::insert( double distance, bool label )
   assert( _ds + _cs <= _n0 );
 }
 
+bool ContingencyTable::operator==( const ContingencyTable& other ) const noexcept
+{
+  return   _as == other._as
+        && _bs == other._bs
+        && _cs == other._cs
+        && _ds == other._ds
+        && _n1 == other._n1
+        && _n0 == other._n0
+        && _n  == other._n; // this last check is somewhat superfluous,
+                            // but what the heck, let's do it anyway
+}
+
 unsigned ContingencyTable::n1() const noexcept
 {
   return _as + _bs;
