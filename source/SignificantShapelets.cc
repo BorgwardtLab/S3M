@@ -41,15 +41,9 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   unsigned n  = unsigned( timeSeries.size() );
   unsigned n1 = unsigned( std::count( labels.begin(), labels.end(), true ) );
 
-  BOOST_LOG_TRIVIAL(info) << "n  = " << n << ", n1 = " << n1;
+  BOOST_LOG_TRIVIAL(info) << "n = " << n << ", n1 = " << n1;
 
   auto min_attainable_p_values = SignificantShapelets::min_attainable_p_values( n, n1 );
-  auto windowSizeCorrection    = _minWindowSize
-                                 + 0.5 * (  std::pow( _maxWindowSize - _minWindowSize, 2 )
-                                           +        ( _maxWindowSize - _minWindowSize )
-                                 );
-
-  BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
   // Remove thresholds that are larger than the desired significance
   // threshold. This does not change testability of patterns because
@@ -108,6 +102,12 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     maxLength = std::max( maxLength, unsigned( ts.length() ) );
 
   BOOST_LOG_TRIVIAL(info) << "Maximum length of input time series is " << maxLength;
+
+  auto windowSizeCorrection = ( _maxWindowSize - _minWindowSize ) * maxLength
+                              - 0.5 * std::pow( _maxWindowSize - _minWindowSize, 2 )
+                              + 0.5 * ( _maxWindowSize - _minWindowSize );
+
+  BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
   // -------------------------------------------------------------------
   // Main loop for significant shapelet mining
