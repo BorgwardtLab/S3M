@@ -22,6 +22,16 @@ std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::str
 
   while( in )
   {
+    // Skip comment lines, regardless of their position within the file,
+    // as this permits us to describe our data.
+    if( in.peek() == '#' )
+    {
+      std::string line;
+      std::getline( in, line );
+
+      continue;
+    }
+
     TimeSeries T;
     in >> T;
 
