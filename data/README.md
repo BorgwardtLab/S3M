@@ -26,7 +26,7 @@ preferred terminal emulator to create your own subsampled version of the
 data&nbsp;(assuming that you have access to a POSIX-like operating
 system such as Linux or MacOS X):
 
-    ```Shell 
+    ```bash
     # First, we need to extract cases and controls from the input data,
     # so we have to take a look at the first entry of each row.
     $ grep    "^1" Blood_pressure.csv > Blood_pressure_cases.csv
