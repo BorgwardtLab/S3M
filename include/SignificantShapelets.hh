@@ -57,6 +57,11 @@ public:
     _disablePruning = value;
   }
 
+  void keepNormalOnly( bool value = true ) noexcept
+  {
+    _keepNormalOnly = value;
+  }
+
   void removeDuplicates( bool value = true ) noexcept
   {
     _removeDuplicates = value;
@@ -91,8 +96,9 @@ private:
   unsigned _maxWindowSize;
   unsigned _windowStride;
 
-  bool _removeDuplicates = false;
   bool _disablePruning   = false;
+  bool _keepNormalOnly   = false;
+  bool _removeDuplicates = false;
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.

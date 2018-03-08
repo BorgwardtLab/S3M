@@ -104,6 +104,7 @@ int main( int argc, char** argv )
   bool standardize      = false;
   bool disablePruning   = false;
   bool removeDuplicates = false;
+  bool keepNormalOnly   = false;
 
   unsigned m = 0; // minimum pattern length
   unsigned M = 0; // maximum pattern length
@@ -118,6 +119,7 @@ int main( int argc, char** argv )
   description.add_options()
     ("help,h"             , "Show help")
     ("standardize"        , "Standardize data" )
+    ("keep-normal-only,n" , "Keep only normal p-values" )
     ("disable-pruning,p"  , "Disable pruning criterion" )
     ("remove-duplicates,r", "Remove duplicates" )
     ("min-length,m"       , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
@@ -148,6 +150,9 @@ int main( int argc, char** argv )
 
   if( variables.count("disable-pruning") )
     disablePruning = true;
+
+  if( variables.count("keep-normal-only" ) )
+    keepNormalOnly = true;
 
   if( variables.count("remove-duplicates") )
     removeDuplicates = true;
@@ -198,6 +203,7 @@ int main( int argc, char** argv )
   SignificantShapelets significantShapelets( m, M, s );
   significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
   significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
+  significantShapelets.keepNormalOnly( keepNormalOnly );      // enable/disable keeping normal $p$-values
 
   long double p_tarone = 0.0;
   auto shapelets       = significantShapelets( timeSeries,
