@@ -62,6 +62,11 @@ public:
     _keepNormalOnly = value;
   }
 
+  void mergeTables( bool value = true ) noexcept
+  {
+    _mergeTables = value;
+  }
+
   void removeDuplicates( bool value = true ) noexcept
   {
     _removeDuplicates = value;
@@ -98,6 +103,7 @@ private:
 
   bool _disablePruning   = false;
   bool _keepNormalOnly   = false;
+  bool _mergeTables      = false;
   bool _removeDuplicates = false;
 
   // Target FWER before any adjustments of the threshold are being made

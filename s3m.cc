@@ -103,8 +103,9 @@ int main( int argc, char** argv )
 
   bool standardize      = false;
   bool disablePruning   = false;
-  bool removeDuplicates = false;
   bool keepNormalOnly   = false;
+  bool mergeTables      = false;
+  bool removeDuplicates = false;
 
   unsigned m = 0; // minimum pattern length
   unsigned M = 0; // maximum pattern length
@@ -119,6 +120,7 @@ int main( int argc, char** argv )
   description.add_options()
     ("help,h"             , "Show help")
     ("standardize"        , "Standardize data" )
+    ("merge-tables,t"     , "Merge equal contingency tables")
     ("keep-normal-only,n" , "Keep only normal p-values" )
     ("disable-pruning,p"  , "Disable pruning criterion" )
     ("remove-duplicates,r", "Remove duplicates" )
@@ -153,6 +155,9 @@ int main( int argc, char** argv )
 
   if( variables.count("keep-normal-only" ) )
     keepNormalOnly = true;
+
+  if( variables.count("merge-tables") )
+    mergeTables = true;
 
   if( variables.count("remove-duplicates") )
     removeDuplicates = true;
@@ -202,8 +207,9 @@ int main( int argc, char** argv )
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
   significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
-  significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
   significantShapelets.keepNormalOnly( keepNormalOnly );      // enable/disable keeping normal $p$-values
+  significantShapelets.mergeTables( mergeTables );            // enable/disable merging of contingency tables
+  significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
 
   long double p_tarone = 0.0;
   auto shapelets       = significantShapelets( timeSeries,

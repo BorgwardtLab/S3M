@@ -220,6 +220,63 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   // to decide upon further corrections, such as Bonferroni.
   tarone = p_tarone;
 
+  // Perform contingency table merging if desired by the user. This
+  // reduces the number of significant shapelets that are reported,
+  // but also makes it easier to sift through the results.
+  if( _mergeTables )
+  {
+    BOOST_LOG_TRIVIAL(info) << "Merging contingency tables";
+
+    // Sort contingency tables in lexicographical order. This makes it
+    // easier to remove duplicates afterwards.
+    std::sort( significantShapelets.begin(), significantShapelets.end(),
+      [] ( const SignificantShapelet& S, const SignificantShapelet& T )
+      {
+        auto as = S.table.as();
+        auto bs = S.table.bs();
+        auto cs = S.table.cs();
+        auto ds = S.table.ds();
+
+        auto at = T.table.as();
+        auto bt = T.table.bs();
+        auto ct = T.table.cs();
+        auto dt = T.table.ds();
+
+        if( as != at )
+          return as < at;
+        else
+        {
+          if( bs != bt )
+            return bs < bt;
+          else
+          {
+            if( cs != ct )
+              return cs < ct;
+            else
+            {
+              if( ds != dt )
+                return ds < dt;
+            }
+          }
+        }
+
+        return false;
+      }
+    );
+
+    // Only keep the first contingency table of every 'class' of
+    // contingency tables.
+    significantShapelets.erase(
+      std::unique( significantShapelets.begin(), significantShapelets.end(),
+        [] ( const SignificantShapelet& S, const SignificantShapelet& T )
+        {
+          return S.table == T.table;
+        }
+      ),
+      significantShapelets.end()
+    );
+  }
+
   // In most of the cases, clients want to keep 'normal' $p$-values
   // only, i.e. ones that are *not* NaN or Inf.
   if( _keepNormalOnly )
