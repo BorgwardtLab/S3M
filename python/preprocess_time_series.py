@@ -12,7 +12,7 @@
 import sys
 
 # TODO: make configurable
-max_length = 80
+max_length = 60
 
 if __name__ == "__main__":
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
       labels.append(label)
       all_time_series.append( values )
 
-  all_time_series = [ time_series[:80] for time_series in all_time_series ]
+  all_time_series = [ time_series[:max_length] for time_series in all_time_series ]
 
   ######################################################################
   # Output
