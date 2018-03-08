@@ -26,7 +26,7 @@ if __name__ == "__main__":
   p_min = math.log(min(p_values) + 1e-10)
   p_max = math.log(max(p_values) + 1e-10)
 
-  for shapelet in shapelets[:5]:
+  for shapelet in shapelets:
     s     = shapelet["shapelet"]
     p     = shapelet["p_val"]
     p     = math.log(p+1e-10)
@@ -36,6 +36,6 @@ if __name__ == "__main__":
     else:
       alpha = 1.0
 
-    plt.plot(s, 'k', alpha=alpha, linewidth=5*alpha)
+    plt.plot(s, 'k', alpha=alpha, linewidth=2*alpha)
 
   plt.show()
