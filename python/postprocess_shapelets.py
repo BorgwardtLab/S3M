@@ -66,4 +66,4 @@ if __name__ == "__main__":
         min_index = index
         min_p     = p_values[index]
 
-    print("{0:4d}: {1:0.8e} {2}".format(min_index, min_p, shapelets[min_index]["shapelet"]))
+    print("{0:4d} {1:4d}: {2:0.8e} {3}".format(min_index, shapelets[min_index]["index"], min_p, shapelets[min_index]["shapelet"]))
