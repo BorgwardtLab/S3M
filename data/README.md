@@ -43,3 +43,20 @@ $ sort -R Blood_pressure_controls.csv | head -n 50 >> Blood_pressure_random_samp
 $ gshuf -o Blood_pressure_random_sample.csv < Blood_pressure_random_sample.csv
 ```
  
+## Reproducing the results
+
+Assuming that you have successfully built our method in a `build`
+subdirectory of the repository, the following settings have been
+used to create the results:
+
+```bash
+$ ./s3m -m 4 -M 6 -t ../data/training/Blood_pressure_random_sample > /tmp/Blood_pressure.json
+$ ./s3m -m 4 -M 6 -t ../data/training/Heart_rate.csv               > /tmp/Heart_rate.json
+$ ./s3m -m 4 -M 6 -t ../data/training/Respiratory_rate.csv         > /tmp/Respiratory_rate.json
+```
+
+You can experiment with other settings of the `s3m` executable in order
+to obtain longer or shorter shapelets, for example. Please use the `-h`
+or `--help` flag of the executable for a brief description:
+
+    $ ./s3m -h
