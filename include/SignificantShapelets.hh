@@ -96,7 +96,7 @@ private:
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.
-  double _alpha = 0.05;
+  double _alpha = 0.01;
 };
 
 /**
