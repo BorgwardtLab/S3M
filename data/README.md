@@ -26,20 +26,20 @@ preferred terminal emulator to create your own subsampled version of the
 data&nbsp;(assuming that you have access to a POSIX-like operating
 system such as Linux or MacOS X):
 
-    ```bash
-    # First, we need to extract cases and controls from the input data,
-    # so we have to take a look at the first entry of each row.
-    $ grep    "^1" Blood_pressure.csv > Blood_pressure_cases.csv
-    $ grep - v "^1" Blood_pressure.csv > Blood_pressure_controls.csv
-    # We then bring all cases into random order, take 50 of them, which
-    # you can of course change, and output them to a new file. Ditto for
-    # the controls, which are appended to the new file.
-    $ sort -R Blood_pressure_cases.csv    | head -n 50 >  Blood_pressure_random_sample.csv
-    $ sort -R Blood_pressure_controls.csv | head -n 50 >> Blood_pressure_random_sample.csv
-    # Last, as a good data science tactic, we shuffle the resulting data
-    # set in order to ensure that the order in which we specified series
-    # does not matter. This is not relevant for our method, but may turn
-    # out to be relevant for comparing with other methods.
-    $ gshuf -o Blood_pressure_random_sample.csv < Blood_pressure_random_sample.csv
-    ```
+```bash
+# First, we need to extract cases and controls from the input data,
+# so we have to take a look at the first entry of each row.
+$ grep    "^1" Blood_pressure.csv > Blood_pressure_cases.csv
+$ grep - v "^1" Blood_pressure.csv > Blood_pressure_controls.csv
+# We then bring all cases into random order, take 50 of them, which
+# you can of course change, and output them to a new file. Ditto for
+# the controls, which are appended to the new file.
+$ sort -R Blood_pressure_cases.csv    | head -n 50 >  Blood_pressure_random_sample.csv
+$ sort -R Blood_pressure_controls.csv | head -n 50 >> Blood_pressure_random_sample.csv
+# Last, as a good data science tactic, we shuffle the resulting data
+# set in order to ensure that the order in which we specified series
+# does not matter. This is not relevant for our method, but may turn
+# out to be relevant for comparing with other methods.
+$ gshuf -o Blood_pressure_random_sample.csv < Blood_pressure_random_sample.csv
+```
  
