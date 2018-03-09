@@ -45,3 +45,11 @@ a terminal, please follow these steps to build the software:
     $ make
 
 The `build` directory should now contain the `s3m` executable.
+
+# Contributors
+
+S3M is developed and maintained by members of the [Machine Learning and
+Computational Biology Lab](https://www.bsse.ethz.ch/mlcb) of [Prof. Dr.
+Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
+
+- Bastian Rieck ([GitHub](https://github.com/Submanifold))
