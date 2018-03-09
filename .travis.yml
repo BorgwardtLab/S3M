@@ -1,0 +1,30 @@
+language: cpp
+
+os:
+  - linux
+
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
+sudo: false
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchan-r-test
+    packages:
+      - g++-4.9
+      - libboost-dev
+
+compiler:
+  - clang
+  - gcc
+
+install:
+  - if [[ "$TRAVIS_OS_NAME" != "osx" && "$CXX" == "g++" ]]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ../
+  - make
