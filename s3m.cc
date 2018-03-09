@@ -1,6 +1,7 @@
 #include "SignificantShapelets.hh"
 #include "TimeSeries.hh"
 #include "Utilities.hh"
+#include "Version.hh"
 
 #include <boost/core/null_deleter.hpp>
 
@@ -265,7 +266,8 @@ int main( int argc, char** argv )
          << "    \"max_length\": "  << M << ",\n"
          << "    \"stride\": "      << s << ",\n"
          << "    \"standardize\": " << std::boolalpha << standardize << std::noboolalpha << ",\n"
-         << "    \"p_tarone\": "    << p_tarone << "\n"
+         << "    \"p_tarone\": "    << p_tarone << ",\n"
+         << "    \"version\": "     << "\"" << GIT_COMMIT_ID << "\"\n"
          << "  },\n"
          << "  \"shapelets\": [\n";
 
