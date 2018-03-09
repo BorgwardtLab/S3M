@@ -107,6 +107,11 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
                               - 0.5 * std::pow( _maxWindowSize - _minWindowSize, 2 )
                               + 0.5 * ( _maxWindowSize - _minWindowSize );
 
+  // Ensures that the window size correction factor is nonzero,
+  // regardless of whether the maximum and minimum window size
+  // happen to coincide.
+  windowSizeCorrection = std::max( windowSizeCorrection, 1.0 );
+
   BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
   // -------------------------------------------------------------------
