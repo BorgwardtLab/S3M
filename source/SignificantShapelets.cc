@@ -114,6 +114,13 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
   BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
+  BOOST_LOG_TRIVIAL(info) << "Bonferroni correction factor is " <<
+    _alpha / (  static_cast<long double>( candidates.size() )
+              * static_cast<long double>( timeSeries.size() )
+              * static_cast<long double>( maxLength )
+              * static_cast<long double>( windowSizeCorrection )
+  );
+
   // -------------------------------------------------------------------
   // Main loop for significant shapelet mining
   // -------------------------------------------------------------------
