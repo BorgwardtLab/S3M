@@ -1,0 +1,6 @@
+#ifndef VERSION_HH__
+#define VERSION_HH__
+
+#cmakedefine GIT_COMMIT_ID "@GIT_COMMIT_ID@"
+
+#endif

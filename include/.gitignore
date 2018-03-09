@@ -1,0 +1,3 @@
+# Ensures that we do not automatically set the version file under
+# revision control because it will be generated automatically.
+Version.hh

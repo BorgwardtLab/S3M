@@ -39,6 +39,17 @@ ENABLE_IF_SUPPORTED( CMAKE_CXX_FLAGS "-Wunsafe-loop-optimization" )
 ENABLE_IF_SUPPORTED( CMAKE_CXX_FLAGS "-pedantic" )
 
 ########################################################################
+# Setup versioning
+########################################################################
+
+GET_GIT_COMMIT_ID()
+
+CONFIGURE_FILE(
+  ${CMAKE_SOURCE_DIR}/include/Version.hh.in
+  ${CMAKE_SOURCE_DIR}/include/Version.hh
+)
+
+########################################################################
 # Dependencies
 ########################################################################
 
