@@ -53,3 +53,4 @@ Computational Biology Lab](https://www.bsse.ethz.ch/mlcb) of [Prof. Dr.
 Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
 
 - Bastian Rieck ([GitHub](https://github.com/Submanifold))
+- Christian Bock ([GitHub](https://github.com/chrisby))
