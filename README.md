@@ -52,5 +52,6 @@ S3M is developed and maintained by members of the [Machine Learning and
 Computational Biology Lab](https://www.bsse.ethz.ch/mlcb) of [Prof. Dr.
 Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
 
-- Bastian Rieck ([GitHub](https://github.com/Submanifold))
 - Christian Bock ([GitHub](https://github.com/chrisby))
+- Thomas Gumbsch ([GitHub](https://github.com/tgumbsch))
+- Bastian Rieck ([GitHub](https://github.com/Submanifold))
