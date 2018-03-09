@@ -31,7 +31,9 @@ compiler:
 # to be rather clunky, but the official documentation contains similar
 # examples.
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost     ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update       ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade      ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost; fi
 
 install:
   - if [[ "$TRAVIS_OS_NAME" != "osx" && "$CXX" == "g++" ]]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
