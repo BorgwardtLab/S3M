@@ -3,8 +3,6 @@
 #include "Utilities.hh"
 #include "Version.hh"
 
-#include <boost/core/null_deleter.hpp>
-
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <boost/log/core.hpp>
@@ -84,7 +82,7 @@ void setupLogging()
     = boost::make_shared<logging::sinks::text_ostream_backend>();
 
   backend->add_stream(
-    boost::shared_ptr<std::ostream>( &std::clog, boost::null_deleter() )
+    boost::shared_ptr<std::ostream>( &std::clog, []( std::ostream* ) {} )
   );
 
   backend->auto_flush( true );
