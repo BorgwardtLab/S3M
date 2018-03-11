@@ -88,7 +88,7 @@ void ProgressDisplay::draw()
 void ProgressDisplay::update()
 {
   std::size_t requiredTics
-    = static_cast<std::size_t>( (static_cast<double>( _n ) / _N ) * 50.0 );
+    = static_cast<std::size_t>( (static_cast<double>( _n ) / static_cast<double>( _N ) ) * 50.0 );
 
   do
   {
@@ -96,7 +96,7 @@ void ProgressDisplay::update()
   }
   while ( ++_t < requiredTics );
 
-  _T = static_cast<std::size_t>( (_t / 50.0 ) *_N );
+  _T = static_cast<std::size_t>( ( static_cast<double>( _t ) / 50.0 ) * static_cast<double>( _N ) );
   if( _n == _N )
   {
     if( _t < 51 )
