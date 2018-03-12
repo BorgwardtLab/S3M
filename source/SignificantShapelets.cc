@@ -355,10 +355,11 @@ std::vector<long double> SignificantShapelets::min_attainable_p_values( unsigned
 std::ostream& operator<<( std::ostream& o, const SignificantShapelets::SignificantShapelet& ss )
 {
   o << "  {\n"
-    << "    \"p_val\": " << std::setprecision( 32 ) << ss.p << ",\n"
-    << "    \"table\": [" << ss.table << "],\n"
-    << "    \"index\": " << ss.shapelet.index() << ",\n"
-    << "    \"start\": " << ss.shapelet.start() << ",\n"
+    << "    \"p_val\": "     << std::setprecision( 32 ) << ss.p                 << ",\n"
+    << "    \"threshold\": " << std::setprecision( 16 ) << ss.table.threshold() << ",\n"
+    << "    \"table\": ["                               << ss.table             << "],\n"
+    << "    \"index\": "                                << ss.shapelet.index()  << ",\n"
+    << "    \"start\": "                                << ss.shapelet.start()  << ",\n"
     << "    \"shapelet\": [\n"
     << "      ";
 
