@@ -32,43 +32,19 @@ Here is an excerpt of such a data set:
 Each document starts with an associative array of parameters. The
 variables have the following meaning:
 
-<dl>
-  <dt>`min_length`</dt>
-  <dd>
-    The minimum length of shapelets for the extraction process, i.e. the
-    minimum window size.
-  </dd>
-
-  <dt>`max_length`</dt>
-  <dd>
-    The maximum length of shapelets for the extraction process, i.e. the
-    maximum window size.
-  </dd>
-
-  <dt>`stride`</dt>
-  <dd>
-    The stride for the shapelet extraction process. This permits you to
-    extract shapelets based on *sliding windows* or *tumbling windows*.
-  </dd>
-
-  <dt>`standardize`</dt>
-  <dd>
-    Flag indicating whether data have been standardized. This is only
-    relevant when you set the appropriate flag during shapelet
-    extraction.
-  </dd>
-
-  <dt>`p_tarone`</dt>
-  <dd>
-    The p-value that was reached following Tarone's method for
-    correcting for multiple hypothesis testing.
-  </dd>
-
-  <dt>`version`</dt>
-  <dd>
-    A textual identifier referring to the `SHA-1` commit ID that was
-    used to obtain the current result. This is highly useful for the
-    reproduction of certain results. Simply use `git checkout`, with
-    the proper commit ID of course, and build the `s3m` executable.
-  </dd>
-</dl>
+* `min_length`: The minimum length of shapelets for the extraction
+  process, i.e. the minimum window size.
+* `max_length`: The maximum length of shapelets for the extraction
+  process, i.e. the maximum window size.
+* `stride`: The stride for the shapelet extraction process. This permits
+  you to extract shapelets based on *sliding windows* or *tumbling
+  windows*.
+* `standardize`: Flag indicating whether data have been standardized.
+  This is only relevant when you set the appropriate flag during
+  shapelet extraction.
+* `p_tarone`: The p-value that was reached following Tarone's method for
+  correcting for multiple hypothesis testing.
+* `version`: A textual identifier referring to the `SHA-1` commit ID
+  that was used to obtain the current result. This is highly useful for
+  the reproduction of certain results. Simply use `git checkout`, with
+  the proper commit ID of course, and build the `s3m` executable.
