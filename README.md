@@ -7,7 +7,9 @@ This is the implementation of the method described in the ISMB 2018 paper "Stati
 
 # Building
 
-The tool is written in C++ and requires the following dependencies:
+S3M has been built successfully under various Linux distributions as
+well as under Mac OS X. The tool is written in C++ and requires the
+following dependencies:
 
 * A C++ compiler with support for C++11; please refer to [this table](https://en.cppreference.com/w/cpp/compiler_support)
   in order to find a suitable compiler
@@ -48,6 +50,14 @@ a terminal, please follow these steps to build the software:
     $ make
 
 The `build` directory should now contain the `s3m` executable.
+
+# Help
+
+If you have questions concerning S3M or you encounter problems when
+trying to build the tool under your own system, please open an issue in
+[the issue tracker](https://github.com/BorgwardtLab/S3M/issues). Try to
+describe the issue in sufficient detail in order to make it possible for
+us to help you.
 
 # Contributors
 
