@@ -48,3 +48,26 @@ variables have the following meaning:
   that was used to obtain the current result. This is highly useful for
   the reproduction of certain results. Simply use `git checkout`, with
   the proper commit ID of course, and build the `s3m` executable.
+
+The individual shapelets are reported as elements of the `shapelets`
+list. Again, each shapelet has a set of attributes:
+
+*  `p_val`: The p-value of the shapelet, according to a standard Chi
+   square test.
+* `threshold`: The distance threshold, specified as a *squared*&nbsp;(!)
+  Euclidean distance, that was used to obtain the best contingency table
+  with respect to the test statistic. You can use this value to classify
+  new time series.
+* `table`: The contingency table corresponding to the threshold. The
+  values are reported in the order `a,b,d,c`, following the notation
+  in the paper.
+* `index`: The index of the time series from which the shapelet was
+  extracted. This is only used to provide additional details. A value of
+  `0` indicates that the shapelet was extracted from the very first time
+  series of the data set, for example.
+* `start`: The position at which the shapelet was extracted. A start
+  value of `0` indicates that the shapelet was taken from the very
+  beginning of the time series, for example.
+* `shapelet`: A list of y values that make up the shapelet. Notice that
+  `index` and `start` can be used to fully reconstruct the position of
+  the shapelet with respect to the time series it originated from.
