@@ -3,7 +3,7 @@
 
 This is the implementation of the method described in the ISMB 2018 paper "Statistically Significant Shapelet Mining in Biomedical Time Series".
 
-![Build Status](https://travis-ci.com/BorgwardtLab/S3M.svg?token=6PepXoG2x1QhsqBnBzHF&branch=master)
+[![Build Status](https://travis-ci.com/BorgwardtLab/S3M.svg?token=6PepXoG2x1QhsqBnBzHF&branch=master)](https://travis-ci.com/BorgwardtLab/S3M)
 
 # Building
 
