@@ -187,12 +187,20 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
         }
       );
 
+
       auto estimateFWER
-          = p_tarone
-              * static_cast<long double>( significantShapelets.size() )
-              * static_cast<long double>( timeSeries.size() )
-              * static_cast<long double>( maxLength )
-              * static_cast<long double>( windowSizeCorrection );
+        = p_tarone * static_cast<long double>( significantShapelets.size() );
+
+
+      // Use the improved---but more conservative factor that we
+      // describe in the paper. This is preferable for most data
+      // sets.
+      if( !_defaultFactor )
+      {
+        estimateFWER *=   static_cast<long double>( timeSeries.size() )
+                        * static_cast<long double>( maxLength )
+                        * static_cast<long double>( windowSizeCorrection );
+      }
 
       // Adjust the testability threshold until the FWER estimate has
       // been sufficiently decreased.
@@ -214,11 +222,14 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
         );
 
         estimateFWER
-          = p_tarone
-              * static_cast<long double>( significantShapelets.size() )
-              * static_cast<long double>( timeSeries.size() )
-              * static_cast<long double>( maxLength )
-              * static_cast<long double>( windowSizeCorrection );
+          = p_tarone * static_cast<long double>( significantShapelets.size() );
+
+        if( !_defaultFactor )
+        {
+          estimateFWER *=   static_cast<long double>( timeSeries.size() )
+                          * static_cast<long double>( maxLength )
+                          * static_cast<long double>( windowSizeCorrection );
+        }
 
         thresholds.push_back( p_tarone );
       }

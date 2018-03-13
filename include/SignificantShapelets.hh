@@ -52,6 +52,11 @@ public:
 
   // Parameters --------------------------------------------------------
 
+  void defaultFactor( bool value = true ) noexcept
+  {
+    _defaultFactor = value;
+  }
+
   void disablePruning( bool value = true ) noexcept
   {
     _disablePruning = value;
@@ -101,6 +106,7 @@ private:
   unsigned _maxWindowSize;
   unsigned _windowStride;
 
+  bool _defaultFactor    = false;
   bool _disablePruning   = false;
   bool _keepNormalOnly   = false;
   bool _mergeTables      = false;
