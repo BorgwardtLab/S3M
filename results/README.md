@@ -74,7 +74,7 @@ list. Again, each shapelet has a set of attributes:
   
   
   ## Evaluation Results
-  Running `python/s3m_eval.sh` creates a `.csv` file named after the identifier (flag `-d`) and the minimum and maxiumum candidate pattern length (flags `-m` and `-M`). The structure the the csv is shown in the following table:
+  Running `python/s3m_eval.sh` creates a `.csv` file named after the identifier (flag `-d`) and the minimum and maxiumum candidate pattern length (flags `-m` and `-M`). The structure of the the resulting csv is shown in the following table:
   
 | acc | contingency | distances | p_val | shapelet | threshold |
 | :--------------------:|:-----------------:|:------------------------------------:|:-----------------:|:----------:|:------------------:|
