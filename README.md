@@ -1,4 +1,4 @@
-![](files/data/s3m_logo.png)
+![](https://github.com/BorgwardtLab/S3M/data/s3m_logo.png)
 # S3M &mdash; Statistically Significant Shapelet Mining
 
 This is the implementation of the method described in the ISMB 2018 paper "Statistically Significant Shapelet Mining in Biomedical Time Series".
