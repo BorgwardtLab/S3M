@@ -1,13 +1,13 @@
 #!/bin/bash
 S3M_OUTDIR="./s3m_out"
-OUTDIR="./evaluation"
+OUTDIR="../results"
 IDENTIFIER="S3MViz"
 MIN_WINDOW=10
 MAX_WINDOW=10
 STRIDE=1
 LABEL_INDEX=0
 KEEP=5
-while getopts "tnprm:M:s:l:k:i:d:qe:" option
+while getopts "tnprm:M:s:l:k:i:d:qe:f" option
 do
  case "${option}"
  in
@@ -24,6 +24,7 @@ do
  d) IDENTIFIER=${OPTARG};;
  q) SQUEEZE=true;;
  e) TEST=${OPTARG};;
+ f) FACTOR=true;;
  esac
 done
 
@@ -58,9 +59,14 @@ if [ "$REMOVE_DUPLICATES" == "true" ] ; then
 	REMOVE_DUPLICATES="-r"
 fi
 
+if [ "$FACTOR" == "true" ] ; then
+	FACTOR="-f"
+fi
+
 IDENTIFIER="${IDENTIFIER}_${MIN_WINDOW}_${MAX_WINDOW}"
 OUTPUT_JSON="${S3M_OUTDIR}/${IDENTIFIER}.json"
-../build/s3m $SQUEEZE $MERGE_TABLE $KEEP_NORMAL_ONLY $DISABLE_PRUNING $REMOVE_DUPLICATES -m $MIN_WINDOW -M $MAX_WINDOW -s $STRIDE -l $LABEL_INDEX -k $KEEP -i $INPUT -o $OUTPUT_JSON
+echo "run ../build/s3m $FACTOR $SQUEEZE $MERGE_TABLE $KEEP_NORMAL_ONLY $DISABLE_PRUNING $REMOVE_DUPLICATES -m $MIN_WINDOW -M $MAX_WINDOW -s $STRIDE -l $LABEL_INDEX -k $KEEP -i $INPUT -o $OUTPUT_JSON"
+../build/s3m $FACTOR $SQUEEZE $MERGE_TABLE $KEEP_NORMAL_ONLY $DISABLE_PRUNING $REMOVE_DUPLICATES -m $MIN_WINDOW -M $MAX_WINDOW -s $STRIDE -l $LABEL_INDEX -k $KEEP -i $INPUT -o $OUTPUT_JSON
 
 echo "Evaluating and Visualizing Shapelets"
-python ShapeletEvaluation.py -tr $INPUT -te $TEST -i $OUTPUT_JSON -o $OUTDIR -n $IDENTIFIER -l $LABEL_INDEX -k $KEEP
+python3 ShapeletEvaluation.py -tr $INPUT -te $TEST -i $OUTPUT_JSON -o $OUTDIR -n $IDENTIFIER -l $LABEL_INDEX -k $KEEP

@@ -41,15 +41,11 @@ if __name__ == '__main__':
 	output_dir = args.output_dir[0]
 	name = args.name[0]
 
-	viz_output = join(output_dir, name, 'visualizations' )
-	metrics_output = join(output_dir, name )
+	metrics_output = output_dir
 
-	#Create dirs if not exist
-	if not exists( viz_output ):
-		makedirs( viz_output )
+	#Create dir if not exist
 	if not exists( metrics_output ):
 		makedirs( metrics_output )
-
 
 	train = args.train[0]
 	test = args.test[0]
@@ -87,7 +83,7 @@ if __name__ == '__main__':
 	y_test = np.array(y_test).astype(float).astype(int)
 	X_test = np.array(X_test)
 
-	#Some labels might be weird (like UCR), put into 0, ..., n format
+	#Some labels might come in an unusual format (like UCR), put into 0, ..., n format
 	#Train
 	range_1 = np.max(y_train) - np.min(y_train)
 	zero_to_one_normalized = (y_train - np.min( y_train ) ) / float(range_1)
@@ -108,8 +104,11 @@ if __name__ == '__main__':
 	json_obj = json.load( open(json_input))
 	parameters = json_obj['parameters']
 
-	#Evaluate only top k shapelets
-	k = args.k
+	#Evaluate only top k shapelets. If k == 0 evaluate all shapelets
+	k = np.min([args.k, len(json_obj['shapelets'])])
+	if k == 0:
+		k = len(json_obj['shapelets'])
+
 	logging.info( "Evaluating metrics and creating visualization for top {} shapelets.".format(k) )
 
 	eval_res = []
@@ -122,8 +121,5 @@ if __name__ == '__main__':
 		metrics = se.evaluate(shapelet, threshold, int(y_train_normalized[pattern['index']]))
 		eval_res.append( metrics )
 		
-		se.create_shapelet_plots( { 'shapelet': shapelet, 'pos': -len(shapelet) }, 
-	    	dir=viz_output, title="{} P-Value on Training: {:.3g}".format(name, p_val), file="{}_{}".format(i, round( np.max(metrics['acc']), 2 )) )
-
-	pd.DataFrame(eval_res).to_csv(  join(metrics_output, "metrics.csv" ) , index=False )
+	pd.DataFrame(eval_res).to_csv(  join(metrics_output, "{}_metrics.csv".format(name) ) , index=False )
 
