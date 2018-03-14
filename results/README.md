@@ -71,3 +71,12 @@ list. Again, each shapelet has a set of attributes:
 * `shapelet`: A list of y values that make up the shapelet. Notice that
   `index` and `start` can be used to fully reconstruct the position of
   the shapelet with respect to the time series it originated from.
+  
+  
+  ## Evaluation Results
+  Running `python/s3m_eval.sh` creates a `.csv` file named after the identifier (flag `-d`) and the minimum and maxiumum candidate pattern length (flags `-m` and `-M`). The structure the the csv is shown in the following table:
+  
+| acc | contingency | distances | p_val | shapelet | threshold |
+| :--------------------:|:-----------------:|:------------------------------------:|:-----------------:|:----------:|:------------------:|
+| Accuracy on Test Set  | Contingency Table | List of Distances of Test Set Samples|P-Value on Test Set|The Shapelet|Respective Threshold|
+
