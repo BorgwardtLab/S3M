@@ -6,6 +6,7 @@ The `s3m_eval.sh` script let's you evaluate and visualize the top `k` significan
 ### Complete List of Options
     -i  path to training file
     -d  identifier (e.g. Heart_rate)
+    -e  path to test file
 
     -t  Merge equal contingency tables
     -n  Keep only normal p-values
