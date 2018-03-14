@@ -1,4 +1,24 @@
 #!/bin/bash
+
+usage="$(basename "$0") [-h] -i -d -e [-t -n -p -r -m -M -s -l -k -q -f] -- Run S3M and evaluate significant shapelets on a test data set
+
+Available options:
+    -h  show this help text
+    -i  path to training file
+    -d 	identifier (e.g. Heart_rate)
+
+    -t  Merge equal contingency tables
+    -n 	Keep only normal p-values
+    -p 	Disable pruning criterion
+    -r 	Remove duplicates
+    -m 	Minimum candidate pattern length (=10)
+    -M 	Maximum candidate pattern length (=0)
+    -s 	Stride (=1)
+    -l 	Index of label in time series (=0)
+    -k 	Maximum number of shapelets to keep (0 = unlimited)
+    -q 	Standardize data
+    -f 	Use default factor and do not apply correction from the paper" 
+
 S3M_OUTDIR="./s3m_out"
 OUTDIR="../results"
 IDENTIFIER="S3MViz"
@@ -7,10 +27,14 @@ MAX_WINDOW=10
 STRIDE=1
 LABEL_INDEX=0
 KEEP=5
-while getopts "tnprm:M:s:l:k:i:d:qe:f" option
+
+while getopts "htnprm:M:s:l:k:i:d:qe:f" option
 do
  case "${option}"
  in
+ h) echo "$usage"
+	exit
+	;;
  t) MERGE_TABLE=true;;
  n) KEEP_NORMAL_ONLY=true;;
  p) DISABLE_PRUNING=true;;
