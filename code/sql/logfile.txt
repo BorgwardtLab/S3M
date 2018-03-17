@@ -1,0 +1,91 @@
+BEGIN
+DROP TABLE
+SELECT 156
+DROP TABLE
+SELECT 1268126
+psql:suspicion-of-infection.sql:1: NOTICE:  drop cascades to 12 other objects
+DETAIL:  drop cascades to materialized view uo_si
+drop cascades to materialized view vitals_si
+drop cascades to materialized view gcs_si
+drop cascades to materialized view labs_si
+drop cascades to materialized view bloodgas_si
+drop cascades to materialized view bloodgasarterial_si
+drop cascades to materialized view bl_bloodgasarterial_si
+drop cascades to materialized view bl_uo_si
+drop cascades to materialized view bl_vitals_si
+drop cascades to materialized view bl_gcs_si
+drop cascades to materialized view bl_labs_si
+drop cascades to materialized view bl_bloodgas_si
+DROP TABLE
+SELECT 61532
+DROP TABLE
+SELECT 61532
+psql:tbls/urine-output-infect-time.sql:1: NOTICE:  materialized view "uo_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 24456
+psql:tbls/vitals-infect-time.sql:4: NOTICE:  materialized view "vitals_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 26610
+COMMIT
+psql:tbls/gcs-infect-time.sql:24: NOTICE:  materialized view "gcs_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 61532
+psql:tbls/labs-infect-time.sql:5: NOTICE:  materialized view "labs_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 61532
+psql:tbls/labs-infect-time.sql:162: WARNING:  there is no transaction in progress
+COMMIT
+psql:tbls/blood-gas-infect-time.sql:5: NOTICE:  materialized view "bloodgas_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 165606
+psql:tbls/blood-gas-arterial-infect-time.sql:1: NOTICE:  materialized view "bloodgasarterial_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 93316
+psql:tbls/ventilation-durations.sql:17: NOTICE:  drop cascades to materialized view ventdurations
+DROP MATERIALIZED VIEW
+SELECT 2549354
+psql:tbls/ventilation-durations.sql:161: NOTICE:  materialized view "ventdurations" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 38591
+psql:tbls/sofa-si.sql:23: NOTICE:  materialized view "sofa_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 35389
+psql:tbls_bl/bl_urine-output-infect-time.sql:1: NOTICE:  materialized view "bl_uo_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 2367
+psql:tbls_bl/bl_vitals-infect-time.sql:4: NOTICE:  materialized view "bl_vitals_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 2563
+psql:tbls_bl/bl_vitals-infect-time.sql:116: WARNING:  there is no transaction in progress
+COMMIT
+psql:tbls_bl/bl_gcs-infect-time.sql:24: NOTICE:  materialized view "bl_gcs_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 61532
+psql:tbls_bl/bl_labs-infect-time.sql:5: NOTICE:  materialized view "bl_labs_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 61532
+psql:tbls_bl/bl_labs-infect-time.sql:162: WARNING:  there is no transaction in progress
+COMMIT
+psql:tbls_bl/bl_blood-gas-infect-time.sql:5: NOTICE:  materialized view "bl_bloodgas_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 75459
+psql:tbls_bl/bl_blood-gas-arterial-infect-time.sql:1: NOTICE:  materialized view "bl_bloodgasarterial_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 93316
+psql:tbls_bl/bl_sofa-si.sql:23: NOTICE:  materialized view "bl_sofa_si" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 35389
+psql:sofa-change.sql:9: NOTICE:  materialized view "sofachange" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 61532
+psql:case-control.sql:9: NOTICE:  materialized view "final_data" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 23582
+psql:extract-case-series.sql:8: NOTICE:  materialized view "case_vitals" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 229337
+psql:extract-control-series.sql:8: NOTICE:  materialized view "control_vitals" does not exist, skipping
+DROP MATERIALIZED VIEW
+SELECT 6822422
+psql:query11.sql:73: WARNING:  there is no transaction in progress
+COMMIT
