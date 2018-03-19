@@ -77,6 +77,16 @@ public:
     _removeDuplicates = value;
   }
 
+  void reportAllShapelets( bool value = true ) noexcept
+  {
+    _reportAllShapelets = value;
+
+    // Reporting *all* shapelets, even the insignificant ones, implies
+    // that no pruning may be performed.
+    if( _reportAllShapelets )
+      _disablePruning = true;
+  }
+
   // Extraction --------------------------------------------------------
 
   /**
@@ -106,11 +116,12 @@ private:
   unsigned _maxWindowSize;
   unsigned _windowStride;
 
-  bool _defaultFactor    = false;
-  bool _disablePruning   = false;
-  bool _keepNormalOnly   = false;
-  bool _mergeTables      = false;
-  bool _removeDuplicates = false;
+  bool _defaultFactor      = false;
+  bool _disablePruning     = false;
+  bool _keepNormalOnly     = false;
+  bool _mergeTables        = false;
+  bool _removeDuplicates   = false;
+  bool _reportAllShapelets = false;
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.

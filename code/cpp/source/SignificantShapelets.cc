@@ -178,7 +178,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
     // Pattern is testable according to the current threshold set by
     // Tarone's criterion.
-    if( p_value <= p_tarone )
+    if( p_value <= p_tarone || _reportAllShapelets )
     {
       significantShapelets.push_back( {
           candidates[i],
@@ -187,6 +187,10 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
         }
       );
 
+      // If the user desired to see *all* shapelets, even those that are
+      // statistically insignificant, we can continue the iteration.
+      if( _reportAllShapelets )
+        continue;
 
       auto estimateFWER
         = p_tarone * static_cast<long double>( significantShapelets.size() );
