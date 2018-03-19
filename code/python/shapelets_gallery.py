@@ -113,7 +113,7 @@ if __name__ == "__main__":
   for index, series in enumerate(time_series):
     d, s = distance(shapelet, series)
 
-    if labels[index] == 0.0:
+    if labels[index] == 1.0:
       data_cases.append( (d,s) )
     else:
       data_controls.append( (d,s) )
@@ -122,6 +122,12 @@ if __name__ == "__main__":
 
   data_cases    = sorted(data_cases,    key=lambda x: x[0])
   data_controls = sorted(data_controls, key=lambda x: x[0])
+
+  # Ensures that the original shapelet can be displayed along with the
+  # sorted ones.
+  sys.stdout.write(format_data(shapelet))
+  sys.stdout.write(format_data(shapelet, offset=2*len(shapelet)))
+  sys.stdout.write("\n\n")
 
   for data_case, data_control in zip(data_cases, data_controls):
     _, case    = data_case
