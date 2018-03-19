@@ -13,6 +13,7 @@
 #
 # The output will be written to `stdout`.
 
+import argparse
 import csv
 import sys
 
@@ -62,10 +63,43 @@ if __name__ == "__main__":
   time_series = []
   labels      = []
 
-  with open(sys.argv[1]) as f:
+  parser = argparse.ArgumentParser(description="Shapelet Gallery Creation")
+
+  parser.add_argument("input",
+    metavar  = "INPUT",
+    help     = "Input file")
+
+  parser.add_argument("-s", "--shapelet",
+    required = True,
+    nargs    = "+",
+    help     = "Shapelet values")
+
+  arguments  = parser.parse_args()
+  input_file = arguments.input
+  shapelet   = arguments.shapelet
+
+  with open(input_file) as f:
     reader = csv.reader(f)
     for row in reader:
+
+      # Skip comments; some versions of our data files make use of them
+      # in order maintain provenance information.
+      if row[0].startswith("#"):
+        continue
+
       time_series.append( row[1:] )
       labels.append( row[0] )
 
-  n = len(time_series)
+  shapelet = [ float(x) for x in shapelet ]
+  n        = len(time_series)
+
+  data_cases    = []
+  data_controls = []
+
+  for index, series in enumerate(time_series):
+    d, s = distance(shapelet, series)
+
+    if labels[index]:
+      data_cases.append( (d,s) )
+    else:
+      data_controls.append( (d,s) )
