@@ -1,6 +1,10 @@
 # Building the MIMIC Dataset 
 
-In this section the reader is instructed how to reproduce our MIMIC dataset.
+In this section the reader is instructed how to reproduce our MIMIC dataset. This directory comprises a postgresql-pipeline to define sepsis cases and controls and to extract their vital time series from the MIMIC database following the recent SEPSIS-3 definition.
+
+A large part of this code was inspired by this project: https://github.com/alistairewj/sepsis3-mimic. Some of their code reappears here modified, some basic scripts even untouched. A big thanks to their valuable contribution.
+Therefore, if you use this code please cite both them and us:
+
 
 ## Getting Started
 
