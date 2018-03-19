@@ -58,6 +58,20 @@ def distance(S,T):
 
   return min_distance, T[min_index:min_index+len(S)]
 
+def format_data(shapelet, offset=0.0):
+  """
+  Prints a shapelet in a formatted way so that it can be visualized with
+  other tools afterwards. The formatted shapelet is returned as a string
+  by this function.
+  """
+
+  data = ""
+  for x,y in enumerate(shapelet):
+    data += "{}\t{}\n".format(x+offset,y)
+
+  data += "\n"
+  return data
+
 if __name__ == "__main__":
   
   time_series = []
@@ -88,7 +102,7 @@ if __name__ == "__main__":
         continue
 
       time_series.append( row[1:] )
-      labels.append( row[0] )
+      labels.append( float(row[0]) )
 
   shapelet = [ float(x) for x in shapelet ]
   n        = len(time_series)
@@ -99,7 +113,20 @@ if __name__ == "__main__":
   for index, series in enumerate(time_series):
     d, s = distance(shapelet, series)
 
-    if labels[index]:
+    if labels[index] == 0.0:
       data_cases.append( (d,s) )
     else:
       data_controls.append( (d,s) )
+
+  assert len(data_cases) + len(data_controls) == n
+
+  data_cases    = sorted(data_cases,    key=lambda x: x[0])
+  data_controls = sorted(data_controls, key=lambda x: x[0])
+
+  for data_case, data_control in zip(data_cases, data_controls):
+    _, case    = data_case
+    _, control = data_control
+
+    sys.stdout.write(format_data(case))
+    sys.stdout.write(format_data(control, offset=2*len(shapelet)))
+    sys.stdout.write("\n\n")
