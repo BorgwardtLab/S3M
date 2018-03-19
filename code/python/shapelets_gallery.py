@@ -55,7 +55,7 @@ def distance(S,T):
       min_distance = sum_distance
       min_index    = i
 
-  return min_distance, T[i,i+len(S)+1]
+  return min_distance, T[min_index:min_index+len(S)]
 
 if __name__ == "__main__":
   
