@@ -11,10 +11,14 @@
 #
 # The output will be written to `stdout`.
 
-
 import json
 import math
 import sys
+
+import numpy as np
+
+# TODO: make configurable
+flip = True
 
 def transform_table(table):
   """
@@ -44,5 +48,8 @@ if __name__ == "__main__":
 
   for table in tables:
     x,y = transform_table(table)
+
+    if flip and ( (x < 0 and y < 0) or (np.sign(x) != np.sign(y) and -x > y) ):
+      x,y = -y,-x
 
     print("{}\t{}".format(x,y))
