@@ -30,6 +30,18 @@ public:
 
   void insert( double distance, bool label );
 
+  // Iterators ---------------------------------------------------------
+
+  using const_iterator = typename std::vector<ContingencyTable>::const_iterator;
+  using iterator       = typename std::vector<ContingencyTable>::iterator;
+
+  const_iterator begin() const noexcept { return _tables.begin(); }
+  iterator begin()             noexcept { return _tables.begin(); }
+  const_iterator end()   const noexcept { return _tables.end();   }
+  iterator end()               noexcept { return _tables.end();   }
+
+  // $p-values$ --------------------------------------------------------
+
   long double min_p()            const noexcept;
   long double min_optimistic_p() const noexcept;
 
