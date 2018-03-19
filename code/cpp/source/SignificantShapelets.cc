@@ -180,12 +180,27 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     // Tarone's criterion.
     if( p_value <= p_tarone || _reportAllShapelets )
     {
-      significantShapelets.push_back( {
-          candidates[i],
-          p_value,
-          table
+      if( _reportAllShapelets )
+      {
+        for( auto&& table : tables )
+        {
+          significantShapelets.push_back( {
+              candidates[i],
+              table.p(),
+              table
+            }
+          );
         }
-      );
+      }
+      else
+      {
+        significantShapelets.push_back( {
+            candidates[i],
+            p_value,
+            table
+          }
+        );
+      }
 
       // If the user desired to see *all* shapelets, even those that are
       // statistically insignificant, we can continue the iteration.
