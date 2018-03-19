@@ -40,7 +40,6 @@ def format_series(time_series):
   return data
 
 if __name__ == "__main__":
-  
   time_series = []
   labels      = []
 
@@ -48,7 +47,14 @@ if __name__ == "__main__":
 
   parser.add_argument("input",
     metavar  = "INPUT",
-    help     = "Input file")
+    help     = "Input file"
+  )
+
+  parser.add_argument("-s", "--summarize",
+    type     = bool,
+    required = False,
+    help     = "Calculate variability summaries"
+  )
 
   arguments  = parser.parse_args()
   input_file = arguments.input
@@ -68,10 +74,24 @@ if __name__ == "__main__":
   cases    = [ series for index, series in enumerate(time_series) if labels[index] == 1.0 ]
   controls = [ series for index, series in enumerate(time_series) if labels[index] != 1.0 ]
 
-  for series in cases:
-    sys.stdout.write(format_series(variability(series)))
 
-  sys.stdout.write("\n\n")
+  if arguments.summarize:
+    variability_cases = set()
+    for series in cases:
+      variability_cases.update(variability(series))
 
-  for series in controls:
-    sys.stdout.write(format_series(variability(series)))
+    variability_controls = set()
+    for series in controls:
+      variability_controls.update(variability(series))
+
+    print(variability_cases)
+    print("\n")
+    print(variability_controls)
+  else:
+    for series in cases:
+      sys.stdout.write(format_series(variability(series)))
+
+    sys.stdout.write("\n\n")
+
+    for series in controls:
+      sys.stdout.write(format_series(variability(series)))
