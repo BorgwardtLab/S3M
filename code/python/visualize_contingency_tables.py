@@ -44,19 +44,20 @@ if __name__ == "__main__":
 
   parser.add_argument("-f", "--flip",
     required = False,
-    type     = bool,
+    action   = "store_true",
     help     = "If set, flips values in the visualization to ensure that quadrant 3 is not used"
   )
 
   parser.add_argument("-p", "--prune",
     required = False,
-    type     = bool,
+    action   = "store_true",
     help     = "If set, prunes duplicates points"
   )
 
   arguments  = parser.parse_args()
   input_file = arguments.input
   flip       = arguments.flip
+  prune      = arguments.prune
 
   with open(input_file) as f:
     data = json.load(f)
