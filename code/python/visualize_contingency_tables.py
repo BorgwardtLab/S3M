@@ -39,12 +39,19 @@ if __name__ == "__main__":
 
   parser.add_argument("input",
     metavar = "INPUT",
-    help    = "Input file")
+    help    = "Input file"
+  )
 
   parser.add_argument("-f", "--flip",
     required = False,
     type     = bool,
     help     = "If set, flips values in the visualization to ensure that quadrant 3 is not used"
+  )
+
+  parser.add_argument("-p", "--prune",
+    required = False,
+    type     = bool,
+    help     = "If set, prunes duplicates points"
   )
 
   arguments  = parser.parse_args()
@@ -60,10 +67,17 @@ if __name__ == "__main__":
   for shapelet in shapelets:
     tables.append( shapelet["table"] )
 
+  points = []
   for table in tables:
     x,y = transform_table(table)
 
     if flip and ( (x < 0 and y < 0) or (np.sign(x) != np.sign(y) and -x > y) ):
       x,y = -y,-x
 
+    points.append( (x,y) )
+
+  if prune:
+    points = set(points)
+
+  for x,y in points:
     print("{}\t{}".format(x,y))
