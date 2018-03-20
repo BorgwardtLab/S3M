@@ -11,14 +11,11 @@
 #
 # The output will be written to `stdout`.
 
+import argparse
 import json
-import math
 import sys
 
 import numpy as np
-
-# TODO: make configurable
-flip = True
 
 def transform_table(table):
   """
@@ -26,7 +23,7 @@ def transform_table(table):
   plane, in which the distance to the origin shows the suitability
   of a contingency table for separating cases and controls.
   """
-  
+
   # Yes, this ordering is correct. Please refer to our paper for
   # more details.
   a, b, d, c = table
@@ -37,7 +34,24 @@ def transform_table(table):
   return (a-b) / n1, (c-d) / n0
 
 if __name__ == "__main__":
-  with open(sys.argv[1]) as f:
+
+  parser = argparse.ArgumentParser(description="Contingency Table Visualization")
+
+  parser.add_argument("input",
+    metavar = "INPUT",
+    help    = "Input file")
+
+  parser.add_argument("-f", "--flip",
+    required = False,
+    type     = bool,
+    help     = "If set, flips values in the visualization to ensure that quadrant 3 is not used"
+  )
+
+  arguments  = parser.parse_args()
+  input_file = arguments.input
+  flip       = arguments.flip
+
+  with open(input_file) as f:
     data = json.load(f)
 
   shapelets = data["shapelets"]
