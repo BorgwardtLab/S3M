@@ -290,7 +290,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     significantShapelets.end()
   );
 
-
   // Report the lowest threshold according to Tarone. This can be used
   // to decide upon further corrections, such as Bonferroni.
   tarone = p_tarone;
@@ -304,7 +303,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
     // Sort contingency tables in lexicographical order. This makes it
     // easier to remove duplicates afterwards.
-    std::sort( significantShapelets.begin(), significantShapelets.end(),
+    std::stable_sort( significantShapelets.begin(), significantShapelets.end(),
       [] ( const SignificantShapelet& S, const SignificantShapelet& T )
       {
         auto as = S.table.as();
@@ -371,7 +370,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
   // Sort by increasing $p$-value in order to make the output easier to
   // parse for humans.
-  std::sort( significantShapelets.begin(), significantShapelets.end(),
+  std::stable_sort( significantShapelets.begin(), significantShapelets.end(),
     [] ( const SignificantShapelet& S, const SignificantShapelet& T )
     {
       // Sort by $p$-value first...
