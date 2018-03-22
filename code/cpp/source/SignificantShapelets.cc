@@ -383,6 +383,25 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     }
   );
 
+  {
+    std::vector<SignificantShapelet> significantShapelets_;
+
+    std::copy_if( significantShapelets.begin(), significantShapelets.end(),
+      std::back_inserter( significantShapelets_ ),
+        [&significantShapelets_] ( const SignificantShapelet& ss )
+        {
+          return std::none_of( significantShapelets_.begin(), significantShapelets_.end(),
+            [&ss] ( const SignificantShapelet& tt )
+            {
+              return ss.shapelet == tt.shapelet;
+            }
+          );
+        }
+    );
+
+    significantShapelets.swap( significantShapelets_ );
+  }
+
   BOOST_LOG_TRIVIAL(info)
     << "Detected " << significantShapelets.size()
     << " significant shapelet"
