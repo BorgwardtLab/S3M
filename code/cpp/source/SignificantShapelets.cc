@@ -191,14 +191,44 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       // statistically insignificant, we can continue the iteration.
       if( _reportAllShapelets )
         continue;
+    }
 
-      auto estimateFWER
+    auto estimateFWER
+      = p_tarone * static_cast<long double>( significantShapelets.size() );
+
+
+    // Use the improved---but more conservative factor that we
+    // describe in the paper. This is preferable for most data
+    // sets.
+    if( !_defaultFactor )
+    {
+      estimateFWER *=   static_cast<long double>( timeSeries.size() )
+                      * static_cast<long double>( maxLength )
+                      * static_cast<long double>( windowSizeCorrection );
+    }
+
+    // Adjust the testability threshold until the FWER estimate has
+    // been sufficiently decreased.
+    while( estimateFWER > _alpha )
+    {
+      min_attainable_p_values.pop_back();
+      p_tarone = min_attainable_p_values.back();
+
+      progress.setField( "Tarone", p_tarone );
+
+      significantShapelets.erase(
+        std::remove_if( significantShapelets.begin(), significantShapelets.end(),
+          [&p_tarone] ( const SignificantShapelet& ss )
+          {
+            return ss.p > p_tarone;
+          }
+        ),
+        significantShapelets.end()
+      );
+
+      estimateFWER
         = p_tarone * static_cast<long double>( significantShapelets.size() );
 
-
-      // Use the improved---but more conservative factor that we
-      // describe in the paper. This is preferable for most data
-      // sets.
       if( !_defaultFactor )
       {
         estimateFWER *=   static_cast<long double>( timeSeries.size() )
@@ -206,41 +236,11 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
                         * static_cast<long double>( windowSizeCorrection );
       }
 
-      // Adjust the testability threshold until the FWER estimate has
-      // been sufficiently decreased.
-      while( estimateFWER > _alpha )
-      {
-        min_attainable_p_values.pop_back();
-        p_tarone = min_attainable_p_values.back();
-
-        progress.setField( "Tarone", p_tarone );
-
-        significantShapelets.erase(
-          std::remove_if( significantShapelets.begin(), significantShapelets.end(),
-            [&p_tarone] ( const SignificantShapelet& ss )
-            {
-              return ss.p > p_tarone;
-            }
-          ),
-          significantShapelets.end()
-        );
-
-        estimateFWER
-          = p_tarone * static_cast<long double>( significantShapelets.size() );
-
-        if( !_defaultFactor )
-        {
-          estimateFWER *=   static_cast<long double>( timeSeries.size() )
-                          * static_cast<long double>( maxLength )
-                          * static_cast<long double>( windowSizeCorrection );
-        }
-
-        thresholds.push_back( p_tarone );
-      }
-
-      progress.setField( "FWER", estimateFWER );
-      progress.setField( "Testable patterns", significantShapelets.size() );
+      thresholds.push_back( p_tarone );
     }
+
+    progress.setField( "FWER", estimateFWER );
+    progress.setField( "Testable patterns", significantShapelets.size() );
   }
 
   // Report the lowest threshold according to Tarone. This can be used
