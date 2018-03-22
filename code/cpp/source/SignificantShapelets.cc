@@ -172,40 +172,56 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     if( skip )
       continue;
 
-    auto pair    = tables.min();
-    auto p_value = pair.first;
-    auto table   = pair.second;
+    bool updated = false;
 
-    // Pattern is testable according to the current threshold set by
-    // Tarone's criterion.
-    if( p_value <= p_tarone || _reportAllShapelets )
+    for( auto&& table : tables )
     {
-      significantShapelets.push_back( {
-          candidates[i],
-          p_value,
-          table
-        }
-      );
+      auto p_min = table.min_attainable_p();
 
-      // If the user desired to see *all* shapelets, even those that are
-      // statistically insignificant, we can continue the iteration.
-      if( _reportAllShapelets )
-        continue;
+      // Pattern is testable according to the current threshold set by
+      // Tarone's criterion. Or else the user is crazy and wants us to
+      // report all shapelets regardless of testability.
+      if( p_min <= p_tarone || _reportAllShapelets )
+      {
+        significantShapelets.push_back(
+          {
+            candidates[i],
+            p_min,
+            table
+          }
+        );
+
+        // At least one shapelet has been added, so we need to update
+        // our FWER estimate below.
+        updated = true;
+      }
     }
+
+    // If nothing has been changed, i.e. no shapelet has been added to
+    // the list of the most significant ones, we do not have to change
+    // the FWER estimate.
+    if( !updated )
+      continue;
+
+    // If the user desired to see *all* shapelets, even those that are
+    // statistically insignificant, we can continue the iteration.
+    if( _reportAllShapelets )
+      continue;
 
     auto estimateFWER
       = p_tarone * static_cast<long double>( significantShapelets.size() );
 
-
+#if 0
     // Use the improved---but more conservative factor that we
     // describe in the paper. This is preferable for most data
     // sets.
     if( !_defaultFactor )
     {
       estimateFWER *=   static_cast<long double>( timeSeries.size() )
-                      * static_cast<long double>( maxLength )
+                      //* static_cast<long double>( maxLength )
                       * static_cast<long double>( windowSizeCorrection );
     }
+#endif
 
     // Adjust the testability threshold until the FWER estimate has
     // been sufficiently decreased.
@@ -229,12 +245,14 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       estimateFWER
         = p_tarone * static_cast<long double>( significantShapelets.size() );
 
+#if 0
       if( !_defaultFactor )
       {
         estimateFWER *=   static_cast<long double>( timeSeries.size() )
-                        * static_cast<long double>( maxLength )
+                        //* static_cast<long double>( maxLength )
                         * static_cast<long double>( windowSizeCorrection );
       }
+#endif
 
       thresholds.push_back( p_tarone );
     }
@@ -242,6 +260,36 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     progress.setField( "FWER", estimateFWER );
     progress.setField( "Testable patterns", significantShapelets.size() );
   }
+
+  // Replace the minimum attainable $p$-value by an actual $p$-value
+  // because we have finished the extraction phase.
+  std::transform(
+    significantShapelets.begin(), significantShapelets.end(),
+    significantShapelets.begin(),
+      [] ( const SignificantShapelet& ss )
+      {
+        SignificantShapelet ss_new = {
+          ss.shapelet,
+          ss.table.p(), // returns the actual $p$-value of the contingency table
+          ss.table
+        };
+
+        return ss_new;
+      }
+  );
+
+  // Remove the shapelets that are not significant according to the
+  // current Tarone threshold.
+  significantShapelets.erase(
+    std::remove_if( significantShapelets.begin(), significantShapelets.end(),
+      [&p_tarone] ( const SignificantShapelet& ss )
+      {
+        return ss.p > p_tarone;
+      }
+    ),
+    significantShapelets.end()
+  );
+
 
   // Report the lowest threshold according to Tarone. This can be used
   // to decide upon further corrections, such as Bonferroni.
