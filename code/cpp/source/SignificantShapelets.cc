@@ -117,7 +117,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   BOOST_LOG_TRIVIAL(info) << "Naive Bonferroni correction factor is " <<
     _alpha / (  static_cast<long double>( candidates.size() )
               * static_cast<long double>( timeSeries.size() )
-              * static_cast<long double>( maxLength )
+              * static_cast<long double>( timeSeries.size() )
               * static_cast<long double>( windowSizeCorrection )
   );
 
