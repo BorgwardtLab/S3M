@@ -114,7 +114,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
   BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
 
-  BOOST_LOG_TRIVIAL(info) << "Bonferroni correction factor is " <<
+  BOOST_LOG_TRIVIAL(info) << "Naive Bonferroni correction factor is " <<
     _alpha / (  static_cast<long double>( candidates.size() )
               * static_cast<long double>( timeSeries.size() )
               * static_cast<long double>( maxLength )
@@ -211,18 +211,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     auto estimateFWER
       = p_tarone * static_cast<long double>( significantShapelets.size() );
 
-#if 0
-    // Use the improved---but more conservative factor that we
-    // describe in the paper. This is preferable for most data
-    // sets.
-    if( !_defaultFactor )
-    {
-      estimateFWER *=   static_cast<long double>( timeSeries.size() )
-                      //* static_cast<long double>( maxLength )
-                      * static_cast<long double>( windowSizeCorrection );
-    }
-#endif
-
     // Adjust the testability threshold until the FWER estimate has
     // been sufficiently decreased.
     while( estimateFWER > _alpha )
@@ -244,15 +232,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
       estimateFWER
         = p_tarone * static_cast<long double>( significantShapelets.size() );
-
-#if 0
-      if( !_defaultFactor )
-      {
-        estimateFWER *=   static_cast<long double>( timeSeries.size() )
-                        //* static_cast<long double>( maxLength )
-                        * static_cast<long double>( windowSizeCorrection );
-      }
-#endif
 
       thresholds.push_back( p_tarone );
     }
