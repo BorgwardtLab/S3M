@@ -1,10 +1,13 @@
+#!/usr/bin/env python3
+
 import pandas as pd
 import numpy as np
 
 from datetime import datetime
-import matplotlib.pyplot as plt
 import csv
 import json
+
+import os
 
 from sklearn.model_selection import train_test_split
 import logging
@@ -14,10 +17,10 @@ np.random.seed(42)
 cached = {}
 for word in ['resprate', 'sysbp', 'heartrate']:
     print(word)
-    resp_data_cases = pd.read_csv( "../data/MIMIC/sepsis/query11_case_{}_subjectID_v5.csv".format(word) )
+    resp_data_cases = pd.read_csv( "../../data/MIMIC/query11_case_{}_subjectID_v5.csv".format(word) )
     resp_data_cases['chart_time'] = resp_data_cases['chart_time'].apply( lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S") )
 
-    resp_data_control = pd.read_csv( "../data/MIMIC/sepsis/query11_control_{}_subjectID_v5.csv".format(word) )
+    resp_data_control = pd.read_csv( "../../data/MIMIC/query11_control_{}_subjectID_v5.csv".format(word) )
     resp_data_control['chart_time'] = resp_data_control['chart_time'].apply( lambda x: datetime.strptime(x, "%Y-%m-%d %H:%M:%S") )
     cached[word] = { 'cases': resp_data_cases, 'controls': resp_data_control }
 
@@ -39,9 +42,9 @@ for word in ['resprate', 'sysbp', 'heartrate']:
     count = 0
     val_count = 0
     unitstay_ids = []
-    with open('../data/MIMIC/sepsis/Train_{}_seed_42_v5.csv'.format(word), 'w') as train_file:
+    with open('../../data/MIMIC/Train_{}_seed_42_v5.csv'.format(word), 'w') as train_file:
         train_writer = csv.writer(train_file, delimiter=',')
-        with open('../data/MIMIC/sepsis/Test_{}_seed_42_v5.csv'.format(word), 'w') as test_file:
+        with open('../../data/MIMIC/Test_{}_seed_42_v5.csv'.format(word), 'w') as test_file:
             test_writer = csv.writer(test_file, delimiter=',')
 
             #Write controls
@@ -57,7 +60,7 @@ for word in ['resprate', 'sysbp', 'heartrate']:
                 pat.resample('30min').asfreq().ffill().bfill()
 
                 #res[ str(icustay_id) ] = { 'case': 0, 'values': pat[word].values[:max_length].tolist(), 
-                                          "chart_time": pat.index.values[:max_length].tolist() }
+                #                          "chart_time": pat.index.values[:max_length].tolist() }
 
                 train_writer.writerow( np.concatenate( [[0], pat[word].values[:max_length]] ) )
 
@@ -68,7 +71,7 @@ for word in ['resprate', 'sysbp', 'heartrate']:
                 pat.resample('30min').asfreq().ffill().bfill()
 
                 #res[ str(icustay_id) ] = { 'case': 0, 'values': pat[word].values[:max_length].tolist(), 
-                      "chart_time": pat.index.values[:max_length].tolist() }
+                #                           "chart_time": pat.index.values[:max_length].tolist() }
 
                 test_writer.writerow( np.concatenate( [[0], pat[word].values[:max_length]] ) )
 
@@ -86,7 +89,7 @@ for word in ['resprate', 'sysbp', 'heartrate']:
                 pat.resample('30min').asfreq().ffill().bfill()
 
                 #res[ str(icustay_id) ] = { 'case': 1, 'values': pat[word].values[:max_length].tolist(),
-                                          "chart_time": pat.index.values[:max_length].tolist() }
+                #                         "chart_time": pat.index.values[:max_length].tolist() }
                 train_writer.writerow( np.concatenate( [[1], pat[word].values[:max_length]] ) )
 
             for icustay_id in X_test:
@@ -96,7 +99,7 @@ for word in ['resprate', 'sysbp', 'heartrate']:
                 pat.resample('30min').asfreq().ffill().bfill()
 
                 #res[ str(icustay_id) ] = { 'case': 1, 'val': 0, 'values': pat[word].values[:max_length].tolist(),
-                                          "chart_time": pat.index.values[:max_length].tolist() }
+                #                          "chart_time": pat.index.values[:max_length].tolist() }
                 test_writer.writerow( np.concatenate( [[1], pat[word].values[:max_length]] ) )
                 
             logging.info( "Wrote {} cases in training, {} in test set.".format(len(X_train), len(X_test)) )
