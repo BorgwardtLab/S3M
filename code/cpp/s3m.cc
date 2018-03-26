@@ -101,7 +101,6 @@ int main( int argc, char** argv )
   using namespace boost::program_options;
 
   bool allShapelets     = false;
-  bool defaultFactor    = false;
   bool standardize      = false;
   bool disablePruning   = false;
   bool keepNormalOnly   = false;
@@ -122,7 +121,6 @@ int main( int argc, char** argv )
     ("help,h"             , "Show help")
     ("standardize"        , "Standardize data" )
     ("all,a"              , "Report all shapelets, not just the most significant ones")
-    ("default-factor,f"   , "Use default factor and do not apply correction from the paper")
     ("merge-tables,t"     , "Merge equal contingency tables")
     ("keep-normal-only,n" , "Keep only normal p-values" )
     ("disable-pruning,p"  , "Disable pruning criterion" )
@@ -159,9 +157,6 @@ int main( int argc, char** argv )
 
     BOOST_LOG_TRIVIAL(warning) << "You are requesting *all* shapelets to be reported, even insignificant ones";
   }
-
-  if( variables.count("default-factor") )
-    defaultFactor = true;
 
   if( variables.count("disable-pruning") )
     disablePruning = true;
@@ -219,7 +214,6 @@ int main( int argc, char** argv )
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
-  significantShapelets.defaultFactor( defaultFactor );        // enable/disable using the default factor for multiple hypothesis correction
   significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
   significantShapelets.keepNormalOnly( keepNormalOnly );      // enable/disable keeping normal $p$-values
   significantShapelets.mergeTables( mergeTables );            // enable/disable merging of contingency tables
