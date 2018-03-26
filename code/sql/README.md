@@ -24,5 +24,5 @@ windows: https://mimic.physionet.org/tutorials/install-mimic-locally-windows/
 Once the requirements are fulfilled, run the query.sql from this folder using:
 
 ```
-psql 'dbname=mimic user=<your_user_name> options=--search_path=mimiciii' -f query.sql 
+psql 'dbname=mimic user=your_user_name options=--search_path=mimiciii' -f query.sql 
 ```
