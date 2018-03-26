@@ -160,7 +160,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       if( !_disablePruning )
         tables.prune( p_tarone );
 
-      if( tables.size() == 0 )
+      if( tables.empty() )
       {
         skip = true;
         break;
