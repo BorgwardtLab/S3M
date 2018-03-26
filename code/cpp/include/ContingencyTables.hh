@@ -69,6 +69,12 @@ public:
     return _tables.size();
   }
 
+  /** @returns true if the set of contingency tables is empty */
+  bool empty() const noexcept
+  {
+    return _tables.empty();
+  }
+
 private:
   unsigned _n;
   unsigned _n1;
