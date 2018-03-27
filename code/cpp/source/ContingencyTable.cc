@@ -178,7 +178,7 @@ long double ContingencyTable::min_optimistic_p() const
   C2._bs  += m1;
   C2._ds  += m0;
 
-  return std::min( C1.p(), C2.p() );
+  return std::min( C1.min_attainable_p(), C2.min_attainable_p() );
 }
 
 long double ContingencyTable::min_optimistic_p( unsigned delta ) const
