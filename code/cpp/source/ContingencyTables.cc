@@ -80,8 +80,10 @@ std::pair<long double, ContingencyTable> ContingencyTables::min() const noexcept
   return std::make_pair( it->p(), *it );
 }
 
-void ContingencyTables::prune( long double p )
+std::size_t ContingencyTables::prune( long double p )
 {
+  auto n = this->size();
+
   _tables.erase(
     std::remove_if( _tables.begin(), _tables.end(),
       [&p] ( const ContingencyTable& table )
@@ -91,4 +93,6 @@ void ContingencyTables::prune( long double p )
     ),
     _tables.end()
   );
+
+  return n - this->size();
 }

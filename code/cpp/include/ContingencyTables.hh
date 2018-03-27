@@ -57,9 +57,11 @@ public:
     Removes all those tables whose optimistic $p$-values is larger than
     the given threshold. Typically, $p$ is Tarone's adjusted threshold,
     so one essentially removes patterns that cannot become testable.
+
+    The function returns the number of tables that have been pruned.
   */
 
-  void prune( long double p );
+  std::size_t prune( long double p );
 
   // Returns the number of tables that are left after performing
   // a pruning process. Ideally, this should only be *one* table
