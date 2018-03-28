@@ -151,15 +151,13 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     // be performed so that not all tables will have to be examined.
     ContingencyTables tables( n, n1 );
 
-    bool skip          = false;
-    std::size_t pruned = 0;
-
+    bool skip = false;
     for( std::size_t j = 0; j < timeSeries.size(); j++ )
     {
-      tables.insert( candidates[i].distance( timeSeries[j] ), labels[j] );
-
-      if( !_disablePruning )
-        pruned += tables.prune( p_tarone );
+      if( _disablePruning )
+        tables.insert( candidates[i].distance( timeSeries[j] ), labels[j] );
+      else
+        tables.insert( candidates[i].distance( timeSeries[j] ), labels[j], p_tarone );
 
       if( tables.empty() )
       {
