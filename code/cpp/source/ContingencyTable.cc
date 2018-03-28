@@ -188,43 +188,6 @@ long double ContingencyTable::min_optimistic_p() const
   return std::min( _lookupTable[ C1.rs() ], _lookupTable[ C2.rs() ] );
 }
 
-long double ContingencyTable::min_optimistic_p( unsigned delta ) const
-{
-  assert( this->n1() == _n1 );
-  assert( this->n0() == _n0 );
-
-  // Assign only half of the objects into the cells of the table in
-  // order not to break symmetry.
-  assert( delta % 2 == 0 );
-  delta = delta / 2;
-
-  long double p = 1.0;
-
-  if( _as >= delta and _cs >= delta and _ds + delta <= _n0 and _bs + delta <= _n1 )
-  {
-    auto C  = *this;
-    C._as  -= delta;
-    C._bs  += delta;
-    C._cs  -= delta;
-    C._ds  += delta;
-
-    p = C.p();
-  }
-
-  if( _as + delta <= _n1 and _cs + delta <= _n0 and _ds >= delta and _bs >= delta )
-  {
-    auto C  = *this;
-    C._as  += delta;
-    C._bs  -= delta;
-    C._cs  += delta;
-    C._ds  -= delta;
-
-    p = std::min( p, C.p() );
-  }
-
-  return p;
-}
-
 bool ContingencyTable::complete() const noexcept
 {
   return _as + _bs + _cs + _ds == _n;

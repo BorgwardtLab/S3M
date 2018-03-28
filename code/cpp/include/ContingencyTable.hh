@@ -94,15 +94,6 @@ public:
 
   long double min_optimistic_p() const;
 
-  /**
-    Calculates the minimum optimistic $p$-value of a *complete* table,
-    but permits the reassignment of $\delta$ many objects. Hence, this
-    function models the exchange of several objects. $\delta$ needs to
-    be an even number for this to work properly.
-  */
-
-  long double min_optimistic_p( unsigned delta ) const;
-
   // Attributes --------------------------------------------------------
   //
   // In all queries, the adjusted value is undone, making it possible to
