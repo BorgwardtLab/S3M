@@ -1,14 +1,12 @@
 #ifndef CONTINGENCY_TABLE_HH__
 #define CONTINGENCY_TABLE_HH__
 
+#include "LookupTable.hh"
+
 #include <iosfwd>
 #include <ostream>
 
 #include <boost/math/distributions/chi_squared.hpp>
-
-// A forward declaration is sufficient here because we only use
-// references to this class.
-class LookupTable;
 
 /**
   @class ContingencyTable
@@ -80,9 +78,8 @@ public:
 
   long double min_attainable_p() const;
   long double min_attainable_p( unsigned rs ) const;
-  long double min_attainable_p( LookupTable& lookupTable ) const;
 
-    /**
+  /**
     Calculates the minimum attainable $p$-value of a partially filled
     contingency table.
   */
@@ -96,9 +93,6 @@ public:
   */
 
   long double min_optimistic_p() const;
-
-  /** @overload min_optimistic_p() */
-  long double min_optimistic_p( LookupTable& lookupTable ) const;
 
   /**
     Calculates the minimum optimistic $p$-value of a *complete* table,
@@ -139,6 +133,7 @@ private:
   long double t_raw() const;
 
   static boost::math::chi_squared_distribution<long double> _chi2;
+  static LookupTable _lookupTable;
 
   unsigned _n;  //< Total number of items (fixed)
   unsigned _n1; //< Total number of items with class 1 (fixed)
