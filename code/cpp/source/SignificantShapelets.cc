@@ -1,5 +1,6 @@
 #include "ContingencyTable.hh"
 #include "ContingencyTables.hh"
+#include "LookupTable.hh"
 #include "ProgressDisplay.hh"
 #include "SignificantShapelets.hh"
 #include "SlidingWindow.hh"
@@ -142,6 +143,8 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   progress.addField( "Tarone" );
   progress.draw();
 
+  LookupTable lookupTable( n+4, n1+2 );
+
   for( std::size_t i = 0; i < candidates.size(); i++ )
   {
     // Set up contingency tables and update them -----------------------
@@ -149,7 +152,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     // This involves iterating over distances in the order in which they
     // appear and constantly update all contingency tables. Pruning will
     // be performed so that not all tables will have to be examined.
-    ContingencyTables tables( n, n1 );
+    ContingencyTables tables( n, n1, lookupTable );
 
     bool skip          = false;
     std::size_t pruned = 0;
