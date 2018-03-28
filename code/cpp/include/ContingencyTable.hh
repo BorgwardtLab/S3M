@@ -6,6 +6,10 @@
 
 #include <boost/math/distributions/chi_squared.hpp>
 
+// A forward declaration is sufficient here because we only use
+// references to this class.
+class LookupTable;
+
 /**
   @class ContingencyTable
   @brief Models a (partially) filled contingency table
@@ -76,6 +80,7 @@ public:
 
   long double min_attainable_p() const;
   long double min_attainable_p( unsigned rs ) const;
+  long double min_attainable_p( LookupTable& lookupTable ) const;
 
     /**
     Calculates the minimum attainable $p$-value of a partially filled
@@ -91,6 +96,9 @@ public:
   */
 
   long double min_optimistic_p() const;
+
+  /** @overload min_optimistic_p() */
+  long double min_optimistic_p( LookupTable& lookupTable ) const;
 
   /**
     Calculates the minimum optimistic $p$-value of a *complete* table,
