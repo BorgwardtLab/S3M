@@ -82,6 +82,7 @@ ADD_EXECUTABLE( s3m
   #
   source/ContingencyTable.cc
   source/ContingencyTables.cc
+  source/LookupTable.cc
   source/ProgressDisplay.cc
   source/SignificantShapelets.cc
   source/SlidingWindow.cc
