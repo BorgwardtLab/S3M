@@ -8,14 +8,24 @@
 class LookupTable
 {
 public:
+
+  /** Creates a new lookup table for the given marginals */
   LookupTable( unsigned n, unsigned n1 );
 
   /**
-    Calculates or returns the minimum attainable $p$-value of a given
-    marginal value.
+     Returns the minimum attainable $p$-value of a given marginal
+     value.
   */
 
-  long double operator[]( unsigned rs );
+  long double operator[]( unsigned rs ) const noexcept
+  {
+    return _values[rs];
+  }
+
+  // Attributes --------------------------------------------------------
+
+  unsigned n()  const noexcept { return _n;  }
+  unsigned n1() const noexcept { return _n1; }
 
 private:
   unsigned _n  = 0;

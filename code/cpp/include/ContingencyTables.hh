@@ -6,10 +6,6 @@
 #include <utility>
 #include <vector>
 
-// A forward reference is sufficient here because we only store
-// a *reference* to this class.
-class LookupTable;
-
 /*
  @class ContingencyTables
  @brief Manager class for multiple contingency tables
@@ -24,7 +20,7 @@ class ContingencyTables
 public:
 
   /** Creates a new set of contingency tables, which is initially empty */
-  ContingencyTables( unsigned n, unsigned n1, LookupTable& lookupTable );
+  ContingencyTables( unsigned n, unsigned n1 );
 
   /**
     Updates all contingency tables by adding a new element with a given
@@ -84,10 +80,6 @@ public:
 private:
   unsigned _n;
   unsigned _n1;
-
-  // Lookup table for quickly calculating minimum attainable $p$-values
-  // of contingency tables.
-  LookupTable& _lookupTable;
 
   // All contingency tables stored by the manager. This container is
   // reduced by the pruning operation.

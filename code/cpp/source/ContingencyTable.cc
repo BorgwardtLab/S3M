@@ -13,6 +13,9 @@
 boost::math::chi_squared_distribution<long double> ContingencyTable::_chi2
   = boost::math::chi_squared_distribution<long double>( 1 );
 
+LookupTable ContingencyTable::_lookupTable
+  = LookupTable( 0, 0);
+
 ContingencyTable::ContingencyTable()
   : _n ( 0 )
   , _n1( 0 )
@@ -38,6 +41,9 @@ ContingencyTable::ContingencyTable( unsigned n, unsigned n1, double threshold )
   assert( _n >= _n1 );
   assert( _n >= _n0 );
   assert( _n == _n0 + _n1 );
+
+  if( _lookupTable.n() != _n && _lookupTable.n1() != _n1 )
+    _lookupTable = LookupTable( _n, _n1 );
 }
 
 void ContingencyTable::insert( double distance, bool label )
@@ -134,11 +140,6 @@ long double ContingencyTable::min_attainable_p( unsigned rs ) const
   return static_cast<long double>(1.0) - boost::math::cdf( _chi2, x );
 }
 
-long double ContingencyTable::min_attainable_p( LookupTable& lookupTable  ) const
-{
-  return lookupTable[ this->rs() ];
-}
-
 long double ContingencyTable::min_attainable_partial_p() const
 {
   // TODO:
@@ -184,35 +185,7 @@ long double ContingencyTable::min_optimistic_p() const
   C2._bs  += m1;
   C2._ds  += m0;
 
-  return std::min( C1.min_attainable_p(), C2.min_attainable_p() );
-}
-
-long double ContingencyTable::min_optimistic_p( LookupTable& lookupTable ) const
-{
-  auto n1 = this->n1(); // marginals (first row)
-  auto n0 = this->n0(); // marginals (second row)
-  auto m1 = _n1 - n1;   // missing objects (y=1)
-  auto m0 = _n0 - n0;   // missing objects (y=0)
-
-  assert( m1 < _n1 );
-  assert( m0 < _n0 );
-
-  // TODO: check for spurious calls, for example when m1 == m0 == 0 and
-  // no optimistic prognosis can be made any more...
-
-  // Case 1: all remaining instances are classified correctly
-
-  auto C1  = *this;
-  C1._as  += m1;
-  C1._cs  += m0;
-
-  // Case 2: all remaining instances are classified incorrectly
-
-  auto C2  = *this;
-  C2._bs  += m1;
-  C2._ds  += m0;
-
-  return std::min( C1.min_attainable_p( lookupTable ), C2.min_attainable_p( lookupTable ) );
+  return std::min( _lookupTable[ C1.rs() ], _lookupTable[ C2.rs() ] );
 }
 
 long double ContingencyTable::min_optimistic_p( unsigned delta ) const

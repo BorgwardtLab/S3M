@@ -1,15 +1,13 @@
 #include "ContingencyTables.hh"
-#include "LookupTable.hh"
 
 #include <algorithm>
 
 #include <cassert>
 #include <cmath>
 
-ContingencyTables::ContingencyTables( unsigned n, unsigned n1, LookupTable& lookupTable )
+ContingencyTables::ContingencyTables( unsigned n, unsigned n1 )
   : _n( n )
   , _n1( n1 )
-  , _lookupTable( lookupTable )
 {
 }
 
@@ -90,7 +88,7 @@ std::size_t ContingencyTables::prune( long double p )
     std::remove_if( _tables.begin(), _tables.end(),
       [&p, this] ( const ContingencyTable& table )
       {
-        return table.min_optimistic_p( _lookupTable ) > p;
+        return table.min_optimistic_p() > p;
       }
     ),
     _tables.end()

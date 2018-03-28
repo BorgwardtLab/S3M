@@ -36,8 +36,3 @@ LookupTable::LookupTable( unsigned n, unsigned n1 )
     }
   );
 }
-
-long double LookupTable::operator[]( unsigned rs )
-{
-  return _values[rs];
-}
