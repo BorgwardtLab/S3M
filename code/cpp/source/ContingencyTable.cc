@@ -138,8 +138,8 @@ long double ContingencyTable::min_optimistic_p() const
   // no optimistic prognosis can be made any more...
 
   return std::min(
-    _lookupTable[ this->rs() + m1 ],
-    _lookupTable[ this->rs() + m0 ]
+    std::min( _lookupTable[ this->rs() + m1 ], _lookupTable[ this->rs() + m0 ] ),
+    _lookupTable[ this->rs() ]
   );
 }
 
