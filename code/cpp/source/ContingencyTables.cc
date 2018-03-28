@@ -11,7 +11,7 @@ ContingencyTables::ContingencyTables( unsigned n, unsigned n1 )
 {
 }
 
-void ContingencyTables::insert( double distance, bool label )
+void ContingencyTables::insert( double distance, bool label, long double p_tarone )
 {
   // Search for the table that is supposed to be updated. Tables are
   // kept sorted according to their threshold.
@@ -37,8 +37,24 @@ void ContingencyTables::insert( double distance, bool label )
 
   // Update *all* tables, including the new one, with the new distance
   // and the new label.
-  for( auto&& table : _tables )
-    table.insert( distance, label );
+
+  if( p_tarone == 0.0 )
+  {
+    for( auto&& table : _tables )
+      table.insert( distance, label );
+  }
+  else
+  {
+    for( auto itTable = _tables.begin(); itTable != _tables.end(); )
+    {
+      itTable->insert( distance, label );
+
+      if( itTable->min_optimistic_p() > p_tarone )
+        itTable = _tables.erase( itTable );
+      else
+        ++itTable;
+    }
+  }
 
   _distanceLabelPairs.emplace_back( std::make_pair( distance, label ) );
 }

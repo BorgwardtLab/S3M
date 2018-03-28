@@ -25,10 +25,12 @@ public:
   /**
     Updates all contingency tables by adding a new element with a given
     distance to all tables. The label is required to update the *cells*
-    of each contingency table correctly.
+    of each contingency table correctly. Optionally, the threshold from
+    Tarone's criterion can be added as an additional parameter. If this
+    is non-zero, it will be used to perform pruning.
   */
 
-  void insert( double distance, bool label );
+  void insert( double distance, bool label, long double p_tarone = 0.0 );
 
   // Iterators ---------------------------------------------------------
 
