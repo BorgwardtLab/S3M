@@ -1,7 +1,7 @@
 #ifndef LOOKUP_TABLE_HH__
 #define LOOKUP_TABLE_HH__
 
-#include <unordered_map>
+#include <vector>
 
 #include <boost/math/distributions/chi_squared.hpp>
 
@@ -25,7 +25,7 @@ private:
   static boost::math::chi_squared_distribution<long double> _chi2;
 
   /** Maps marginals to $p$-values */
-  std::unordered_map<unsigned, long double> _values;
+  std::vector<long double> _values;
 };
 
 #endif
