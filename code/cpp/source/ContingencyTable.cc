@@ -121,23 +121,7 @@ long double ContingencyTable::min_attainable_p() const
 
 long double ContingencyTable::min_attainable_p( unsigned rs ) const
 {
-  auto na = std::min(_n1, _n - _n1);
-  auto nb = std::max(_n1, _n - _n1);
-
-  assert( rs <= _n );
-
-  long double x = 0.0;
-
-  if( rs < na )
-    x = (_n-1) * nb/static_cast<long double>(na) * rs/static_cast<long double>(_n - rs);
-  else if( na <= rs and rs < _n/2 )
-    x = (_n-1) * na/static_cast<long double>(nb) * (_n - rs)/static_cast<long double>(rs);
-  else if( _n/2 <= rs and rs < nb )
-    x = (_n-1) * na/static_cast<long double>(nb) * rs/static_cast<long double>(_n - rs);
-  else if( nb <= rs and rs <= _n )
-    x = (_n-1) * nb/static_cast<long double>(na) * (_n - rs)/static_cast<long double>(rs);
-
-  return static_cast<long double>(1.0) - boost::math::cdf( _chi2, x );
+  return _lookupTable[ rs ];
 }
 
 long double ContingencyTable::min_optimistic_p() const
@@ -153,19 +137,10 @@ long double ContingencyTable::min_optimistic_p() const
   // TODO: check for spurious calls, for example when m1 == m0 == 0 and
   // no optimistic prognosis can be made any more...
 
-  // Case 1: all remaining instances are classified correctly
-
-  auto C1  = *this;
-  C1._as  += m1;
-  C1._cs  += m0;
-
-  // Case 2: all remaining instances are classified incorrectly
-
-  auto C2  = *this;
-  C2._bs  += m1;
-  C2._ds  += m0;
-
-  return std::min( _lookupTable[ C1.rs() ], _lookupTable[ C2.rs() ] );
+  return std::min(
+    _lookupTable[ this->rs() + m1 ],
+    _lookupTable[ this->rs() + m0 ]
+  );
 }
 
 bool ContingencyTable::complete() const noexcept
