@@ -80,13 +80,6 @@ public:
   long double min_attainable_p( unsigned rs ) const;
 
   /**
-    Calculates the minimum attainable $p$-value of a partially filled
-    contingency table.
-  */
-
-  long double min_attainable_partial_p() const;
-
-  /**
     Calculates the minimum optimistic $p$-value of an incomplete table,
     i.e. the minimum $p$-value that can be attained if every remaining
     element is classified correctly.

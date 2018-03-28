@@ -140,26 +140,6 @@ long double ContingencyTable::min_attainable_p( unsigned rs ) const
   return static_cast<long double>(1.0) - boost::math::cdf( _chi2, x );
 }
 
-long double ContingencyTable::min_attainable_partial_p() const
-{
-  // TODO:
-  //  - not sure whether this function could be merged into the regular
-  //  function for attainable $p$-values
-  //
-  //  - check for memoization strategies; it should be possible to save
-  //  a lot of spurious calculations here
-
-  long double p = 1.0;
-  auto rs       = this->rs();
-  auto qs       = this->qs();
-  auto delta    = _n - (rs+qs);
-
-  for( unsigned i = 0; i <= delta; i++ )
-    p = std::min( p, this->min_attainable_p( rs+i ) );
-
-  return p;
-}
-
 long double ContingencyTable::min_optimistic_p() const
 {
   auto n1 = this->n1(); // marginals (first row)
