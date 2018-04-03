@@ -138,7 +138,7 @@ FROM  (
   )
 ) pvt
 --group by pvt.subject_id, pvt.hadm_id, pvt.icustay_id
-order by pvt.icustay_id, pvt.subject_id; -- removed pvt.hadm_id, 
+order by pvt.icustay_id, pvt.subject_id, pvt.chart_time; -- removed pvt.hadm_id, 
 
 
 
