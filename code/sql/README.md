@@ -26,3 +26,11 @@ Once the requirements are fulfilled, run the query.sql from this folder using:
 ```
 psql 'dbname=mimic user=your_user_name options=--search_path=mimiciii' -f query.sql 
 ```
+
+### Version:
+
+This query was performed using following 
+- postgres version:
+PostgreSQL 10.1 on x86_64-apple-darwin15.6.0, compiled by Apple LLVM version 8.0.0 (clang-800.0.42.1), 64-bit
+- mimic version:
+MIMIC-III v1.4, downloaded January 5th, 2018.
