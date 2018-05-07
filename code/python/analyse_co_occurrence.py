@@ -173,4 +173,4 @@ if __name__ == '__main__':
 
         # Counts are now available for the given pair, so we can
         # calculate its minimum (pessimistic!) $p$-value.
-        writer.writerow([s['index'], s['start'], t['start'], r_s, p])
+        writer.writerow([s['index'], s['start'], t['start'], r_s, k, p])
