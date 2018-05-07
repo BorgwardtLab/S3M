@@ -36,7 +36,7 @@ def distance(S,T):
 
     return min_distance
 
-if name == '__main__':
+if __name__ == '__main__':
     with open(sys.argv[1]) as f:
         data = json.load(f)
 
@@ -60,4 +60,20 @@ if name == '__main__':
             if i == j and p_i < p_j:
                 pairs.append((s,t))
 
-    print("There are {} shapelet pair candidates".format(len(pairs)))
+    print('There are {} shapelet pair candidates'.format(len(pairs)))
+
+    ####################################################################
+    # Load time series
+    ####################################################################
+
+    time_series = []
+
+    with open(sys.argv[2]) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0].startswith('#'):
+                continue
+
+            time_series.append( row[1:] )
+
+    print('Loaded {} time series'.format(len(time_series)))
