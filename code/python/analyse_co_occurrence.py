@@ -95,7 +95,7 @@ def pessimistic_p_value(n, r_s):
     p = mpmath.mpf(1.0)
     k = -1
 
-    for n_1 in range(1,math.ceil(n/2)):
+    for n_1 in range(1,n+1):
         p_new = min_attainable_p_value(n, n_1, r_s)
         if p_new < p:
             p = p_new
