@@ -3,6 +3,7 @@
 import collections
 import csv
 import json
+import tqdm
 import sys
 
 import numpy                  as np
@@ -85,8 +86,12 @@ if __name__ == '__main__':
 
     print('Loaded {} time series'.format(len(time_series)))
 
-    counts = collections.Counter()
-    for index, (s,t) in enumerate(pairs):
+    counts                     = collections.Counter()
+    tqdm.tqdm.monitor_interval = 0
+
+    print('Processing pairs...')
+
+    for index, (s,t) in enumerate(tqdm.tqdm(pairs)):
         for T in time_series:
             d_s, i_s = distance(s['shapelet'], T)
             t_s      = s['threshold']
@@ -99,5 +104,3 @@ if __name__ == '__main__':
 
                 if d_t <= t['threshold'] and i_s <= i_t:
                     counts[index] += 1
-
-        print("Number of co-occurrences per pair:", counts[index])
