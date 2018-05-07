@@ -3,11 +3,14 @@
 import collections
 import csv
 import json
+import math
 import tqdm
 import sys
 
 import numpy                  as np
 import scipy.spatial.distance as ss
+
+from scipy.stats import chi2
 
 def distance(S,T):
     """
@@ -43,6 +46,43 @@ def distance(S,T):
         min_index    = i
 
     return min_distance, min_index
+
+def min_attainable_p_value(n, n_1, r_s):
+    """
+    Calculates the minimum attainable $p$-value that can be achieved
+    given the marginals of a contingency table. This function uses a
+    a Chi-squared test.
+    """
+
+    n_a = np.min([n_1, n - n_1])
+    n_b = np.max([n_1, n - n_1])
+
+    if 0 <= r_s and r_s < n_a:
+        return 1.0 - chi2.cdf((n - 1) * ((n_b / float(n_a)) * (     r_s  / float(n - r_s))), 1)
+    elif n_a <= r_s and r_s < n / float(2):
+        return 1.0 - chi2.cdf((n - 1) * ((n_a / float(n_b)) * ((n - r_s) / float(r_s))), 1)
+    elif n / float(2) <= r_s and r_s < n_b:
+        return 1.0 - chi2.cdf((n - 1) * ((n_a / float(n_b)) * (     r_s  / float(n - r_s))), 1)
+    elif n_b <= r_s and r_s <= n:
+        return 1.0 - chi2.cdf((n - 1) * ((n_b / float(n_a)) * ((n - r_s) / float(r_s))), 1)
+
+def pessimistic_p_value(n, r_s):
+    """
+    Calculates the most pessimistic attainable $p$-value, i.e. the
+    smallest one that could possibly be achieved without knowing a
+    true frequency of the positive class.
+    """
+
+    p = 1.0
+    k = -1
+
+    for n_1 in range(1,math.ceil(n/2)):
+        p_new = min_attainable_p_value(n, n_1, r_s)
+        if p_new < p:
+            p = p_new
+            k = n_1
+
+    return p, k
 
 if __name__ == '__main__':
     with open(sys.argv[1]) as f:
@@ -88,6 +128,8 @@ if __name__ == '__main__':
 
     counts                     = collections.Counter()
     tqdm.tqdm.monitor_interval = 0
+    writer                     = csv.writer(sys.stdout)
+    n                          = len(time_series)
 
     print('Processing pairs...')
 
@@ -104,3 +146,12 @@ if __name__ == '__main__':
 
                 if d_t <= t['threshold'] and i_s <= i_t:
                     counts[index] += 1
+
+        # Co-occurrence count of the 'amalgamated' pattern, consisting
+        # of the two shapelets defined above.
+        r_s  = counts[index]
+        p, k = pessimistic_p_value(n, r_s)
+
+        # Counts are now available for the given pair, so we can
+        # calculate its minimum (pessimistic!) $p$-value.
+        writer.writerow([s['index'], t['index'], r_s, p])
