@@ -4,6 +4,7 @@ import collections
 import csv
 import json
 import math
+import mpmath
 import tqdm
 import sys
 
@@ -11,6 +12,24 @@ import numpy                  as np
 import scipy.spatial.distance as ss
 
 from scipy.stats import chi2
+
+# Decimal digits of precision for the multi-precision mathematics
+# library.
+#
+# FIXME: make this configurable?
+mpmath.mp.dps = 200
+
+def pdf(x,k):
+    x,k = mpmath.mpf(x), mpmath.mpf(k)
+    if x < 0: return 0
+    return 1/(2**(k/2) * mpmath.gamma(k/2)) * (x**(k/2-1)) * mpmath.exp(-x/2)
+
+def cdf(x,k): 
+    x,k = mpmath.mpf(x), mpmath.mpf(k) 
+    return mpmath.gammainc(k/2, 0, x/2, regularized=True)
+
+def cdf_via_quad(s,k):
+    return mpmath.quad(lambda x: pdf(x,k), [0, s])
 
 def distance(S,T):
     """
@@ -58,13 +77,13 @@ def min_attainable_p_value(n, n_1, r_s):
     n_b = np.max([n_1, n - n_1])
 
     if 0 <= r_s and r_s < n_a:
-        return 1.0 - chi2.cdf((n - 1) * ((n_b / float(n_a)) * (     r_s  / float(n - r_s))), 1)
+        return mpmath.mpf(1.0) - cdf((n - 1) * ((n_b / float(n_a)) * (     r_s  / float(n - r_s))), 1)
     elif n_a <= r_s and r_s < n / float(2):
-        return 1.0 - chi2.cdf((n - 1) * ((n_a / float(n_b)) * ((n - r_s) / float(r_s))), 1)
+        return mpmath.mpf(1.0) - cdf((n - 1) * ((n_a / float(n_b)) * ((n - r_s) / float(r_s))), 1)
     elif n / float(2) <= r_s and r_s < n_b:
-        return 1.0 - chi2.cdf((n - 1) * ((n_a / float(n_b)) * (     r_s  / float(n - r_s))), 1)
+        return mpmath.mpf(1.0) - cdf((n - 1) * ((n_a / float(n_b)) * (     r_s  / float(n - r_s))), 1)
     elif n_b <= r_s and r_s <= n:
-        return 1.0 - chi2.cdf((n - 1) * ((n_b / float(n_a)) * ((n - r_s) / float(r_s))), 1)
+        return mpmath.mpf(1.0) - cdf((n - 1) * ((n_b / float(n_a)) * ((n - r_s) / float(r_s))), 1)
 
 def pessimistic_p_value(n, r_s):
     """
@@ -73,7 +92,7 @@ def pessimistic_p_value(n, r_s):
     true frequency of the positive class.
     """
 
-    p = 1.0
+    p = mpmath.mpf(1.0)
     k = -1
 
     for n_1 in range(1,math.ceil(n/2)):
@@ -154,4 +173,4 @@ if __name__ == '__main__':
 
         # Counts are now available for the given pair, so we can
         # calculate its minimum (pessimistic!) $p$-value.
-        writer.writerow([s['index'], t['index'], r_s, p])
+        writer.writerow([s['index'], s['start'], t['start'], r_s, p])
