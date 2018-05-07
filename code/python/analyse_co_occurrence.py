@@ -103,6 +103,21 @@ def pessimistic_p_value(n, r_s):
 
     return p, k
 
+def pessimistic_p_value_curve(n, r_s):
+    """
+    Calculates the curve of the most pessimistic attainable $p$-value,
+    i.e. the smallest one that could possibly be achieved without true
+    known frequencies of the positive class.
+    """
+
+    p = mpmath.mpf(1.0)
+    r = []
+
+    for n_1 in range(1,n+1):
+        r.append( (n_1, min_attainable_p_value(n, n_1, r_s)) )
+
+    return r
+
 if __name__ == '__main__':
     with open(sys.argv[1]) as f:
         data = json.load(f)
