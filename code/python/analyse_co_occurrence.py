@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
+import collections
 import csv
 import json
 import sys
 
+import numpy                  as np
+import scipy.spatial.distance as ss
+
 def distance(S,T):
     """
     Calculates the Euclidean distance between two sequences of varying
-    lengths, using early abandon if possible.
+    lengths, using early abandon if possible. Returns the minimum dist
+    value and the index at which it occurred.
     """
     n, m = len(S), len(T)
   
@@ -16,6 +21,7 @@ def distance(S,T):
       S,T = T,S
   
     min_distance = np.inf
+    min_index    = -1
   
     for i in range(0, m - n + 1):
       stop         = False
@@ -23,7 +29,7 @@ def distance(S,T):
   
       for j,x in enumerate(S):
         y             = T[i+j]
-        sum_distance += sqeuclidean(x, y)
+        sum_distance += ss.sqeuclidean(x, y)
   
         # Abandon calculations as soon as the best distance (so far) has
         # been surpassed---adding more values will only increase it.
@@ -33,8 +39,9 @@ def distance(S,T):
 
       if not stop:
         min_distance = sum_distance
+        min_index    = i
 
-    return min_distance
+    return min_distance, min_index
 
 if __name__ == '__main__':
     with open(sys.argv[1]) as f:
@@ -77,3 +84,20 @@ if __name__ == '__main__':
             time_series.append( row[1:] )
 
     print('Loaded {} time series'.format(len(time_series)))
+
+    counts = collections.Counter()
+    for index, (s,t) in enumerate(pairs):
+        for T in time_series:
+            d_s, i_s = distance(s['shapelet'], T)
+            t_s      = s['threshold']
+
+            # Check the second shapelet only if the first shapelet is
+            # already known to occur in the time series.
+            if d_s <= t_s:
+                d_t, i_t = distance(t['shapelet'], T)
+                t_t      = t['threshold']
+
+                if d_t <= t['threshold'] and i_s <= i_t:
+                    counts[index] += 1
+
+        print("Number of co-occurrences per pair:", counts[index])
