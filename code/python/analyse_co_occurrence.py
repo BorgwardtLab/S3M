@@ -9,6 +9,7 @@ import tqdm
 import sys
 
 import numpy                  as np
+import matplotlib.pyplot      as plt
 import scipy.spatial.distance as ss
 
 from scipy.stats import chi2
@@ -114,7 +115,7 @@ def pessimistic_p_value_curve(n, r_s):
     r = []
 
     for n_1 in range(1,n+1):
-        r.append( (n_1, min_attainable_p_value(n, n_1, r_s)) )
+        r.append( (n_1, mpmath.log(min_attainable_p_value(n, n_1, r_s))) )
 
     return r
 
@@ -167,7 +168,7 @@ if __name__ == '__main__':
 
     print('Processing pairs...')
 
-    for index, (s,t) in enumerate(tqdm.tqdm(pairs)):
+    for index, (s,t) in enumerate(tqdm.tqdm(pairs[5:20])):
         for T in time_series:
             d_s, i_s = distance(s['shapelet'], T)
             t_s      = s['threshold']
@@ -189,3 +190,8 @@ if __name__ == '__main__':
         # Counts are now available for the given pair, so we can
         # calculate its minimum (pessimistic!) $p$-value.
         writer.writerow([s['index'], s['start'], t['start'], r_s, k, p])
+
+        plt.plot(*zip(*pessimistic_p_value_curve(n, r_s)))
+        plt.show(block=False)
+
+    plt.show()
