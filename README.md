@@ -51,6 +51,54 @@ a terminal, please follow these steps to build the software:
 
 The `build` directory should now contain the `s3m` executable.
 
+## Building with Docker
+
+In order to ease the usage of s3m accross multiple platforms, we provide a script to setup a docker contrainer contraining s3m.
+
+To build the binaries using dock execute the following commands in the root folder of the repository
+
+    $ docker build -t s3m_container .
+
+This creates a new docker container with the tag `s3m_container`, such that s3m can be called using the following command
+
+    $ docker run -t s3m_container s3m --help
+    Available options:
+      -h [ --help ]                 Show help
+      --standardize                 Standardize data
+      -a [ --all ]                  Report all shapelets, not just the most
+                                    significant ones
+      -t [ --merge-tables ]         Merge equal contingency tables
+      -n [ --keep-normal-only ]     Keep only normal p-values
+      -p [ --disable-pruning ]      Disable pruning criterion
+      -r [ --remove-duplicates ]    Remove duplicates
+      -m [ --min-length ] arg (=10) Minimum candidate pattern length
+      -M [ --max-length ] arg (=0)  Maximum candidate pattern length
+      -s [ --stride ] arg (=1)      Stride
+      -l [ --label-index ] arg (=0) Index of label in time series
+      -k [ --keep ] arg (=0)        Maximum number of shapelets to keep (0 =
+                                    unlimited
+      -i [ --input ] arg            Training file
+      -o [ --output ] arg           Output file (specify '-' for stdout)
+
+which runs `s3m --help` in the docker container.
+
+
+To map a directory (for example containing data and/or results) into the docker contrainer, one must rely on the docker maping syntax
+
+    $ docker run -it -v $PWD/data:/S3M/data -t s3m_container bash
+    
+
+which maps the directory `$PWD/data` into the container under the path `/S3M/data/`.
+
+To ease usage, it is possible to define an alias using `alias s3m_container="docker run -it -v $(pwd)/data:/S3M/data -v $(pwd)/results:/S3M/results -t s3m_container"`.
+
+This allows to run s3m and the python analysis scripts using:
+
+    $ s3m_container s3m --help
+    $ s3m_container ShapeletEvaluation.py --help 
+
+Please be aware that this requires the data to be in the data folder of the repository. Access to the files in this folder has to be done under the path `/S3M/data`, while the results should be written to `/S3M/results` which allows them to be accesed on the host computer in the results folder of the repository.
+
 # Help
 
 If you have questions concerning S3M or you encounter problems when

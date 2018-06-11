@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 from utils.ShapeletEval import ShapeletEval
 import pandas as pd
