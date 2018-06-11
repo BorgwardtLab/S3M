@@ -26,8 +26,13 @@ MACRO( GET_GIT_COMMIT_ID )
       OUTPUT_VARIABLE COMMIT_ID
       OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    SET( GIT_COMMIT_ID ${COMMIT_ID} )
   ELSE()
-    SET( GIT_COMMIT_ID "" )
+    SET( COMMIT_ID "" )
+  ENDIF()
+  # Either directory is not a git repository, or git is not installed
+  IF ( "${COMMIT_ID}" STREQUAL "" )
+    SET( GIT_COMMIT_ID "unknown" )
+  ELSE()
+    SET( GIT_COMMIT_ID ${COMMIT_ID} )
   ENDIF()
 ENDMACRO()
