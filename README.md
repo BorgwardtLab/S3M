@@ -53,5 +53,6 @@ Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
 
 - Christian Bock ([GitHub](https://github.com/chrisby))
 - Thomas Gumbsch ([GitHub](https://github.com/tgumbsch))
+- Max Horn ([GitHub](https://github.com/maexlich))
 - Michael Moor ([GitHub](https://github.com/mi92))
 - Bastian Rieck ([GitHub](https://github.com/Submanifold))
