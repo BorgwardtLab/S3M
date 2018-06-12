@@ -99,6 +99,9 @@ This allows to run s3m and the python analysis scripts using:
 
 Please be aware that this requires the data to be in the data folder of the repository. Access to the files in this folder has to be done under the path `/S3M/data`, while the results should be written to `/S3M/results` which allows them to be accesed on the host computer in the results folder of the repository.
 
+# Example
+
+We provide a set of synthetic data that illustrates the utility of S3M. After installation, the command `s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n` runs S3M on in and stores its results in the `results` folder.
 # Help
 
 If you have questions concerning S3M or you encounter problems when
