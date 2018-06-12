@@ -102,3 +102,39 @@ INSTALL( TARGETS s3m
   RUNTIME
   DESTINATION bin
 )
+
+########################################################################
+# Packaging
+########################################################################
+
+FIND_PROGRAM( DPKG_DEB dpkg-deb )
+IF( DPKG_DEB )
+  MESSAGE( STATUS "Found dpkg-deb: ${DPKG_DEB}" )
+  MESSAGE( STATUS "Attempting to build Debian package" )
+
+  FILE( MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/packages/s3m-master )
+  FILE( MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/packages/s3m-master/DEBIAN )
+  FILE( MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/packages/s3m-master/usr/local/bin )
+
+  CONFIGURE_FILE( ${CMAKE_SOURCE_DIR}/packages/DEBIAN/control.in
+    ${CMAKE_BINARY_DIR}/packages/s3m-master/DEBIAN/control
+  )
+
+  # Copy the executable into the directory for the Debian package file,
+  # which only works *after* the build process has finished.
+  ADD_CUSTOM_COMMAND(
+    TARGET s3m POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/s3m
+            ${CMAKE_BINARY_DIR}/packages/s3m-master/usr/local/bin/s3m
+  )
+
+  # Create the package *after* all other steps have been performed. This
+  # step *must* be run `POST_BUILD` because the executable will *not* be
+  # available prior to that.
+  ADD_CUSTOM_COMMAND(
+    TARGET s3m POST_BUILD
+    COMMAND ${DPKG_DEB} --build s3m-master
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/packages
+  )
+ENDIF()
