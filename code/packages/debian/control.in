@@ -1,0 +1,16 @@
+Package: s3m
+Version: 1.0.0
+Section: base
+Priority: science
+Architecture: amd64
+Depends: libboost-all-dev
+Maintainer: Bastian Rieck <bastian.rieck@bsse.ethz.ch>
+Description: S3M --- Statistically Significant Shapelet Mining
+ This is the reference implementation of the method described in the ISMB 2018
+ paper:
+  
+  Association mapping in biomedical time series via statistically significant shapelet mining
+  Christian Bock, Thomas Gumbsch, Michael Moor, Bastian Rieck, Damian Roqueiro, and Karsten Borgwardt
+
+ Please refer to to our repository https://github.com/BorgwardtLab/S3M for more
+ details.
