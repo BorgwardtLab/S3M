@@ -34,7 +34,7 @@ We provide a synthetic data set that illustrates the utility of S3M. After insta
 
     $ s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n 
  
-runs S3M on it for shapelets of length `15` and stores its results in the `results` folder. The below figure shows how the method identifies the case-characteristic two spikes as the most significant shapelet (p-Value: 5.42e-20).
+runs S3M on it for shapelets of length `15` and stores its results in the `results` folder. The argument `-n` only keeps shapelets with "normal" p-values. Not normal p-values (e.g. 0) might occur due to limited precision in the calculation. The below figure shows how the method identifies the case-characteristic two spikes as the most significant shapelet (p-Value: 5.42e-20).
 
 ![](./results/example.png)
 # Help
