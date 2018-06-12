@@ -101,7 +101,9 @@ Please be aware that this requires the data to be in the data folder of the repo
 
 # Example
 
-We provide a set of synthetic data that illustrates the utility of S3M. After installation, the command `s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n` runs S3M on in and stores its results in the `results` folder.
+We provide a synthetic data set that illustrates the utility of S3M. After installation, the command `s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n` runs S3M on in and stores its results in the `results` folder. The below figure shows how the method identifies the case-characteristic two spikes as the most significant shapelet.
+
+![](./results/example.png)
 # Help
 
 If you have questions concerning S3M or you encounter problems when
