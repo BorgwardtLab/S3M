@@ -34,14 +34,14 @@ build() {
 	cd "$srcdir/${pkgname%-git}"
   mkdir -p build
   cd build
-  cmake ../ -DCMAKE_INSTALL_PREFIX=/usr
+  cmake ../code/cpp -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
   make -j8
 }
 
 check() {
 	cd "$srcdir/${pkgname%-git}"
   cd build
-	make -k test
+	./s3m --help
 }
 
 package() {
