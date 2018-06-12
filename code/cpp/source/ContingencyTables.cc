@@ -102,7 +102,7 @@ std::size_t ContingencyTables::prune( long double p )
 
   _tables.erase(
     std::remove_if( _tables.begin(), _tables.end(),
-      [&p, this] ( const ContingencyTable& table )
+      [&p] ( const ContingencyTable& table )
       {
         return table.min_optimistic_p() > p;
       }
