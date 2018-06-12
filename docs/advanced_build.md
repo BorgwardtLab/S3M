@@ -56,7 +56,7 @@ a script to setup a docker container for S3M.
 To build the binaries using `docker`, execute the following commands in
 the root folder of the repository:
 
-    $ docker build -t s3m_container .
+    $ docker build -t s3m_container -f code/cpp/packages/DOCKER/Dockerfile .
 
 This creates a new docker container with the tag `s3m_container`, such
 that S3M can be called using the following command:
