@@ -6,9 +6,7 @@ RUN apt-get update && apt-get install -y apt-utils git \
 # Python dependencies \
     python3 python3-pip \
 # packaging dependencies \
-    dpkg \
-# Cleanup to reduce docker image size
-   && rm -rf /var/lib/apt/lists/*
+    dpkg
 
 # Install S3M
 RUN mkdir -p /S3M
@@ -19,8 +17,14 @@ RUN mkdir build
 WORKDIR build
 RUN cmake -DBUILD_LINUX_PACKAGES=ON ../code/cpp 
 RUN make
-# Add s3m binary to path
-ENV PATH="/S3M/build:${PATH}"
+# Remove build dependencies again
+RUN apt-get purge -y libboost-dev libboost-program-options-dev libboost-math-dev libboost-log-dev libboost-system-dev libboost-timer-dev build-essential && apt-get autoremove -y
+# Install debian package
+RUN apt install -y /S3M/build/packages/s3m-master.deb
+
+# Cleanup to reduce docker image size
+RUN rm -rf /var/lib/apt/lists/*
+
 # Preprocessing scripts are path sensitive
 WORKDIR /S3M/code/python
 
