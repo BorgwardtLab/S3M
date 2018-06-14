@@ -14,8 +14,7 @@ manager](https://brew.sh):
 
     $ brew install BorgwardtLab/mlcb/s3m
 
-For Debian and Ubuntu, please use one of the released `.deb` files and
-install it using:
+For Debian and Ubuntu, please use the `.deb` file of the [latest release](https://github.com/BorgwardtLab/S3M/releases/latest)  and install it using:
 
     $ sudo apt install s3m-latest.deb
 
