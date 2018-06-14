@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y apt-utils git \
     cmake libboost-dev libboost-program-options-dev libboost-math-dev libboost-log-dev libboost-system-dev libboost-timer-dev build-essential \
 # Python dependencies \
     python3 python3-pip \
+# packaging dependencies \
+    dpkg \
 # Cleanup to reduce docker image size
    && rm -rf /var/lib/apt/lists/*
 
@@ -15,7 +17,7 @@ WORKDIR /S3M
 # Compile C++ code
 RUN mkdir build
 WORKDIR build
-RUN cmake ../code/cpp
+RUN cmake -DBUILD_LINUX_PACKAGES=ON ../code/cpp 
 RUN make
 # Add s3m binary to path
 ENV PATH="/S3M/build:${PATH}"
