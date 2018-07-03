@@ -2,8 +2,9 @@
 # S3M &mdash; Statistically Significant Shapelet Mining
 
 This is the implementation of the method described in the ISMB 2018
-paper &ldquo;Association Mapping in Biomedical Time Series via
-Statistically Significant Shapelet Mining&rdquo;.
+paper [&ldquo;Association mapping in biomedical time series via
+statistically significant shapelet
+mining&rdquo;](https://doi.org/10.1093/bioinformatics/bty246).
 
 [![Build Status](https://travis-ci.com/BorgwardtLab/S3M.svg?token=6PepXoG2x1QhsqBnBzHF&branch=master)](https://travis-ci.com/BorgwardtLab/S3M)
 
@@ -29,13 +30,17 @@ installations.
 
 # Example
 
-We provide a synthetic data set that illustrates the utility of S3M. After installation, the command 
+We provide a synthetic data set that illustrates the utility of S3M.
+After installation, the command
 
-    $ s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n 
- 
-runs S3M on it for shapelets of length `15` and stores its results in the `results` folder. The argument `-n` only keeps shapelets with "normal" p-values. Not normal p-values (e.g. 0) might occur due to limited precision in the calculation. The below figure shows how the method identifies the case-characteristic two spikes as the most significant shapelet (p-Value: 5.42e-20).
+    $ s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n
+
+runs S3M on it and stores its results in the `results` folder. The below
+figure shows how the method identifies the case-characteristic two
+spikes as the most significant shapelet&nbsp;(p-value: 5.42e-20).
 
 ![](./results/example.png)
+
 # Help
 
 If you have questions concerning S3M or you encounter problems when
