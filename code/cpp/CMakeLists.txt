@@ -69,7 +69,15 @@ FIND_PACKAGE( Boost REQUIRED
 ########################################################################
 
 INCLUDE_DIRECTORIES(
-  ${Boost_INCLUDE_DIR}
+  # Specifying these directories to represent `SYSTEM` headers as this
+  # ensures that we do *not* get any warnings for them.
+  SYSTEM
+    ${Boost_INCLUDE_DIR}
+)
+
+INCLUDE_DIRECTORIES(
+  # For these directories, we *expect* and *want* warnings to be shown
+  # during the compilation process.
   ${CMAKE_SOURCE_DIR}/include
 )
 
