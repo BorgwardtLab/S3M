@@ -56,10 +56,12 @@ CONFIGURE_FILE(
 FIND_PACKAGE( Threads )
 FIND_PACKAGE( Boost REQUIRED
   COMPONENTS
+    date_time
     log
     program_options
     system
     timer
+    thread
 )
 
 ########################################################################
