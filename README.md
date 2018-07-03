@@ -60,3 +60,21 @@ Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
 - Max Horn ([GitHub](https://github.com/maexlich))
 - Michael Moor ([GitHub](https://github.com/mi92))
 - Bastian Rieck ([GitHub](https://github.com/Submanifold))
+
+# Citation
+
+Please use the following BibTeX citation when using our method or
+comparing against it:
+
+```TeX
+@article{Bock18,
+  author  = {Bock, Christian and Gumbsch, Thomas and Moor, Michael and Rieck, Bastian and Roqueiro, Damian and Borgwardt, Karsten},
+  title   = {Association mapping in biomedical time series via statistically significant shapelet mining},
+  journal = {Bioinformatics},
+  volume  = {34},
+  number  = {13},
+  pages   = {i438--i446},
+  year    = {2018},
+  doi     = {10.1093/bioinformatics/bty246},
+}
+```
