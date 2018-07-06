@@ -20,9 +20,11 @@ For Debian and Ubuntu, please use the `.deb` file of the [latest release](https:
     $ sudo apt install s3m-latest.deb
 
 For Arch Linux, please install S3M from [AUR](https://aur.archlinux.org/packages/s3m-git)
-using `pacaur`, for example:
+using [`pacaur`](https://github.com/rmarquis/pacaur) or
+[`trizen`](https://github.com/trizen/trizen), for example:
 
     $ pacaur -S s3m
+    $ trizen -S s3m
 
 Please refer to the [advanced build instructions](docs/advanced_build.md)
 for more advanced build processes, including source builds and Docker
