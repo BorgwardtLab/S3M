@@ -57,11 +57,6 @@ public:
     _disablePruning = value;
   }
 
-  void keepNormalOnly( bool value = true ) noexcept
-  {
-    _keepNormalOnly = value;
-  }
-
   void mergeTables( bool value = true ) noexcept
   {
     _mergeTables = value;
@@ -117,7 +112,6 @@ private:
   unsigned _windowStride;
 
   bool _disablePruning     = false;
-  bool _keepNormalOnly     = false;
   bool _mergeTables        = false;
   bool _removeDuplicates   = false;
   bool _reportAllShapelets = false;

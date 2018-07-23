@@ -330,23 +330,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     );
   }
 
-  // In most of the cases, clients want to keep 'normal' $p$-values
-  // only, i.e. ones that are *not* NaN or Inf.
-  if( _keepNormalOnly )
-  {
-    BOOST_LOG_TRIVIAL( info ) << "Only keeping normal $p$-values";
-
-    significantShapelets.erase(
-      std::remove_if( significantShapelets.begin(), significantShapelets.end(),
-        [] ( const SignificantShapelet& S )
-        {
-          return !std::isnormal( S.p );
-        }
-      ),
-      significantShapelets.end()
-    );
-  }
-
   // Sort by increasing $p$-value in order to make the output easier to
   // parse for humans.
   std::stable_sort( significantShapelets.begin(), significantShapelets.end(),
