@@ -106,7 +106,18 @@ unsigned ContingencyTable::qs() const noexcept
 
 long double ContingencyTable::p() const
 {
-  return boost::math::cdf( boost::math::complement( _chi2, this->t() ) );
+  long double pval = 0.0;
+
+  try
+  {
+    pval = boost::math::cdf( boost::math::complement( _chi2, this->t() ) );
+  }
+  catch( std::domain_error& e)
+  {
+    pval = std::numeric_limits<long double>::quiet_NaN();
+  }
+
+  return pval;
 }
 
 long double ContingencyTable::min_attainable_p() const
