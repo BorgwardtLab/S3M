@@ -82,6 +82,11 @@ public:
       _disablePruning = true;
   }
 
+  void withPseudocounts( bool value = true ) noexcept
+  {
+    _withPseudocounts = value;
+  }
+
   // Extraction --------------------------------------------------------
 
   /**
@@ -105,7 +110,7 @@ private:
     is required to access elements from the back of the vector.
   */
 
-  static std::vector<long double> min_attainable_p_values( unsigned n, unsigned n1 );
+  static std::vector<long double> min_attainable_p_values( unsigned n, unsigned n1, bool withPseudocounts );
 
   unsigned _minWindowSize;
   unsigned _maxWindowSize;
@@ -116,6 +121,7 @@ private:
   bool _mergeTables        = false;
   bool _removeDuplicates   = false;
   bool _reportAllShapelets = false;
+  bool _withPseudocounts   = false;
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.

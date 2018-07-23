@@ -55,7 +55,7 @@ public:
 
   // Marginals ---------------------------------------------------------
 
-  unsigned n()  const noexcept { return _as + _bs + _cs + _ds };
+  unsigned n()  const noexcept { return _as + _bs + _cs + _ds; }
   unsigned n1() const noexcept;
   unsigned n0() const noexcept;
   unsigned rs() const noexcept;

@@ -43,7 +43,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
   BOOST_LOG_TRIVIAL(info) << "n = " << n << ", n1 = " << n1;
 
-  auto min_attainable_p_values = SignificantShapelets::min_attainable_p_values( n, n1 );
+  auto min_attainable_p_values = SignificantShapelets::min_attainable_p_values( n, n1, _withPseudocounts );
 
   // Remove thresholds that are larger than the desired significance
   // threshold. This does not change testability of patterns because
@@ -149,7 +149,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     // This involves iterating over distances in the order in which they
     // appear and constantly update all contingency tables. Pruning will
     // be performed so that not all tables will have to be examined.
-    ContingencyTables tables( n, n1 );
+    ContingencyTables tables( n, n1, _withPseudocounts );
 
     bool skip = false;
     for( std::size_t j = 0; j < timeSeries.size(); j++ )
@@ -388,11 +388,12 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   return significantShapelets;
 }
 
-std::vector<long double> SignificantShapelets::min_attainable_p_values( unsigned n, unsigned n1 )
+std::vector<long double> SignificantShapelets::min_attainable_p_values( unsigned n, unsigned n1, bool withPseudocounts )
 {
   ContingencyTable C( n,
                       n1,
-                      0.0 ); // use a dummy threshold
+                      0.0,
+                      withPseudocounts ); // use a dummy threshold
 
   std::vector<long double> p_values;
   p_values.reserve( n );

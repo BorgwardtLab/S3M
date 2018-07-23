@@ -20,7 +20,7 @@ class ContingencyTables
 public:
 
   /** Creates a new set of contingency tables, which is initially empty */
-  ContingencyTables( unsigned n, unsigned n1 );
+  ContingencyTables( unsigned n, unsigned n1, bool withPseudocounts );
 
   /**
     Updates all contingency tables by adding a new element with a given
@@ -82,6 +82,10 @@ public:
 private:
   unsigned _n;
   unsigned _n1;
+
+  // Stores whether we want to use pseudocounts in each contingency
+  // table managed by this class.
+  bool _withPseudocounts;
 
   // All contingency tables stored by the manager. This container is
   // reduced by the pruning operation.

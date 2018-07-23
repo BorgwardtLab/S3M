@@ -5,9 +5,10 @@
 #include <cassert>
 #include <cmath>
 
-ContingencyTables::ContingencyTables( unsigned n, unsigned n1 )
+ContingencyTables::ContingencyTables( unsigned n, unsigned n1, bool withPseudocounts )
   : _n( n )
   , _n1( n1 )
+  , _withPseudocounts( withPseudocounts )
 {
 }
 
@@ -16,7 +17,7 @@ void ContingencyTables::insert( double distance, bool label, long double p_taron
   // Search for the table that is supposed to be updated. Tables are
   // kept sorted according to their threshold.
   auto itPosition = std::lower_bound( _tables.begin(), _tables.end(),
-    ContingencyTable( _n, _n1, distance ),
+    ContingencyTable( _n, _n1, distance, _withPseudocounts ),
     [] ( const ContingencyTable& table1, const ContingencyTable& table2 )
     {
       return table1.threshold() < table2.threshold();
@@ -27,7 +28,7 @@ void ContingencyTables::insert( double distance, bool label, long double p_taron
   // that we have already seen so far.
   if( itPosition == _tables.end() or itPosition->threshold() != distance )
   {
-    ContingencyTable table( _n, _n1, distance );
+    ContingencyTable table( _n, _n1, distance, _withPseudocounts );
 
     for( auto&& distanceLabelPair : _distanceLabelPairs )
       table.insert( distanceLabelPair.first, distanceLabelPair.second );
