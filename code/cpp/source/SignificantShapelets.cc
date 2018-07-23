@@ -256,13 +256,14 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       }
   );
 
-  // Remove the shapelets that are not significant according to the
-  // current Tarone threshold.
+  // Remove the shapelets that are not significant according to  the
+  // current Tarone threshold. Also remove shapelets whose $p$-value
+  // is NaN.
   significantShapelets.erase(
     std::remove_if( significantShapelets.begin(), significantShapelets.end(),
       [&p_tarone] ( const SignificantShapelet& ss )
       {
-        return ss.p > p_tarone;
+        return std::isnan( ss.p ) || ss.p > p_tarone;
       }
     ),
     significantShapelets.end()
