@@ -32,7 +32,7 @@ LookupTable::LookupTable( unsigned n, unsigned n1 )
         x = (_n-1) * nb/static_cast<long double>(na) * (_n - rs)/static_cast<long double>(rs);
 
       ++rs;
-      return static_cast<long double>(1.0) - boost::math::cdf( _chi2, x );
+      return boost::math::cdf( boost::math::complement(_chi2, x ) );
     }
   );
 }
