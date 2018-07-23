@@ -134,9 +134,6 @@ long double ContingencyTable::min_optimistic_p() const
   assert( m1 < _n1 );
   assert( m0 < _n0 );
 
-  // TODO: check for spurious calls, for example when m1 == m0 == 0 and
-  // no optimistic prognosis can be made any more...
-
   return std::min(
     std::min( _lookupTable[ this->rs() + m1 ], _lookupTable[ this->rs() + m0 ] ),
     _lookupTable[ this->rs() ]
@@ -158,8 +155,8 @@ long double ContingencyTable::t() const
 
 long double ContingencyTable::t_raw() const
 {
-  // Use the *uncorrected* values. This may be an extremely stupid idea
-  // by the client, but who are we to discourage them?
+  // Use the *uncorrected* values. This may be an extremely dangerous
+  // idea by the client in case the table is not valid.
   auto as = this->as();
   auto bs = this->bs();
   auto cs = this->cs();
