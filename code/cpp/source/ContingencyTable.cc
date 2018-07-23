@@ -106,12 +106,14 @@ unsigned ContingencyTable::qs() const noexcept
 
 long double ContingencyTable::p() const
 {
-  return boost::math::cdf( boost::math::complement( _chi2, this->t() ) );
+  bool withPseudocounts = true;
+  return boost::math::cdf( boost::math::complement( _chi2, this->t( withPseudocounts ) ) );
 }
 
 long double ContingencyTable::p_raw() const
 {
-  return boost::math::cdf( boost::math::complement( _chi2, this->t_raw() ) );
+  bool withPseudocounts = false;
+  return boost::math::cdf( boost::math::complement( _chi2, this->t( withPseudocounts ) ) );
 }
 
 long double ContingencyTable::min_attainable_p() const
@@ -145,12 +147,32 @@ bool ContingencyTable::complete() const noexcept
   return _as + _bs + _cs + _ds == _n;
 }
 
-long double ContingencyTable::t() const
+long double ContingencyTable::t( bool withPseudocounts ) const
 {
-  auto numerator   = _n * std::pow( static_cast<long double>(_as*_cs) - static_cast<long double>(_bs*_ds), static_cast<long double>( 2.0 ) );
-  auto denominator = (_as+_bs) * (_cs+_ds) * (_as+_ds) * (_bs+_cs);
+  long double as = withPseudocounts ? _as : this->as();
+  long double bs = withPseudocounts ? _bs : this->bs();
+  long double cs = withPseudocounts ? _cs : this->cs();
+  long double ds = withPseudocounts ? _ds : this->ds();
+  long double n  = as+bs+cs+ds;
+  long double n1 = as+bs;
+  long double n0 = cs+ds;
+  long double rs = as+ds;
+  long double qs = bs+cs;
 
-  return static_cast<long double>( numerator / denominator );
+  // Expected frequencies, lovingly calculated and checked manually;
+  // note that we give an explicit type in order to ensure that each
+  // term will have the proper type
+  long double ea = (n1*rs) / n;
+  long double eb = (n1*qs) / n;
+  long double ec = (n0*qs) / n;
+  long double ed = (n0*rs) / n;
+
+  long double t = ((as-ea)*(as-ea))/ea
+                + ((bs-eb)*(bs-eb))/eb
+                + ((cs-ec)*(cs-ec))/ec
+                + ((ds-ed)*(ds-ed))/ed;
+
+  return t;
 }
 
 long double ContingencyTable::t_raw() const

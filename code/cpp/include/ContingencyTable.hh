@@ -113,7 +113,7 @@ private:
     and returns it. This is required for $p$-value calculation.
   */
 
-  long double t() const;
+  long double t( bool withPseudocounts ) const;
   long double t_raw() const;
 
   static boost::math::chi_squared_distribution<long double> _chi2;
