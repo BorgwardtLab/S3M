@@ -140,7 +140,9 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   progress.addField( "Testable patterns" );
   progress.addField( "FWER" );
   progress.addField( "Tarone" );
-  progress.draw();
+
+  if( !_quiet )
+    progress.draw();
 
   for( std::size_t i = 0; i < candidates.size(); i++ )
   {
@@ -166,7 +168,8 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       }
     }
 
-    ++progress;
+    if( !_quiet )
+      ++progress;
 
     if( skip )
       continue;
@@ -217,7 +220,8 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       min_attainable_p_values.pop_back();
       p_tarone = min_attainable_p_values.back();
 
-      progress.setField( "Tarone", p_tarone );
+      if( !_quiet )
+        progress.setField( "Tarone", p_tarone );
 
       significantShapelets.erase(
         std::remove_if( significantShapelets.begin(), significantShapelets.end(),
@@ -235,8 +239,11 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       thresholds.push_back( p_tarone );
     }
 
-    progress.setField( "FWER", estimateFWER );
-    progress.setField( "Testable patterns", significantShapelets.size() );
+    if( !_quiet )
+    {
+      progress.setField( "FWER", estimateFWER );
+      progress.setField( "Testable patterns", significantShapelets.size() );
+    }
   }
 
   // Replace the minimum attainable $p$-value by an actual $p$-value

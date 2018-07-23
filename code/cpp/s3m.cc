@@ -104,6 +104,7 @@ int main( int argc, char** argv )
   bool standardize      = false;
   bool disablePruning   = false;
   bool mergeTables      = false;
+  bool quiet            = false;
   bool removeDuplicates = false;
   bool withPseudocounts = false;
 
@@ -125,6 +126,7 @@ int main( int argc, char** argv )
     ("disable-pruning,p"  , "Disable pruning criterion" )
     ("remove-duplicates,r", "Remove duplicates" )
     ("with-pseudocounts,c", "Use pseudocounts in contingency tables" )
+    ("quiet,q"            , "Disables progress bar" )
     ("min-length,m"       , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
     ("max-length,M"       , value<unsigned>( &M )->default_value(  0 ), "Maximum candidate pattern length" )
     ("stride,s"           , value<unsigned>( &s )->default_value(  1 ), "Stride" )
@@ -151,6 +153,8 @@ int main( int argc, char** argv )
     return 0;
   }
 
+  BOOST_LOG_TRIVIAL(info) << "S3M (" << GIT_COMMIT_ID << ")";
+
   if( variables.count("all") )
   {
     allShapelets = true;
@@ -163,6 +167,9 @@ int main( int argc, char** argv )
 
   if( variables.count("merge-tables") )
     mergeTables = true;
+
+  if( variables.count("quiet") )
+    quiet = true;
 
   if( variables.count("remove-duplicates") )
     removeDuplicates = true;
@@ -216,6 +223,7 @@ int main( int argc, char** argv )
   SignificantShapelets significantShapelets( m, M, s );
   significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
   significantShapelets.mergeTables( mergeTables );            // enable/disable merging of contingency tables
+  significantShapelets.quiet( quiet );                        // enable/disable progress bar display
   significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
   significantShapelets.reportAllShapelets( allShapelets );    // enable/disable pruning based on significance threshold
   significantShapelets.withPseudocounts( withPseudocounts );  // enable use of pseudocounts for contingency tables

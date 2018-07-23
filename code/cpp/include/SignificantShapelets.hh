@@ -62,6 +62,11 @@ public:
     _mergeTables = value;
   }
 
+  void quiet( bool value = true ) noexcept
+  {
+    _quiet = value;
+  }
+
   void removeDuplicates( bool value = true ) noexcept
   {
     _removeDuplicates = value;
@@ -113,6 +118,7 @@ private:
 
   bool _disablePruning     = false;
   bool _mergeTables        = false;
+  bool _quiet              = false;
   bool _removeDuplicates   = false;
   bool _reportAllShapelets = false;
   bool _withPseudocounts   = false;
