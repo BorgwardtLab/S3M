@@ -106,12 +106,12 @@ unsigned ContingencyTable::qs() const noexcept
 
 long double ContingencyTable::p() const
 {
-  return static_cast<long double>( 1.0 ) - boost::math::cdf( _chi2, this->t() );
+  return boost::math::cdf( boost::math::complement( _chi2, this->t() ) );
 }
 
 long double ContingencyTable::p_raw() const
 {
-  return static_cast<long double>( 1.0 ) - boost::math::cdf( _chi2, this->t_raw() );
+  return boost::math::cdf( boost::math::complement( _chi2, this->t_raw() ) );
 }
 
 long double ContingencyTable::min_attainable_p() const
