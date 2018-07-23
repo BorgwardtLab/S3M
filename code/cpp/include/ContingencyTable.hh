@@ -30,9 +30,13 @@ public:
     1 are stored.
 
     The distance threshold is required for subsequent updates.
+
+    The flag `withPseudocounts` changes the behaviour of the class. If set, the
+    table will be created such that no cell can have a value of zero. This will
+    ensure that the $p$-value is always valid.
   */
 
-  ContingencyTable( unsigned n, unsigned n1, double threshold );
+  ContingencyTable( unsigned n, unsigned n1, double threshold, bool withPseudocounts );
 
   /**
     Updates the contingency table by inserting a new element with
@@ -51,6 +55,7 @@ public:
 
   // Marginals ---------------------------------------------------------
 
+  unsigned n()  const noexcept { return _as + _bs + _cs + _ds };
   unsigned n1() const noexcept;
   unsigned n0() const noexcept;
   unsigned rs() const noexcept;
@@ -61,14 +66,10 @@ public:
   /**
     Calculates the $p$-value of a filled contingency table. This
     function does not work if the table is only partially filled
-    or its values do not add up to the number of instances. Note
-    that the $p$-value is adjusted to ensure that the table does
-    not degenerate. To this end, $1$ is added to the entries. If
-    you want the *raw* uncorrected $p$-value, use p_raw().
+    or its values do not add up to the number of instances.
   */
 
   long double p() const;
-  long double p_raw() const;
 
   /**
     Calculates the minimum attainable $p$-value of a filled contingency
@@ -88,14 +89,11 @@ public:
   long double min_optimistic_p() const;
 
   // Attributes --------------------------------------------------------
-  //
-  // In all queries, the adjusted value is undone, making it possible to
-  // obtain the correct counts for the table afterwards.
 
-  unsigned as() const noexcept { return _as - 1; }
-  unsigned bs() const noexcept { return _bs - 1; }
-  unsigned cs() const noexcept { return _cs - 1; }
-  unsigned ds() const noexcept { return _ds - 1; }
+  unsigned as() const noexcept { return _as; }
+  unsigned bs() const noexcept { return _bs; }
+  unsigned cs() const noexcept { return _cs; }
+  unsigned ds() const noexcept { return _ds; }
 
   double threshold() const noexcept { return _threshold; }
 
@@ -113,8 +111,7 @@ private:
     and returns it. This is required for $p$-value calculation.
   */
 
-  long double t( bool withPseudocounts ) const;
-  long double t_raw() const;
+  long double t() const;
 
   static boost::math::chi_squared_distribution<long double> _chi2;
   static LookupTable _lookupTable;
@@ -126,11 +123,13 @@ private:
   // Entries in the actual contingency table. We follow common
   // terminology here, so that the table looks like this:
   //
-  // as | bs | n1
-  // --------|
-  // ds | cs | n0
-  // ---------
-  // rs | qs
+  // ----------------
+  // | as | bs | n1 |
+  // |----|----|----|
+  // | ds | cs | n0 |
+  // |----|----|----|
+  // | rs | qs | n  |
+  // ----------------
   //
   // The marginals rs and qs are determined automatically upon
   // updating the table.

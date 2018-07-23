@@ -28,14 +28,14 @@ ContingencyTable::ContingencyTable()
 {
 }
 
-ContingencyTable::ContingencyTable( unsigned n, unsigned n1, double threshold )
-  : _n ( n  + 4   )
-  , _n1( n1 + 2   )
+ContingencyTable::ContingencyTable( unsigned n, unsigned n1, double threshold, bool withPseudocounts )
+  : _n ( withPseudocounts ? n  + 4 : n  )
+  , _n1( withPseudocounts ? n1 + 2 : n1 )
   , _n0( _n - _n1 )
-  , _as( 1 )
-  , _bs( 1 )
-  , _cs( 1 )
-  , _ds( 1 )
+  , _as( withPseudocounts ? 1 : 0 )
+  , _bs( withPseudocounts ? 1 : 0 )
+  , _cs( withPseudocounts ? 1 : 0 )
+  , _ds( withPseudocounts ? 1 : 0 )
   , _threshold( threshold )
 {
   assert( _n >= _n1 );
@@ -106,14 +106,7 @@ unsigned ContingencyTable::qs() const noexcept
 
 long double ContingencyTable::p() const
 {
-  bool withPseudocounts = true;
-  return boost::math::cdf( boost::math::complement( _chi2, this->t( withPseudocounts ) ) );
-}
-
-long double ContingencyTable::p_raw() const
-{
-  bool withPseudocounts = false;
-  return boost::math::cdf( boost::math::complement( _chi2, this->t( withPseudocounts ) ) );
+  return boost::math::cdf( boost::math::complement( _chi2, this->t() ) );
 }
 
 long double ContingencyTable::min_attainable_p() const
@@ -147,17 +140,20 @@ bool ContingencyTable::complete() const noexcept
   return _as + _bs + _cs + _ds == _n;
 }
 
-long double ContingencyTable::t( bool withPseudocounts ) const
+long double ContingencyTable::t() const
 {
-  long double as = withPseudocounts ? _as : this->as();
-  long double bs = withPseudocounts ? _bs : this->bs();
-  long double cs = withPseudocounts ? _cs : this->cs();
-  long double ds = withPseudocounts ? _ds : this->ds();
-  long double n  = as+bs+cs+ds;
-  long double n1 = as+bs;
-  long double n0 = cs+ds;
-  long double rs = as+ds;
-  long double qs = bs+cs;
+  // Strictly speaking, the copies are not required here. We need them
+  // because we want to ensure that the highest-available precision is
+  // being used in the calculation below.
+  long double as = this->as();
+  long double bs = this->bs();
+  long double cs = this->cs();
+  long double ds = this->ds();
+  long double n1 = this->n1();
+  long double n0 = this->n0();
+  long double rs = this->rs();
+  long double qs = this->qs();
+  long double n  = this->n();
 
   // Expected frequencies, lovingly calculated and checked manually;
   // note that we give an explicit type in order to ensure that each
@@ -173,22 +169,6 @@ long double ContingencyTable::t( bool withPseudocounts ) const
                 + ((ds-ed)*(ds-ed))/ed;
 
   return t;
-}
-
-long double ContingencyTable::t_raw() const
-{
-  // Use the *uncorrected* values. This may be an extremely dangerous
-  // idea by the client in case the table is not valid.
-  auto as = this->as();
-  auto bs = this->bs();
-  auto cs = this->cs();
-  auto ds = this->ds();
-  auto n  = _n - 4;
-
-  auto numerator   = n * std::pow( static_cast<long double>(as*cs) - static_cast<long double>(bs*ds), static_cast<long double>( 2.0 ) );
-  auto denominator = (as+bs) * (cs+ds) * (as+ds) * (bs+cs);
-
-  return static_cast<double>( numerator / denominator );
 }
 
 std::ostream& operator<<( std::ostream& o, const ContingencyTable& C )
