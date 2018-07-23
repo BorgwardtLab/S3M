@@ -126,8 +126,8 @@ long double ContingencyTable::min_optimistic_p() const
   auto m1 = _n1 - n1;   // missing objects (y=1)
   auto m0 = _n0 - n0;   // missing objects (y=0)
 
-  assert( m1 < _n1 );
-  assert( m0 < _n0 );
+  assert( m1 <= _n1 );
+  assert( m0 <= _n0 );
 
   return std::min(
     std::min( _lookupTable[ this->rs() + m1 ], _lookupTable[ this->rs() + m0 ] ),
