@@ -103,9 +103,9 @@ int main( int argc, char** argv )
   bool allShapelets     = false;
   bool standardize      = false;
   bool disablePruning   = false;
-  bool keepNormalOnly   = false;
   bool mergeTables      = false;
   bool removeDuplicates = false;
+  bool withPseudocounts = false;
 
   unsigned m = 0; // minimum pattern length
   unsigned M = 0; // maximum pattern length
@@ -122,9 +122,9 @@ int main( int argc, char** argv )
     ("standardize"        , "Standardize data" )
     ("all,a"              , "Report all shapelets, not just the most significant ones")
     ("merge-tables,t"     , "Merge equal contingency tables")
-    ("keep-normal-only,n" , "Keep only normal p-values" )
     ("disable-pruning,p"  , "Disable pruning criterion" )
     ("remove-duplicates,r", "Remove duplicates" )
+    ("with-pseudocounts,c", "Use pseudocounts in contingency tables" )
     ("min-length,m"       , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
     ("max-length,M"       , value<unsigned>( &M )->default_value(  0 ), "Maximum candidate pattern length" )
     ("stride,s"           , value<unsigned>( &s )->default_value(  1 ), "Stride" )
@@ -161,9 +161,6 @@ int main( int argc, char** argv )
   if( variables.count("disable-pruning") )
     disablePruning = true;
 
-  if( variables.count("keep-normal-only" ) )
-    keepNormalOnly = true;
-
   if( variables.count("merge-tables") )
     mergeTables = true;
 
@@ -172,6 +169,9 @@ int main( int argc, char** argv )
 
   if( variables.count("standardize") )
     standardize = true;
+
+  if( variables.count( "with-pseudocounts" ) )
+    withPseudocounts = true;
 
   // 1. Read training data ---------------------------------------------
 
@@ -215,10 +215,10 @@ int main( int argc, char** argv )
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
   significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
-  significantShapelets.keepNormalOnly( keepNormalOnly );      // enable/disable keeping normal $p$-values
   significantShapelets.mergeTables( mergeTables );            // enable/disable merging of contingency tables
   significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
   significantShapelets.reportAllShapelets( allShapelets );    // enable/disable pruning based on significance threshold
+  significantShapelets.withPseudocounts( withPseudocounts );  // enable use of pseudocounts for contingency tables
 
   long double p_tarone = 0.0;
   auto shapelets       = significantShapelets( timeSeries,
@@ -250,6 +250,9 @@ int main( int argc, char** argv )
         }
     );
   }
+
+  if( withPseudocounts )
+    BOOST_LOG_TRIVIAL(info) << "Using pseudocounts for contingency table calculation";
 
   // 3. Output ---------------------------------------------------------
   //
