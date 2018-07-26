@@ -114,6 +114,7 @@ int main( int argc, char** argv )
   unsigned l = 0; // label index in time series
   unsigned k = 0; // number of significant shapelets to keep
 
+  std::string excludeColumns;
   std::string input;
   std::string output = "-";
 
@@ -132,6 +133,7 @@ int main( int argc, char** argv )
     ("stride,s"           , value<unsigned>( &s )->default_value(  1 ), "Stride" )
     ("label-index,l"      , value<unsigned>( &l )->default_value(  0 ), "Index of label in time series" )
     ("keep,k"             , value<unsigned>( &k )->default_value(  0 ), "Maximum number of shapelets to keep (0 = unlimited" )
+    ("exclude-columns,e"  , value<std::string>( &excludeColumns )     , "Columns to exclude for shapelet processing" )
     ("input,i"            , value<std::string>( &input )              , "Training file" )
     ("output,o"           , value<std::string>( &output )             , "Output file (specify '-' for stdout)" );
 

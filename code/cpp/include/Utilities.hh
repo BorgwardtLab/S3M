@@ -135,12 +135,13 @@ template <class T, class S> T convert( const S& sequence )
 
   It is assumed that only two labels exist.
 
-  @param filename Input filename
-  @param l        Label index, i.e. the position of the time series that
-                  contains the label
+  @param filename       Input filename
+  @param l              Label index, i.e. the position of the time series that
+                        contains the label
+  @param excludeColumns Column indices to exclude from the calculations
 */
 
-std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::string& filename, unsigned l = 0 );
+std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::string& filename, unsigned l = 0, const std::vector<unsigned>& excludeColumns = std::vector<unsigned>() );
 
 /**
   Performs $z$-score normalization, i.e. standardization, of a set of

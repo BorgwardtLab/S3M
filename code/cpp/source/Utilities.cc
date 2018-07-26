@@ -3,13 +3,14 @@
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <set>
 #include <stdexcept>
 
 #include <cassert>
 
-std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::string& filename, unsigned l )
+std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::string& filename, unsigned l, const std::vector<unsigned>& excludeColumns )
 {
   std::ifstream in( filename );
   if( !in )
@@ -37,9 +38,20 @@ std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::str
 
     assert( l < T.length() );
 
-    // extract & remove the label afterwards
+    // Extract & remove the label afterwards
     rawLabels.push_back( T[l] );
-    T.pop_front();
+
+    // Clean the time series by removing the label and all columns that
+    // we want to exclude from the calculation
+    std::vector<ValueType> rawValues( T.begin(), T.end() );
+    std::vector<ValueType> newValues;
+    for( unsigned i = 0; i < static_cast<unsigned>( rawValues.size() ); i++ )
+    {
+      if( i == l || std::find( excludeColumns.begin(), excludeColumns.end(), i ) != excludeColumns.end() )
+        newValues.push_back( rawValues[i] );
+    }
+
+    T = TimeSeries( newValues.begin(), newValues.end() );
 
     result.push_back( T );
   }
