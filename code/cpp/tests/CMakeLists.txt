@@ -1,0 +1,5 @@
+ADD_EXECUTABLE( test_time_series_reading test_time_series_reading.cc )
+
+ADD_TEST( TimeSeriesReading test_time_series_reading )
+
+CONFIGURE_FILE( data/short.csv ${CMAKE_CURRENT_BINARY_DIR}/data/short.csv COPYONLY )
