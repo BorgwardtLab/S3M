@@ -17,6 +17,12 @@ ENDIF()
 MESSAGE( STATUS "CMAKE_ROOT:           ${CMAKE_ROOT}" )
 MESSAGE( STATUS "CMAKE_SYSTEM_VERSION: ${CMAKE_SYSTEM_VERSION}" )
 
+# Include information about the CMake environment. This is required for
+# tests.
+CONFIGURE_FILE( include/Environment.hh.in
+  ${CMAKE_SOURCE_DIR}/include/Environment.hh
+)
+
 ########################################################################
 # Macros and additional flags
 ########################################################################
@@ -112,6 +118,13 @@ INSTALL( TARGETS s3m
   RUNTIME
   DESTINATION bin
 )
+
+########################################################################
+# Testing
+########################################################################
+
+ENABLE_TESTING()
+ADD_SUBDIRECTORY( tests )
 
 ########################################################################
 # Packaging
