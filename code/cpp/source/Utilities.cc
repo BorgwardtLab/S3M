@@ -43,16 +43,16 @@ std::pair< std::vector<TimeSeries>, std::vector<bool> > readData( const std::str
 
     // Clean the time series by removing the label and all columns that
     // we want to exclude from the calculation
-    std::vector<ValueType> rawValues( T.begin(), T.end() );
-    std::vector<ValueType> newValues;
-    for( unsigned i = 0; i < static_cast<unsigned>( rawValues.size() ); i++ )
+    std::vector<ValueType> values;
+    for( unsigned i = 0; i < static_cast<unsigned>( T.length() ); i++ )
     {
-      if( i == l || std::find( excludeColumns.begin(), excludeColumns.end(), i ) != excludeColumns.end() )
-        newValues.push_back( rawValues[i] );
+      // Skip either the label column or any column that appears in the
+      // list of excluded columns.
+      if( i != l && std::find( excludeColumns.begin(), excludeColumns.end(), i ) == excludeColumns.end() )
+        values.push_back( T[i] );
     }
 
-    T = TimeSeries( newValues.begin(), newValues.end() );
-
+    T = TimeSeries( values.begin(), values.end() );
     result.push_back( T );
   }
 
