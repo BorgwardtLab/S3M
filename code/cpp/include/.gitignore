@@ -1,3 +1,5 @@
-# Ensures that we do not automatically set the version file under
-# revision control because it will be generated automatically.
+# Ensures that we do not automatically set the version file or the
+# environment file under revision control because both of them are
+# generated automatically.
+Environment.hh
 Version.hh
