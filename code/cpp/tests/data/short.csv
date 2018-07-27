@@ -1,0 +1,6 @@
+# Some comments to throw off other CSV readers and demonstrate
+# how cool our reader can be.
+0,1.0,23.0, 47.11,1234, 7
+1,423,93,45,1.234,98.3, 0.0
+0,2,5,7,9,11,13,15,17,19,21
+1,2,4,6,8,10,12,14,16,18,20
