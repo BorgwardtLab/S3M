@@ -82,7 +82,7 @@ std::istream& operator>>( std::istream& in, TimeSeries& T )
 
   std::vector<ValueType> values;
 
-  auto tokens = split( line, std::string( "[:;,[:space:]]+" ) );
+  auto tokens = split( line, std::string( "[,]+" ) );
   for( auto&& token : tokens )
   {
     auto value = convert<ValueType>( token );
