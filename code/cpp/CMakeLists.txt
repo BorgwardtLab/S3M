@@ -106,6 +106,13 @@ ADD_EXECUTABLE( s3m
   source/Utilities.cc
 )
 
+# This ensures that the runtime path will be set correctly for the
+# installed binary. Else, we run into problems if multiple library
+# versions are installed.
+SET_TARGET_PROPERTIES( s3m
+  PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE
+)
+
 TARGET_COMPILE_OPTIONS( s3m
   PRIVATE
     "-DBOOST_LOG_DYN_LINK"
