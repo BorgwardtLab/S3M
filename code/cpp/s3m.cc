@@ -186,7 +186,23 @@ int main( int argc, char** argv )
 
   BOOST_LOG_TRIVIAL(info) << "Loading input from " << input;
 
-  auto data         = readData( input, l );
+  std::vector<unsigned> excludedColumns;
+  if( !excludeColumns.empty() )
+  {
+    BOOST_LOG_TRIVIAL(info) <<  "Excluding the following columns in addition to the label column: "
+                            << excludeColumns;
+
+    // Excluded columns can be separated by commas, colons, and
+    // semicolons, or a mixture of them.
+    auto tokens = split( excludeColumns, std::string( "[,:;]+" ) );
+    for( auto&& token : tokens )
+    {
+      auto value = convert<unsigned>( token );
+      excludedColumns.emplace_back( value );
+    }
+  }
+
+  auto data         = readData( input, l, excludedColumns );
   auto&& timeSeries = data.first;
   auto&& labels     = data.second;
 
