@@ -48,6 +48,17 @@ a terminal, please follow these steps to build the software:
 
 The `build` directory should now contain the `s3m` executable.
 
+## Installing S3M on older versions of Ubuntu or Debian
+
+If you are using `gcc` to install S3M, please make sure that your
+version is larger than `4.8.5`. If necessary, you can select a specific
+compiler using:
+
+    $ cmake -DCMAKE_CXX_COMPILER=g++-5 ../code/cpp/
+    $ cmake .
+
+In the example above, `g++-5` would be used instead of the `g++`.
+
 # Building with Docker
 
 In order to ease the usage of S3M across multiple platforms, we provide
