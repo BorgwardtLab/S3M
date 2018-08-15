@@ -182,6 +182,17 @@ int main( int argc, char** argv )
   if( variables.count( "with-pseudocounts" ) )
     withPseudocounts = true;
 
+  // Show usage information if no input file has been specified. This is
+  // nicer than just ending the program with an exception.
+  if( input.empty() )
+  {
+    std::cerr << "No input file was specified. S3M needs at least an input file\n"
+              << "to perform shapelet extraction.\n\n"
+              << description << "\n";
+
+    return 0;
+  }
+
   // 1. Read training data ---------------------------------------------
 
   BOOST_LOG_TRIVIAL(info) << "Loading input from " << input;
