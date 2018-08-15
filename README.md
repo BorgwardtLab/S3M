@@ -35,7 +35,7 @@ installations.
 We provide a synthetic data set that illustrates the utility of S3M.
 After installation, the command
 
-    $ s3m -i data/example/synthetic.csv -m 15 -o results/example.json -n
+    $ s3m -i data/example/synthetic.csv -m 15 -o results/example.json
 
 runs S3M on it and stores its results in the `results` folder. The below
 figure shows how the method identifies the case-characteristic two
