@@ -44,4 +44,4 @@ script:
   - make
   - make test
   - ./s3m ../data/example/synthetic.csv -m 15 -o synthetic.json
-  - [[ `grep \"shapelet\" /tmp/foo.json | wc -l` -eq 421 ]] && echo "" || exit -1
+  - sh -c [[ `grep \"shapelet\" /tmp/foo.json | wc -l` -eq 421 ]] && echo "" || exit -1
