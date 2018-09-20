@@ -87,6 +87,11 @@ void ProgressDisplay::draw()
 
 void ProgressDisplay::update()
 {
+  // Do not draw any tics if there is an insufficient amount of data
+  // available. Else, we divide by zero in the line below.
+  if( _n == 0 || _N == 0 )
+    return;
+
   std::size_t requiredTics
     = static_cast<std::size_t>( (static_cast<double>( _n ) / static_cast<double>( _N ) ) * 50.0 );
 
