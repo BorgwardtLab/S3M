@@ -10,7 +10,11 @@ boost::math::chi_squared_distribution<long double> LookupTable::_chi2
 LookupTable::LookupTable( unsigned n, unsigned n1 )
   : _n ( n  )
   , _n1( n1 )
-  , _values( n )
+  // This initialization ensures that queries can access the `_values`
+  // vector at positions 0, ..., rs, where rs <= n. In particular, the
+  // initialization solves the issue of having *one* missing cell, for
+  // the extreme case of rs == n.
+  , _values( n > 0 ? n + 1 : n )
 {
   unsigned rs = 0;
 
