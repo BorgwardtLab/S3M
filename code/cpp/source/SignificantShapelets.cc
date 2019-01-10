@@ -28,18 +28,20 @@ double piecewiseLinearDistance( const TimeSeries& shapelet, const TimeSeries& ti
 
   assert( n <= m );
 
-  auto f   = PiecewiseLinearFunction( timeSeries.begin(), timeSeries.end() );
+  auto f   = PiecewiseLinearFunction( shapelet.begin(), shapelet.end() );
   double d = std::numeric_limits<double>::max();
 
-  // For each offset, insert the shapelet at the corresponding
-  // position, fill the rest with zeros, and evaluate the norm
-  // of the corresponding piecewise linear function.
+  // For each offset, construct a time series of the correct length and
+  // compare it against the shapelet.
   for( std::size_t i = 0; i < m - n + 1; i++ )
   {
-    std::vector<double> values( m );
+    std::vector<double> values( n );
 
-    std::copy( shapelet.begin(), shapelet.end(),
-               values.begin() + static_cast<long>(i) );
+    std::copy( timeSeries.begin() + static_cast<long>(i),
+               timeSeries.begin() + static_cast<long>(i + n),
+               values.begin() );
+
+    assert( values.size() == n );
 
     auto g = PiecewiseLinearFunction( values.begin(), values.end() );
     d = std::min( d, std::abs( (f - g).norm(2) ) );
