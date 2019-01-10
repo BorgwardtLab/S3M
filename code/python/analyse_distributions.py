@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+#
+# analyse_distributions.py: analyses the $p$-value distributions of
+# a set of result files from S3M.
+
+import collections
+import json
+import os
+import sys
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+if __name__ == '__main__':
+
+    distributions = collections.defaultdict(list)
+
+    for filename in sys.argv[1:]:
+
+        basename = os.path.splitext(os.path.basename(filename))[0]
+
+        with open(filename) as f:
+            data = json.load(f)
+            data = data['shapelets']
+
+            for shapelet in data:
+                distributions[basename].append(float(shapelet['p_val']))
