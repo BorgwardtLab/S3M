@@ -100,13 +100,14 @@ int main( int argc, char** argv )
 
   using namespace boost::program_options;
 
-  bool allShapelets     = false;
-  bool standardize      = false;
-  bool disablePruning   = false;
-  bool mergeTables      = false;
-  bool quiet            = false;
-  bool removeDuplicates = false;
-  bool withPseudocounts = false;
+  bool allShapelets         = false;
+  bool standardize          = false;
+  bool experimentalDistance = false;
+  bool disablePruning       = false;
+  bool mergeTables          = false;
+  bool quiet                = false;
+  bool removeDuplicates     = false;
+  bool withPseudocounts     = false;
 
   unsigned m = 0; // minimum pattern length
   unsigned M = 0; // maximum pattern length
@@ -120,22 +121,23 @@ int main( int argc, char** argv )
 
   options_description description( "Available options" );
   description.add_options()
-    ("help,h"             , "Show help")
-    ("standardize"        , "Standardize data" )
-    ("all,a"              , "Report all shapelets, not just the most significant ones")
-    ("merge-tables,t"     , "Merge equal contingency tables")
-    ("disable-pruning,p"  , "Disable pruning criterion" )
-    ("remove-duplicates,r", "Remove duplicates" )
-    ("with-pseudocounts,c", "Use pseudocounts in contingency tables" )
-    ("quiet,q"            , "Disables progress bar" )
-    ("min-length,m"       , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
-    ("max-length,M"       , value<unsigned>( &M )->default_value(  0 ), "Maximum candidate pattern length" )
-    ("stride,s"           , value<unsigned>( &s )->default_value(  1 ), "Stride" )
-    ("label-index,l"      , value<unsigned>( &l )->default_value(  0 ), "Index of label in time series" )
-    ("keep,k"             , value<unsigned>( &k )->default_value(  0 ), "Maximum number of shapelets to keep (0 = unlimited" )
-    ("exclude-columns,e"  , value<std::string>( &excludeColumns )     , "Columns to exclude for shapelet processing" )
-    ("input,i"            , value<std::string>( &input )              , "Training file" )
-    ("output,o"           , value<std::string>( &output )             , "Output file (specify '-' for stdout)" );
+    ("help,h"                 , "Show help")
+    ("standardize"            , "Standardize data" )
+    ("all,a"                  , "Report all shapelets, not just the most significant ones")
+    ("experimental-distance,e", "Use experimental distance instead of squared Euclidean one")
+    ("merge-tables,t"         , "Merge equal contingency tables")
+    ("disable-pruning,p"      , "Disable pruning criterion" )
+    ("remove-duplicates,r"    , "Remove duplicates" )
+    ("with-pseudocounts,c"    , "Use pseudocounts in contingency tables" )
+    ("quiet,q"                , "Disables progress bar" )
+    ("min-length,m"           , value<unsigned>( &m )->default_value( 10 ), "Minimum candidate pattern length" )
+    ("max-length,M"           , value<unsigned>( &M )->default_value(  0 ), "Maximum candidate pattern length" )
+    ("stride,s"               , value<unsigned>( &s )->default_value(  1 ), "Stride" )
+    ("label-index,l"          , value<unsigned>( &l )->default_value(  0 ), "Index of label in time series" )
+    ("keep,k"                 , value<unsigned>( &k )->default_value(  0 ), "Maximum number of shapelets to keep (0 = unlimited" )
+    ("exclude-columns,e"      , value<std::string>( &excludeColumns )     , "Columns to exclude for shapelet processing" )
+    ("input,i"                , value<std::string>( &input )              , "Training file" )
+    ("output,o"               , value<std::string>( &output )             , "Output file (specify '-' for stdout)" );
 
   positional_options_description positionalOptions;
   positionalOptions.add( "input", 1 );
@@ -166,6 +168,9 @@ int main( int argc, char** argv )
 
   if( variables.count("disable-pruning") )
     disablePruning = true;
+
+  if( variables.count("experimental-distance") )
+    experimentalDistance = true;
 
   if( variables.count("merge-tables") )
     mergeTables = true;
@@ -250,12 +255,13 @@ int main( int argc, char** argv )
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
-  significantShapelets.disablePruning( disablePruning );      // enable/disable pruning
-  significantShapelets.mergeTables( mergeTables );            // enable/disable merging of contingency tables
-  significantShapelets.quiet( quiet );                        // enable/disable progress bar display
-  significantShapelets.removeDuplicates( removeDuplicates );  // enable/disable duplicate removal upon extraction
-  significantShapelets.reportAllShapelets( allShapelets );    // enable/disable pruning based on significance threshold
-  significantShapelets.withPseudocounts( withPseudocounts );  // enable use of pseudocounts for contingency tables
+  significantShapelets.disablePruning( disablePruning );             // enable/disable pruning
+  significantShapelets.experimentalDistance( experimentalDistance ); // enable/disable using experimental distance
+  significantShapelets.mergeTables( mergeTables );                   // enable/disable merging of contingency tables
+  significantShapelets.quiet( quiet );                               // enable/disable progress bar display
+  significantShapelets.removeDuplicates( removeDuplicates );         // enable/disable duplicate removal upon extraction
+  significantShapelets.reportAllShapelets( allShapelets );           // enable/disable pruning based on significance threshold
+  significantShapelets.withPseudocounts( withPseudocounts );         // enable use of pseudocounts for contingency tables
 
   long double p_tarone = 0.0;
   auto shapelets       = significantShapelets( timeSeries,

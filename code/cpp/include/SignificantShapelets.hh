@@ -57,6 +57,11 @@ public:
     _disablePruning = value;
   }
 
+  void experimentalDistance( bool value = true ) noexcept
+  {
+    _experimentalDistance = value;
+  }
+
   void mergeTables( bool value = true ) noexcept
   {
     _mergeTables = value;
@@ -116,12 +121,13 @@ private:
   unsigned _maxWindowSize;
   unsigned _windowStride;
 
-  bool _disablePruning     = false;
-  bool _mergeTables        = false;
-  bool _quiet              = false;
-  bool _removeDuplicates   = false;
-  bool _reportAllShapelets = false;
-  bool _withPseudocounts   = false;
+  bool _disablePruning       = false;
+  bool _experimentalDistance = false;
+  bool _mergeTables          = false;
+  bool _quiet                = false;
+  bool _removeDuplicates     = false;
+  bool _reportAllShapelets   = false;
+  bool _withPseudocounts     = false;
 
   // Target FWER before any adjustments of the threshold are being made
   // using Tarone's method.
