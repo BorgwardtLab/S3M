@@ -36,7 +36,7 @@ bool TimeSeries::isClose( const TimeSeries& other, double rtol, double atol ) co
   return true;
 }
 
-double TimeSeries::distance( const TimeSeries& other ) const noexcept
+TimeSeries::ValueType TimeSeries::distance( const TimeSeries& other ) const noexcept
 {
   const TimeSeries* T1 = this;
   const TimeSeries* T2 = &other;
