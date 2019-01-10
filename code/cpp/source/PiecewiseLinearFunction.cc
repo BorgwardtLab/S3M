@@ -1,5 +1,13 @@
 #include "PiecewiseLinearFunction.hh"
 
+PiecewiseLinearFunction PiecewiseLinearFunction::operator+( const PiecewiseLinearFunction& other ) const
+{
+}
+
+PiecewiseLinearFunction PiecewiseLinearFunction::operator-( const PiecewiseLinearFunction& other ) const
+{
+}
+
 bool PiecewiseLinearFunction::hasSameDomain( const PiecewiseLinearFunction& ) const
 {
   // Since we do not include the domain in our calculation of the
