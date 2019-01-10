@@ -50,6 +50,10 @@ public:
   PiecewiseLinearFunction operator+( const PiecewiseLinearFunction& other ) const;
   PiecewiseLinearFunction operator-( const PiecewiseLinearFunction& other ) const;
 
+  // Norms & distances -------------------------------------------------
+
+  ValueType norm( double p = 2.0 ) const;
+
 private:
 
   template <class BinaryOperation> PiecewiseLinearFunction apply(
