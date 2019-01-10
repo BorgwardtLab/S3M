@@ -8,8 +8,11 @@ import json
 import os
 import sys
 
+import numpy as np
+
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 
 if __name__ == '__main__':
 
@@ -24,4 +27,11 @@ if __name__ == '__main__':
             data = data['shapelets']
 
             for shapelet in data:
-                distributions[basename].append(float(shapelet['p_val']))
+                p_val = float(shapelet['p_val'])
+                distributions[basename].append(-np.log10(p_val))
+
+    for name in distributions.keys():
+        sns.distplot(distributions[name], bins=10, label=name, axlabel='$p$-value (-log)')
+
+    plt.legend()
+    plt.show()
