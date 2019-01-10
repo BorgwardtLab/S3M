@@ -37,7 +37,9 @@ double piecewiseLinearDistance( const TimeSeries& shapelet, const TimeSeries& ti
   for( std::size_t i = 0; i < m - n + 1; i++ )
   {
     std::vector<double> values( m );
-    values.insert( values.begin() + static_cast<long>(i), shapelet.begin(), shapelet.end() );
+
+    std::copy( shapelet.begin(), shapelet.end(),
+               values.begin() + static_cast<long>(i) );
 
     auto g = PiecewiseLinearFunction( values.begin(), values.end() );
     d = std::min( d, std::abs( (f - g).norm(2) ) );
