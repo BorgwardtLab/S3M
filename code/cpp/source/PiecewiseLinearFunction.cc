@@ -1,6 +1,9 @@
 #include "PiecewiseLinearFunction.hh"
 
 #include <functional>
+#include <iterator>
+
+#include <cmath>
 
 PiecewiseLinearFunction PiecewiseLinearFunction::operator+( const PiecewiseLinearFunction& other ) const
 {
@@ -12,24 +15,40 @@ PiecewiseLinearFunction PiecewiseLinearFunction::operator-( const PiecewiseLinea
   return this->apply( other, std::minus<ValueType>() );
 }
 
-//  def norm(self, p=2.0):
-//      result = 0.0
-//      for first, second in zip(zip(self.x, self.y), zip(self.x[1:], self.y[1:])):
-//          x1, y1 = first[0] , first[1]
-//          x2, y2 = second[0], second[1]
-//          m      = (y2 - y1) / (x2 - x1)
-//          c      = y1 - m * x1
-//
-//          def evaluator(x):
-//              if m == 0.0:
-//                  return math.pow(c,p) * x
-//              else:
-//                  return math.pow( m*x + c, p+1 ) / ( m * (p+1) );
-//          
-//          integral  = abs( evaluator(x2) - evaluator(x1) )
-//          result   += integral
-//
-//      return math.pow(result, 1.0 / p)
+PiecewiseLinearFunction::ValueType PiecewiseLinearFunction::norm( double p ) const
+{
+  ValueType result = ValueType();
+
+  for( auto it = this->begin(); it != this->end(); ++it )
+  {
+    auto next = std::next( it );
+    if( next == this->end() )
+      break;
+
+    auto xi = std::distance( this->begin(), it );
+    auto yi = *it;
+    auto xj = std::distance( this->begin(), next ); // should be xi + 1
+    auto yj = *next;
+
+    // These two expressions are guaranteed to be valid for valid
+    // iterators.
+    auto m = (yj - yi) / (xj - xi);
+    auto c = yi - m * xi;
+
+    auto evaluator = [&]( ValueType x )
+    {
+      if( m == ValueType() )
+        return std::pow( c, static_cast<ValueType>(p) ) * x;
+      else
+        return std::pow( m * x + c, static_cast<ValueType>(p + 1) ) / ( m * (p + 1) );
+    };
+
+    auto integral = std::abs( evaluator(xj) - evaluator(xi) );
+    result += integral;
+  }
+
+  return result;
+}
 
 bool PiecewiseLinearFunction::hasSameDomain( const PiecewiseLinearFunction& ) const
 {
