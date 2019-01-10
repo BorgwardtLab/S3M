@@ -122,7 +122,7 @@ private:
     sorted in order of appearance.
   */
 
-  std::vector<ValueType> _values;
+  ContainerType _values;
 };
 
 /**
