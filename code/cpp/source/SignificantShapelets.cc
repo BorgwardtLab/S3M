@@ -156,10 +156,12 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     bool skip = false;
     for( std::size_t j = 0; j < timeSeries.size(); j++ )
     {
+      auto&& distance = candidates[i].distance( timeSeries[j] );
+
       if( _disablePruning )
-        tables.insert( candidates[i].distance( timeSeries[j] ), labels[j] );
+        tables.insert( distance, labels[j] );
       else
-        tables.insert( candidates[i].distance( timeSeries[j] ), labels[j], p_tarone );
+        tables.insert( distance, labels[j], p_tarone );
 
       if( tables.empty() )
       {
