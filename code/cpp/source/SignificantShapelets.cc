@@ -1,5 +1,6 @@
 #include "ContingencyTable.hh"
 #include "ContingencyTables.hh"
+#include "PiecewiseLinearFunction.hh"
 #include "ProgressDisplay.hh"
 #include "SignificantShapelets.hh"
 #include "SlidingWindow.hh"
@@ -7,6 +8,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <vector>
 
 #include <cassert>
@@ -15,6 +17,36 @@
 #include <boost/log/trivial.hpp>
 
 #include <boost/math/special_functions/factorials.hpp>
+
+namespace
+{
+
+double piecewiseLinearDistance( const TimeSeries& shapelet, const TimeSeries& timeSeries )
+{
+  auto n = shapelet.length();
+  auto m = timeSeries.length();
+
+  assert( n <= m );
+
+  auto f   = PiecewiseLinearFunction( timeSeries.begin(), timeSeries.end() );
+  double d = std::numeric_limits<double>::max();
+
+  // For each offset, insert the shapelet at the corresponding
+  // position, fill the rest with zeros, and evaluate the norm
+  // of the corresponding piecewise linear function.
+  for( std::size_t i = 0; i < m - n + 1; i++ )
+  {
+    std::vector<double> values( m );
+    values.insert( values.begin() + static_cast<long>(i), shapelet.begin(), shapelet.end() );
+
+    auto g = PiecewiseLinearFunction( values.begin(), values.end() );
+    d = std::min( d, std::abs( (f - g).norm(2) ) );
+  }
+
+  return d;
+}
+
+} // end of anonymous namespace
 
 SignificantShapelets::SignificantShapelets( unsigned size, unsigned windowStride )
   : _minWindowSize( size )
@@ -156,7 +188,12 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     bool skip = false;
     for( std::size_t j = 0; j < timeSeries.size(); j++ )
     {
-      auto&& distance = candidates[i].distance( timeSeries[j] );
+      TimeSeries::ValueType distance = TimeSeries::ValueType();
+
+      if( _experimentalDistance )
+        distance = piecewiseLinearDistance( candidates[i], timeSeries[j] );
+      else
+        distance = candidates[i].distance( timeSeries[j] );
 
       if( _disablePruning )
         tables.insert( distance, labels[j] );
