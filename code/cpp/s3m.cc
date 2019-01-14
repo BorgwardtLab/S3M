@@ -279,7 +279,12 @@ int main( int argc, char** argv )
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
-  significantShapelets.setDistance( selectDistance( distance) );     // selected distance functor
+
+  // Only set the distance if the user requested a specific one. Else,
+  // the default implementation is much faster.
+  if( !distance.empty() )
+    significantShapelets.setDistance( selectDistance( distance) );
+
   significantShapelets.disablePruning( disablePruning );             // enable/disable pruning
   significantShapelets.experimentalDistance( experimentalDistance ); // enable/disable using experimental distance
   significantShapelets.mergeTables( mergeTables );                   // enable/disable merging of contingency tables

@@ -118,11 +118,11 @@ private:
 
   /**
     Distance functor that will be used to calculate distance between
-    a shapelet and a time series. Will be initialized to the squared
-    Euclidean subsequence distance.
+    a shapelet and a time series. Will only be used when initialized
+    and thus overriding the default Euclidean subsequence distance.
   */
 
-  std::shared_ptr<DistanceFunctor> _distance;
+  std::shared_ptr<DistanceFunctor> _distance = nullptr;
 
   /**
     Calculates the minimum attainable $p$-values for a given problem
