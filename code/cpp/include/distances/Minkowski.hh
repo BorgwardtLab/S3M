@@ -10,7 +10,7 @@ public:
 
   MinkowskiDistance( ValueType p );
 
-  virtual ValueType operator()( const TimeSeries& S, const TimeSeries& T );
+  virtual ValueType operator()( const TimeSeries& S, const TimeSeries& T ) const;
 
 private:
   ValueType _p = ValueType();

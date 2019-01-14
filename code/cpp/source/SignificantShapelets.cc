@@ -6,6 +6,8 @@
 #include "SlidingWindow.hh"
 #include "Utilities.hh"
 
+#include "distances/Minkowski.hh"
+
 #include <algorithm>
 #include <iostream>
 #include <limits>
@@ -53,14 +55,16 @@ double piecewiseLinearDistance( const TimeSeries& shapelet, const TimeSeries& ti
 } // end of anonymous namespace
 
 SignificantShapelets::SignificantShapelets( unsigned size, unsigned windowStride )
-  : _minWindowSize( size )
+  : _distance( new MinkowskiDistance( ValueType( 2.0 ) ) )
+  , _minWindowSize( size )
   , _maxWindowSize( size )
   , _windowStride( windowStride )
 {
 }
 
 SignificantShapelets::SignificantShapelets( unsigned minSize, unsigned maxSize, unsigned windowStride )
-  : _minWindowSize( minSize )
+  : _distance( new MinkowskiDistance( ValueType( 2.0 ) ) )
+  , _minWindowSize( minSize )
   , _maxWindowSize( maxSize )
   , _windowStride( windowStride )
 {
@@ -197,7 +201,7 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       if( _experimentalDistance )
         distance = piecewiseLinearDistance( candidates[i], timeSeries[j] );
       else
-        distance = candidates[i].distance( timeSeries[j] );
+        distance = _distance->operator()( candidates[i], timeSeries[j] );
 
       if( _disablePruning )
         tables.insert( distance, labels[j] );

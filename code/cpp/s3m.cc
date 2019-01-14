@@ -3,6 +3,9 @@
 #include "Utilities.hh"
 #include "Version.hh"
 
+#include "distances/DistanceFunctor.hh"
+#include "distances/Minkowski.hh"
+
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <boost/log/core.hpp>
@@ -94,6 +97,13 @@ void setupLogging()
   core->add_sink( sink );
 }
 
+std::shared_ptr<DistanceFunctor> selectDistance( const std::string& name )
+{
+  // Fall back to the default distance here instead of selecting one
+  // that does not fit.
+  return std::make_shared<MinkowskiDistance>( 2.0 );
+}
+
 int main( int argc, char** argv )
 {
   setupLogging();
@@ -116,6 +126,7 @@ int main( int argc, char** argv )
   unsigned k = 0; // number of significant shapelets to keep
 
   std::string excludeColumns;
+  std::string distance;
   std::string input;
   std::string output = "-";
 
@@ -135,6 +146,7 @@ int main( int argc, char** argv )
     ("stride,s"               , value<unsigned>( &s )->default_value(  1 ), "Stride" )
     ("label-index,l"          , value<unsigned>( &l )->default_value(  0 ), "Index of label in time series" )
     ("keep,k"                 , value<unsigned>( &k )->default_value(  0 ), "Maximum number of shapelets to keep (0 = unlimited" )
+    ("distance,d"             , value<std::string>( &distance )           , "Use non-standard distance function")
     ("exclude-columns,e"      , value<std::string>( &excludeColumns )     , "Columns to exclude for shapelet processing" )
     ("input,i"                , value<std::string>( &input )              , "Training file" )
     ("output,o"               , value<std::string>( &output )             , "Output file (specify '-' for stdout)" );
@@ -255,6 +267,7 @@ int main( int argc, char** argv )
 
   std::vector<long double> thresholds;
   SignificantShapelets significantShapelets( m, M, s );
+  significantShapelets.setDistance( selectDistance( distance) );     // selected distance functor
   significantShapelets.disablePruning( disablePruning );             // enable/disable pruning
   significantShapelets.experimentalDistance( experimentalDistance ); // enable/disable using experimental distance
   significantShapelets.mergeTables( mergeTables );                   // enable/disable merging of contingency tables

@@ -16,7 +16,7 @@ MinkowskiDistance::MinkowskiDistance( ValueType p )
     throw std::runtime_error( "Power parameter must be nonnegative" );
 }
 
-MinkowskiDistance::ValueType MinkowskiDistance::operator()( const TimeSeries& S, const TimeSeries& T )
+MinkowskiDistance::ValueType MinkowskiDistance::operator()( const TimeSeries& S, const TimeSeries& T ) const
 {
   const TimeSeries* T1 = &S;
   const TimeSeries* T2 = &T;

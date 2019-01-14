@@ -4,8 +4,11 @@
 #include "ContingencyTable.hh"
 #include "TimeSeries.hh"
 
+#include "distances/DistanceFunctor.hh"
+
 #include <initializer_list>
 #include <iosfwd>
+#include <memory>
 #include <vector>
 
 /**
@@ -51,6 +54,13 @@ public:
   SignificantShapelets( unsigned minSize, unsigned maxSize, unsigned windowStride );
 
   // Parameters --------------------------------------------------------
+
+  // This *could* thrown an exception, but I am hoping that it does not,
+  // so I cannot use `noexcept` in good conscience here).
+  void setDistance( std::shared_ptr<DistanceFunctor> distance )
+  {
+    _distance = distance;
+  }
 
   void disablePruning( bool value = true ) noexcept
   {
@@ -105,6 +115,14 @@ public:
                                                std::vector<long double>& thresholds );
 
 private:
+
+  /**
+    Distance functor that will be used to calculate distance between
+    a shapelet and a time series. Will be initialized to the squared
+    Euclidean subsequence distance.
+  */
+
+  std::shared_ptr<DistanceFunctor> _distance;
 
   /**
     Calculates the minimum attainable $p$-values for a given problem
