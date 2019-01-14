@@ -98,6 +98,7 @@ ADD_EXECUTABLE( s3m
   #
   source/ContingencyTable.cc
   source/ContingencyTables.cc
+  source/DistanceFunctor.cc
   source/LookupTable.cc
   source/PiecewiseLinearFunction.cc
   source/ProgressDisplay.cc
