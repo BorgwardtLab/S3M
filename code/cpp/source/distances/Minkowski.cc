@@ -33,9 +33,12 @@ MinkowskiDistance::ValueType MinkowskiDistance::operator()( const TimeSeries& S,
     {
       auto x = (*T2)[i+j];
       auto y = (*T1)[  j];
-      auto d = static_cast<ValueType>(x - y);
+      auto d = static_cast<ValueType>( std::abs( x - y ) );
 
-      temp += std::pow( d, _p );
+      if( _p > 0 )
+        temp += _p > 1 ? std::pow( d, _p ) : d;
+      else
+        temp = std::max( temp, d );
 
       // Abandon early if we are already worse than the current best
       // estimate.
