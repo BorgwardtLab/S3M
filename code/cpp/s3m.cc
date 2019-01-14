@@ -99,6 +99,18 @@ void setupLogging()
 
 std::shared_ptr<DistanceFunctor> selectDistance( const std::string& name )
 {
+  auto position = name.find( ':' );
+  auto metric   = name.substr( 0, position );
+  auto power    = position != std::string::npos ? name.substr( position + 1 ) : std::string();
+  auto p        = power.empty() ? 2.0 : std::stod( power );
+
+  if( metric == "minkowski" )
+    return std::make_shared<MinkowskiDistance>( p );
+
+  // FIXME: implement...
+  else if( metric == "lp" )
+    return nullptr;
+
   // Fall back to the default distance here instead of selecting one
   // that does not fit.
   return std::make_shared<MinkowskiDistance>( 2.0 );
