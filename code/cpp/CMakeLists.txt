@@ -98,7 +98,6 @@ ADD_EXECUTABLE( s3m
   #
   source/ContingencyTable.cc
   source/ContingencyTables.cc
-  source/DistanceFunctor.cc
   source/LookupTable.cc
   source/PiecewiseLinearFunction.cc
   source/ProgressDisplay.cc
@@ -106,6 +105,9 @@ ADD_EXECUTABLE( s3m
   source/SlidingWindow.cc
   source/TimeSeries.cc
   source/Utilities.cc
+  #
+  source/distances/DistanceFunctor.cc
+  source/distances/Minkowski.cc
 )
 
 # This ensures that the runtime path will be set correctly for the
