@@ -67,11 +67,6 @@ public:
     _disablePruning = value;
   }
 
-  void experimentalDistance( bool value = true ) noexcept
-  {
-    _experimentalDistance = value;
-  }
-
   void mergeTables( bool value = true ) noexcept
   {
     _mergeTables = value;
@@ -140,7 +135,6 @@ private:
   unsigned _windowStride;
 
   bool _disablePruning       = false;
-  bool _experimentalDistance = false;
   bool _mergeTables          = false;
   bool _quiet                = false;
   bool _removeDuplicates     = false;

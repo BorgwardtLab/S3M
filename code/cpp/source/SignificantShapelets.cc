@@ -20,40 +20,6 @@
 
 #include <boost/math/special_functions/factorials.hpp>
 
-namespace
-{
-
-double piecewiseLinearDistance( const TimeSeries& shapelet, const TimeSeries& timeSeries )
-{
-  auto n = shapelet.length();
-  auto m = timeSeries.length();
-
-  assert( n <= m );
-
-  auto f   = PiecewiseLinearFunction( shapelet.begin(), shapelet.end() );
-  double d = std::numeric_limits<double>::max();
-
-  // For each offset, construct a time series of the correct length and
-  // compare it against the shapelet.
-  for( std::size_t i = 0; i < m - n + 1; i++ )
-  {
-    std::vector<double> values( n );
-
-    std::copy( timeSeries.begin() + static_cast<long>(i),
-               timeSeries.begin() + static_cast<long>(i + n),
-               values.begin() );
-
-    assert( values.size() == n );
-
-    auto g = PiecewiseLinearFunction( values.begin(), values.end() );
-    d = std::min( d, std::abs( (f - g).norm(2) ) );
-  }
-
-  return d;
-}
-
-} // end of anonymous namespace
-
 SignificantShapelets::SignificantShapelets( unsigned size, unsigned windowStride )
   : _minWindowSize( size )
   , _maxWindowSize( size )
@@ -196,12 +162,14 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     {
       TimeSeries::ValueType distance = TimeSeries::ValueType();
 
-      if( _experimentalDistance )
-        distance = piecewiseLinearDistance( candidates[i], timeSeries[j] );
-      else if( _distance )
-        distance = _distance->operator()( candidates[i], timeSeries[j] );
-      else
+      // No special distance functor specified, so we fall back to the
+      // original squared Euclidean distance.
+      if( !_distance )
         distance = candidates[i].distance( timeSeries[j] );
+
+      // Use the client-provided distance functor
+      else
+        distance = _distance->operator()( candidates[i], timeSeries[j] );
 
       if( _disablePruning )
         tables.insert( distance, labels[j] );

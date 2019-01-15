@@ -124,7 +124,6 @@ int main( int argc, char** argv )
 
   bool allShapelets         = false;
   bool standardize          = false;
-  bool experimentalDistance = false;
   bool disablePruning       = false;
   bool mergeTables          = false;
   bool quiet                = false;
@@ -147,7 +146,6 @@ int main( int argc, char** argv )
     ("help,h"                 , "Show help")
     ("standardize"            , "Standardize data" )
     ("all,a"                  , "Report all shapelets, not just the most significant ones")
-    ("experimental-distance,e", "Use experimental distance instead of squared Euclidean one")
     ("merge-tables,t"         , "Merge equal contingency tables")
     ("disable-pruning,p"      , "Disable pruning criterion" )
     ("remove-duplicates,r"    , "Remove duplicates" )
@@ -192,9 +190,6 @@ int main( int argc, char** argv )
 
   if( variables.count("disable-pruning") )
     disablePruning = true;
-
-  if( variables.count("experimental-distance") )
-    experimentalDistance = true;
 
   if( variables.count("merge-tables") )
     mergeTables = true;
@@ -286,7 +281,6 @@ int main( int argc, char** argv )
     significantShapelets.setDistance( selectDistance( distance) );
 
   significantShapelets.disablePruning( disablePruning );             // enable/disable pruning
-  significantShapelets.experimentalDistance( experimentalDistance ); // enable/disable using experimental distance
   significantShapelets.mergeTables( mergeTables );                   // enable/disable merging of contingency tables
   significantShapelets.quiet( quiet );                               // enable/disable progress bar display
   significantShapelets.removeDuplicates( removeDuplicates );         // enable/disable duplicate removal upon extraction
