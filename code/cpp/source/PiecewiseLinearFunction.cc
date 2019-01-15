@@ -44,19 +44,20 @@ PiecewiseLinearFunction::ValueType PiecewiseLinearFunction::norm( double p ) con
         return std::pow( m * x + c, static_cast<ValueType>(p + 1) ) / ( m * (p + 1) );
     };
 
-    auto integral = std::abs( evaluator(xj) - evaluator(xi) );
-
     assert( p >= 0 );
 
     // The client wants to calculate the usual $p$-norm, so we do not
     // have to worry about anything else here.
     if( p > 0 )
+    {
+      auto integral = std::abs( evaluator(xj) - evaluator(xi) );
       result += integral;
+    }
 
     // The client wants to calculate the supremum norm, so we just take
     // the *largest* integral interval that we can find.
     else
-      result = std::max( result, integral );
+      result = std::max( result, std::max( yi, yj ) );
   }
 
   return result;
