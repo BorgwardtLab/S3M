@@ -2,6 +2,7 @@
 
 #include "PiecewiseLinearFunction.hh"
 
+#include <limits>
 #include <utility>
 
 #include <cassert>

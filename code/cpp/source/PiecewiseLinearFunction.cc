@@ -2,7 +2,6 @@
 
 #include <functional>
 #include <iterator>
-#include <limits>
 
 #include <cmath>
 #include <cassert>
