@@ -12,6 +12,11 @@ public:
 
   virtual ValueType operator()( const TimeSeries& S, const TimeSeries& T ) const;
 
+  virtual std::string name() const noexcept
+  {
+    return "Minkowski:" + std::to_string( _p );
+  }
+
 private:
   ValueType _p;
 };

@@ -1,6 +1,8 @@
 #ifndef DISTANCE_FUNCTOR_HH__
 #define DISTANCE_FUNCTOR_HH__
 
+#include <string>
+
 // Using a forward reference because it is sufficient here, thus
 // minimizing the complexity of all dependencies to some extent.
 class TimeSeries;
@@ -26,6 +28,13 @@ public:
   */
 
   virtual ValueType operator()( const TimeSeries& S, const TimeSeries& T ) const = 0; 
+
+  /**
+    Returns the name of the distance functor. Ideally, this should
+    include parameters, but this function cannot enforce it.
+  */
+
+  virtual std::string name() const = 0;
 };
 
 #endif
