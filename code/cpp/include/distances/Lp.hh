@@ -3,6 +3,8 @@
 
 #include "DistanceFunctor.hh"
 
+#include <sstream>
+
 class LpDistance : public DistanceFunctor
 {
 public:
@@ -14,7 +16,13 @@ public:
 
   virtual std::string name() const noexcept
   {
-    return "Lp:" + std::to_string( _p );
+    // In contrast to `std::to_string`, this uses the *default*
+    // notation for output streams, so that we get '0', instead
+    // of '0.000000'.
+    std::ostringstream stream;
+    stream << _p;
+
+    return "Lp:" + stream.str();
   }
 
 private:
