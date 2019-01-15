@@ -13,7 +13,7 @@ public:
   virtual ValueType operator()( const TimeSeries& S, const TimeSeries& T ) const;
 
 private:
-  ValueType _p = ValueType();
+  ValueType _p;
 };
 
 #endif
