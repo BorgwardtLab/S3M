@@ -4,6 +4,7 @@
 #include "Version.hh"
 
 #include "distances/DistanceFunctor.hh"
+#include "distances/Lp.hh"
 #include "distances/Minkowski.hh"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -107,9 +108,8 @@ std::shared_ptr<DistanceFunctor> selectDistance( const std::string& name )
   if( metric == "minkowski" )
     return std::make_shared<MinkowskiDistance>( p );
 
-  // FIXME: implement...
   else if( metric == "lp" )
-    return nullptr;
+    return std::make_shared<LpDistance>( p );
 
   // Fall back to the default distance here instead of selecting one
   // that does not fit.
