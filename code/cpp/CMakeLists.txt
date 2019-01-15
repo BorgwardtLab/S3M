@@ -105,6 +105,7 @@ ADD_EXECUTABLE( s3m
   source/Utilities.cc
   #
   source/distances/DistanceFunctor.cc
+  source/distances/Lp.cc
   source/distances/Minkowski.cc
 )
 
