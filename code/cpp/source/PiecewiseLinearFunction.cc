@@ -4,6 +4,7 @@
 #include <iterator>
 
 #include <cmath>
+#include <cassert>
 
 PiecewiseLinearFunction PiecewiseLinearFunction::operator+( const PiecewiseLinearFunction& other ) const
 {
@@ -44,7 +45,18 @@ PiecewiseLinearFunction::ValueType PiecewiseLinearFunction::norm( double p ) con
     };
 
     auto integral = std::abs( evaluator(xj) - evaluator(xi) );
-    result += integral;
+
+    assert( p >= 0 );
+
+    // The client wants to calculate the usual $p$-norm, so we do not
+    // have to worry about anything else here.
+    if( p > 0 )
+      result += integral;
+
+    // The client wants to calculate the supremum norm, so we just take
+    // the *largest* integral interval that we can find.
+    else
+      result = std::max( result, integral );
   }
 
   return result;
