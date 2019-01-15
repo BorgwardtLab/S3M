@@ -343,8 +343,21 @@ int main( int argc, char** argv )
          << "    \"min_length\": "  << m << ",\n"
          << "    \"max_length\": "  << M << ",\n"
          << "    \"stride\": "      << s << ",\n"
-         << "    \"standardize\": " << std::boolalpha << standardize << std::noboolalpha << ",\n"
-         << "    \"p_tarone\": "    << p_tarone << ",\n"
+         << "    \"standardize\": " << std::boolalpha << standardize << std::noboolalpha << ",\n";
+
+    // Only add this section if we deviated from the default distance.
+    // We do not want to clutter up the output.
+    if( !distance.empty() )
+    {
+      // This is a *little* bit inefficient since we already set the
+      // functor above, but I do not want to write yet another 'get'
+      // function for the significant shapelets class.
+      auto functor = selectDistance( distance);
+
+      *out << "    \"distance\": " << "\"" << functor->name() << "\",\n";
+    }
+
+    *out << "    \"p_tarone\": "    << p_tarone << ",\n"
          << "    \"version\": "     << "\"" << GIT_COMMIT_ID << "\"\n"
          << "  },\n"
          << "  \"shapelets\": [\n";
