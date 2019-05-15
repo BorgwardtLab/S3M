@@ -107,22 +107,9 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
 
   BOOST_LOG_TRIVIAL(info) << "Maximum length of input time series is " << maxLength;
 
-  auto windowSizeCorrection = ( _maxWindowSize - _minWindowSize ) * maxLength
-                              - 0.5 * std::pow( _maxWindowSize - _minWindowSize, 2 )
-                              + 0.5 * ( _maxWindowSize - _minWindowSize );
-
-  // Ensures that the window size correction factor is nonzero,
-  // regardless of whether the maximum and minimum window size
-  // happen to coincide.
-  windowSizeCorrection = std::max( windowSizeCorrection, 1.0 );
-
-  BOOST_LOG_TRIVIAL(info) << "Window size correction factor is " << windowSizeCorrection;
-
   BOOST_LOG_TRIVIAL(info) << "Naive Bonferroni correction factor is " <<
-    _alpha / (  static_cast<long double>( candidates.size() )
-              * static_cast<long double>( timeSeries.size() )
+    _alpha / (  ( static_cast<long double>( candidates.size() ) )
               * ( static_cast<long double>( timeSeries.size() ) + 1 )
-              * static_cast<long double>( windowSizeCorrection )
   );
 
   // -------------------------------------------------------------------
