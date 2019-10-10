@@ -60,15 +60,27 @@ CONFIGURE_FILE(
 ########################################################################
 
 FIND_PACKAGE( Threads )
-FIND_PACKAGE( Boost REQUIRED
-  COMPONENTS
-    date_time
-    log
-    program_options
-    system
-    timer
-    thread
-)
+
+IF( APPLE )
+  FIND_PACKAGE( Boost REQUIRED
+    COMPONENTS
+      date_time
+      program_options
+      system
+      timer
+      thread
+  )
+ELSE()
+  FIND_PACKAGE( Boost REQUIRED
+    COMPONENTS
+      date_time
+      log
+      program_options
+      system
+      timer
+      thread
+  )
+ENDIF()
 
 ########################################################################
 # Include directories
@@ -118,7 +130,8 @@ SET_TARGET_PROPERTIES( s3m
 
 TARGET_COMPILE_OPTIONS( s3m
   PRIVATE
-    "-DBOOST_LOG_DYN_LINK"
+    "-DBOOST_LOG_DYN_LINK"  # This is not required for Mac OS X but it
+                            # does not hurt
     "-O3"
 )
 
