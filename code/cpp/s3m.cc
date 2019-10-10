@@ -7,17 +7,27 @@
 #include "distances/Lp.hh"
 #include "distances/Minkowski.hh"
 
-#include <boost/date_time/posix_time/posix_time.hpp>
+// FIXME 2019-10: Boost.Log is causing issues under Mac OS X at present.
+// They are *not* related to S3M but make it impossible for us to *link*
+// the program right now. Hence, the pretty logger is disabled.
+#ifndef __APPLE__
+  #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <boost/log/core.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/trivial.hpp>
+  #include <boost/log/core.hpp>
+  #include <boost/log/expressions.hpp>
+  #include <boost/log/trivial.hpp>
 
-#include <boost/log/sinks/sync_frontend.hpp>
-#include <boost/log/sinks/text_ostream_backend.hpp>
+  #include <boost/log/sinks/sync_frontend.hpp>
+  #include <boost/log/sinks/text_ostream_backend.hpp>
 
-#include <boost/log/utility/formatting_ostream.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
+  #include <boost/log/utility/formatting_ostream.hpp>
+  #include <boost/log/utility/setup/common_attributes.hpp>
+#else
+  // This is a very cute way of pretending that we are using a logging
+  // system when in reality, we are *not*.
+  #define BOOST_LOG_TRIVIAL(level) std::cerr
+#endif
+
 
 #include <boost/make_shared.hpp>
 
@@ -41,6 +51,11 @@
 // from StackOverflow [1].
 //
 // [1]: https://stackoverflow.com/a/38316911/1396991
+//
+// FIXME 2019-10: Please note that this functionality is only available
+// under Linux for the time being.
+#ifndef __APPLE__
+
 void formatLogRecord( boost::log::record_view const& r, boost::log::formatting_ostream& o )
 {
   namespace logging = boost::log;
@@ -73,10 +88,17 @@ void formatLogRecord( boost::log::record_view const& r, boost::log::formatting_o
   // Restore the default colour
   if( severity )
     o << "\033[0m";
+  // Silence compiler warnings if Boost.Log is not present in the
+  // platform.
+  (void) r;
+  (void) o;
 }
+
+#endif
 
 void setupLogging()
 {
+#ifndef __APPLE__
   namespace logging = boost::log;
   auto core         = logging::core::get();
 
@@ -96,6 +118,7 @@ void setupLogging()
 
   sink->set_formatter( &formatLogRecord );
   core->add_sink( sink );
+#endif
 }
 
 std::shared_ptr<DistanceFunctor> selectDistance( const std::string& name )
