@@ -129,12 +129,10 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
   ProgressDisplay progress( candidates.size() );
   progress.addField( "FWER" );
   progress.addField( "Tarone" );
-  progress.addField( "1. No. pruned patterns" );
-  progress.addField( "2. No. testable patterns" );
-  progress.addField( "3. No. tested patterns" );
+  progress.addField( "No. testable patterns" );
+  progress.addField( "No. tested patterns" );
 
-  unsigned numHypotheses       = 0;
-  unsigned numPrunedHypotheses = 0;
+  unsigned numHypotheses = 0;
 
   if( !_quiet )
     progress.draw();
@@ -235,8 +233,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       if( !_quiet )
         progress.setField( "Tarone", p_tarone );
 
-      auto sizeBefore = significantShapelets.size();
-
       significantShapelets.erase(
         std::remove_if( significantShapelets.begin(), significantShapelets.end(),
           [&p_tarone] ( const SignificantShapelet& ss )
@@ -247,11 +243,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
         significantShapelets.end()
       );
 
-      auto sizeAfter = significantShapelets.size();
-
-      if( sizeBefore > sizeAfter )
-        numPrunedHypotheses += static_cast<unsigned>( sizeBefore - sizeAfter );
-
       estimateFWER
         = p_tarone * static_cast<long double>( significantShapelets.size() );
 
@@ -261,9 +252,8 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
     if( !_quiet )
     {
       progress.setField( "FWER", estimateFWER );
-      progress.setField( "1. No. pruned patterns", numPrunedHypotheses );
-      progress.setField( "2. No. testable patterns", significantShapelets.size() );
-      progress.setField( "3. No. tested patterns", numHypotheses );
+      progress.setField( "No. testable patterns", significantShapelets.size() );
+      progress.setField( "No. tested patterns", numHypotheses );
     }
   }
 
