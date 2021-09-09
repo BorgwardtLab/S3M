@@ -61,26 +61,15 @@ CONFIGURE_FILE(
 
 FIND_PACKAGE( Threads )
 
-IF( APPLE )
-  FIND_PACKAGE( Boost REQUIRED
-    COMPONENTS
-      date_time
-      program_options
-      system
-      timer
-      thread
-  )
-ELSE()
-  FIND_PACKAGE( Boost REQUIRED
-    COMPONENTS
-      date_time
-      log
-      program_options
-      system
-      timer
-      thread
-  )
-ENDIF()
+FIND_PACKAGE( Boost REQUIRED
+  COMPONENTS
+    date_time
+    log
+    program_options
+    system
+    timer
+    thread
+)
 
 ########################################################################
 # Include directories

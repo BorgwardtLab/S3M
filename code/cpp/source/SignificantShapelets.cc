@@ -16,17 +16,7 @@
 #include <cassert>
 #include <cmath>
 
-// FIXME 2019-10: Boost.Log is causing issues under Mac OS X at present.
-// They are *not* related to S3M but make it impossible for us to *link*
-// the program right now. Hence, the pretty logger is disabled.
-#ifndef __APPLE__
-  #include <boost/log/trivial.hpp>
-#else
-  // This is a very cute way of pretending that we are using a logging
-  // system when in reality, we are *not*.
-  #define BOOST_LOG_TRIVIAL(level) std::cerr
-#endif
-
+#include <boost/log/trivial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 
 SignificantShapelets::SignificantShapelets( unsigned size, unsigned windowStride )
