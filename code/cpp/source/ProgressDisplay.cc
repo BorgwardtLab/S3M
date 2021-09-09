@@ -61,7 +61,7 @@ void ProgressDisplay::draw()
   {
     _out << std::left
          << std::setfill( ' ' )
-         << std::setw( 18 )
+         << std::setw( 25 )
          << it->first << " = ";
 
     auto value = it->second;
@@ -72,7 +72,7 @@ void ProgressDisplay::draw()
     else if( value.type() == typeid(std::size_t) )
       _out << boost::any_cast<std::size_t>( value );
     else if( value.type() == typeid(unsigned) )
-      _out << boost::any_cast<std::size_t>( value );
+      _out << boost::any_cast<unsigned>( value );
 
     _out << "\n";
   }
