@@ -167,6 +167,12 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
       else
         tables.insert( distance, labels[j], p_tarone );
 
+      // Have to increment number of hypotheses here because the
+      // `ContingencyTables` class is allowed to prune tables on
+      // its own. Hence, the number of candidates afterwards may
+      // be lower in certain cases.
+      numHypotheses++;
+
       if( tables.empty() )
       {
         skip = true;
@@ -203,8 +209,6 @@ std::vector<SignificantShapelets::SignificantShapelet> SignificantShapelets::ope
         // our FWER estimate below.
         updated = true;
       }
-
-      numHypotheses++;
     }
 
     // If nothing has been changed, i.e. no shapelet has been added to
