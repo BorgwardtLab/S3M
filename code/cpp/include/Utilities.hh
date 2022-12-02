@@ -26,6 +26,7 @@
 #include "TimeSeries.hh"
 
 #include <algorithm>
+#include <limits>
 #include <numeric>
 #include <sstream>
 #include <string>
